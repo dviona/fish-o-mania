@@ -35,16 +35,16 @@ class FishManager:
         if fish_class is None:
             # Generate a random number to determine which fish to spawn
             random_num = random.random()
-            # 50% chance for Common Fish type
-            if random_num < 0.5:
+            # 40% chance for Common Fish type
+            if random_num < 0.4:
                 fish_class = "common"
             # 30% chance for Fast fish type
-            elif random_num < 0.8:
+            elif random_num < 0.7:
                 fish_class = "fast"
-            # 15% chance for Large Fish type
-            elif random_num < 0.95:
+            # 20% chance for Large Fish type
+            elif random_num < 0.9:
                 fish_class = "large"
-            # 5% chance for Golden Fish Type
+            # 10% chance for Golden Fish Type
             else:
                 fish_class = "golden"
         
@@ -82,7 +82,7 @@ class FishManager:
         self.all_fish.update()
         
         # Auto-spawn fish
-        self.spawn_timer += 2
+        self.spawn_timer += 1
         if self.spawn_timer >= self.spawn_delay:
             self.spawn_timer = 0
             if len(self.all_fish) < MAX_FISH:

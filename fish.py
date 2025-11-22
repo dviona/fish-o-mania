@@ -54,10 +54,10 @@ class AnimatedFish(pygame.sprite.Sprite):
             frame.blit(self.sprite_sheet, (0, 0),
                       (x, 0, self.frame_width, self.frame_height))
 
-            # Scale up 2x
+            # Scale up 3x
             frame = pygame.transform.scale(frame,
-                                          (self.frame_width * 2,
-                                           self.frame_height * 2))
+                                          (self.frame_width * 2.25,
+                                           self.frame_height * 2.25))
             frames.append(frame)
 
         return frames
@@ -168,4 +168,3 @@ class LargeFish(AnimatedFish):
         )
         self.value = 100
         self.rarity = "uncommon"
-
