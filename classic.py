@@ -9,46 +9,33 @@ from fish_manager import FishManager
 
 pygame.init()
 
-SKY_BLUE = (161, 214, 231)
-DEEP_BLUE = (0, 105, 148)
-WHITE = (255, 255, 255)
-
-# Screen Resolution
-SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = 800
+# Main parameters for the scene
 SCREEN_RESOLUTION = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode(SCREEN_RESOLUTION)
-pygame.display.set_caption('Classic Mode')
 screen.fill(SKY_BLUE)
-
 clock = pygame.time.Clock()
-FPS = 60
+font = pygame.font.Font(None, 24)
+big_font = pygame.font.Font(None, 36)
 
 
 def main():
     """Main game loop."""
-
     # Initialize Pygame
     pygame.init()
+    # Running boolean detects if game is running or it should close
     running = True
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Fish-O-Mania: Classic Mode")
-    clock = pygame.time.Clock()
 
-    # Create fish manager
+    # Call the function FishManager() that allows to control fish behaviours
     fish_manager = FishManager()
 
     # Spawn initial fish
-    for _ in range(5):
+    for i in range(5):
         fish_manager.spawn_fish()
-
-    # Game variables
+    # Defining the Scoreboard and Fish Net variables
     score = 0
     caught_fish = []
-
-    # Fonts
-    font = pygame.font.Font(None, 24)
-    big_font = pygame.font.Font(None, 36)
 
     while running:
         # Event handling
@@ -61,7 +48,7 @@ def main():
                     running = False
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                # Click on fish to catch
+                # Click on Fish to catch it
                 fish = fish_manager.get_fish_at_position(event.pos)
                 if fish:
                     info = fish.get_info()

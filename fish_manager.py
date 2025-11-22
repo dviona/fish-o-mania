@@ -29,27 +29,30 @@ class FishManager:
     def spawn_fish(self, fish_class=None):
         """
         Spawn a new fish.
-        
         Args:
             fish_class: Specific fish type to spawn, or None for random
         """
         if fish_class is None:
-            # Weighted random selection
-            rand = random.random()
-            if rand < 0.5:      # 50% common
+            # Generate a random number to determine which fish to spawn
+            random_num = random.random()
+            # 50% chance for Common Fish type
+            if random_num < 0.5:
                 fish_class = "common"
-            elif rand < 0.8:    # 30% fast
+            # 30% chance for Fast fish type
+            elif random_num < 0.8:
                 fish_class = "fast"
-            elif rand < 0.95:   # 15% large
+            # 15% chance for Large Fish type
+            elif random_num < 0.95:
                 fish_class = "large"
-            else:               # 5% golden
+            # 5% chance for Golden Fish Type
+            else:
                 fish_class = "golden"
         
-        # Random spawn position
+        # Determine a random position for the Fish to spawn
         x = random.randint(-50, SCREEN_WIDTH + 50)
         y = random.randint(100, SCREEN_HEIGHT - 50)
 
-        # Create the appropriate fish type
+        # Create the appropriate fish type (Golden, Common, Fast, or Large)
         try:
             if fish_class == "golden":
                 fish = GoldenTrout(x, y)
@@ -63,7 +66,7 @@ class FishManager:
                 fish = FastFish(x, y)
                 self.common_fish.add(fish)
                 
-            else:  # large
+            else:
                 fish = LargeFish(x, y)
                 self.large_fish.add(fish)
             
