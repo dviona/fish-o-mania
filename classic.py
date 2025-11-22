@@ -7,6 +7,7 @@ import pygame, sys
 from constants import *
 from fish_manager import FishManager
 
+# Initialize pygame
 pygame.init()
 
 # Main parameters for the scene
@@ -31,7 +32,7 @@ def main():
     fish_manager = FishManager()
 
     # Spawn initial fish
-    for i in range(5):
+    for i in range(start_fishes):
         fish_manager.spawn_fish()
     # Defining the Scoreboard and Fish Net variables
     score = 0

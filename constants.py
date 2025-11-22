@@ -13,7 +13,8 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 SKY_BLUE = (135, 206, 235)
 DEEP_BLUE = (0, 105, 148)
-
+LIGHT_PINK = (255, 182, 193)
+DEEP_PINK = (255,182,211)
 
 # Water bounds
 WATER_SURFACE = 200
@@ -22,3 +23,4 @@ WATER_BOTTOM = SCREEN_HEIGHT - 50
 # Game settings
 MAX_FISH = 15
 SPAWN_DELAY = 120  # Frames between fish spawns
+start_fishes = 5

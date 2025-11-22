@@ -9,16 +9,12 @@ from fish_manager import FishManager
 
 pygame.init()
 
-SKY_BLUE = (255, 182, 193)
-DEEP_BLUE = (255,182,211)
-WHITE = (255, 255, 255)
-
 # Screen Resolution
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 800
 SCREEN_RESOLUTION = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode(SCREEN_RESOLUTION)
-screen.fill(SKY_BLUE)
+screen.fill(LIGHT_PINK)
 
 clock = pygame.time.Clock()
 FPS = 60
@@ -75,7 +71,7 @@ def main():
         # Draw
         # Background
         screen.fill(SKY_BLUE)
-        pygame.draw.rect(screen, DEEP_BLUE,
+        pygame.draw.rect(screen, DEEP_PINK,
                          (0, WATER_SURFACE, SCREEN_WIDTH, SCREEN_HEIGHT - WATER_SURFACE))
         pygame.draw.line(screen, WHITE, (0, WATER_SURFACE), (SCREEN_WIDTH, WATER_SURFACE), 2)
 
