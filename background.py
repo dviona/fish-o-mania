@@ -5,7 +5,7 @@ This file manages the background elements like ripples, seaweed, and rocks.
 import pygame
 import random
 import math
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT, WATER_SURFACE, WATER_BOTTOM, SKY_BLUE, DEEP_BLUE, WHITE
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT, WATER_SURFACE, WATER_BOTTOM, LIGHT_PINK, DEEP_PINK, WHITE
 
 
 class Ripple:
