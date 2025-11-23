@@ -21,6 +21,9 @@ class FishManager:
         self.common_fish = pygame.sprite.Group()
         self.rare_fish = pygame.sprite.Group()
         self.large_fish = pygame.sprite.Group()
+
+        # Death animations group
+        self.death_animations = pygame.sprite.Group()
         
         # Spawn timing
         self.spawn_timer = 0
@@ -80,6 +83,7 @@ class FishManager:
     def update(self):
         """Update all fish and handle auto-spawning."""
         self.all_fish.update()
+        self.death_animations.update()
         
         # Auto-spawn fish
         self.spawn_timer += 1
@@ -91,6 +95,7 @@ class FishManager:
     def draw(self, surface):
         """Draw all fish to the screen."""
         self.all_fish.draw(surface)
+        self.death_animations.draw(surface)
     
     def get_fish_at_position(self, pos):
         """
@@ -106,10 +111,16 @@ class FishManager:
             if fish.rect.collidepoint(pos):
                 return fish
         return None
-    
+
     def remove_fish(self, fish):
-        """Remove a caught fish from all groups."""
-        fish.kill()  # Removes from all sprite groups
+        """Remove a caught fish and create its death animation."""
+        # Create death animation before removing fish
+        death_anim = fish.create_death_animation()
+        if death_anim:
+            self.death_animations.add(death_anim)
+
+        # Remove fish from all groups
+        fish.kill()
     
     def get_stats(self):
         """Get statistics about current fish."""

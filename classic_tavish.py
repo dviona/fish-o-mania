@@ -46,14 +46,16 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
+            # Monitor for any key-presses
             elif event.type == pygame.KEYDOWN:
+                # exit if 'esc' button pressed
                 if event.key == pygame.K_ESCAPE:
                     running = False
-
+            # Monitor for any mouse-presses
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 # Click on Fish to catch it
                 fish = fish_manager.get_fish_at_position(event.pos)
+                # Get fish info if fish was caught
                 if fish:
                     info = fish.get_info()
                     score += info["value"]
@@ -99,7 +101,7 @@ def main():
         count_text = font.render(f"Fish in water: {stats['total']}", True, WHITE)
         screen.blit(count_text, (10, 50))
 
-        # Instructions
+        # In Game Instructions
         instructions = [
             "Click on fish to catch them!",
             "ESC: Quit"
