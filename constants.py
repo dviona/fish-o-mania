@@ -25,3 +25,8 @@ WATER_BOTTOM = SCREEN_HEIGHT - 50
 MAX_FISH = 15
 SPAWN_DELAY = 120  # Frames between fish spawns
 start_fishes = 5
+
+# Fishing Rod Constants
+boat_speed = 8
+rod_length = 0
+rod_speed = 6

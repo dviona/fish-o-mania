@@ -18,24 +18,21 @@ clock = pygame.time.Clock()
 font = pygame.font.Font(None, 24)
 big_font = pygame.font.Font(None, 36)
 
-# DV - defining parameters for the boat
+# Defining parameters for the boat
 boat_image = pygame.image.load("graphics/boat.png")
 boat_image = pygame.transform.scale(boat_image, (310, 260))
 
 boat_x = SCREEN_WIDTH // 2 - boat_image.get_width() // 2 - 300
 boat_y = WATER_SURFACE - boat_image.get_height() // 2 - 52
-boat_speed = 8
 
-#DV - defining parameters for the fishing hook
+# Defining parameters for the fishing hook
 fishing_hook_img = pygame.image.load("graphics/fishing_hook.png")
 fishing_hook_img = pygame.transform.scale(fishing_hook_img, (30, 30))
 hook_rect = fishing_hook_img.get_rect()
 
-#DV - defining parameters for fishing rod and casting
-rod_length = 0
+# Defining parameters for fishing rod and casting
 rod_max_length = SCREEN_HEIGHT - 300
 is_casting = False
-rod_speed = 6
 
 """
     This is the main game loop where all in-game features will be defined and called
@@ -59,7 +56,7 @@ def main():
     score = 0
     caught_fish = []
 
-    #DV- defining global casting variables
+    # Defining global casting variables
     global boat_x, is_casting, rod_length
 
     # Main Game
@@ -70,34 +67,19 @@ def main():
                 running = False
             # Monitor for any key-presses
             elif event.type == pygame.KEYDOWN:
-                # exit if 'esc' button pressed
+                # Exit if 'esc' button pressed
                 if event.key == pygame.K_ESCAPE:
                     running = False
-                # DV - logic for pressing space to cast
+                # Press space to cast fishing rod
                 if event.key == pygame.K_SPACE:
                     is_casting = True
-
-            # Monitor for any mouse-presses
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                # Click on Fish to catch it
-                fish = fish_manager.get_fish_at_position(event.pos)
-                # Get fish info if fish was caught
-                if fish:
-                    info = fish.get_info()
-                    score += info["value"]
-                    caught_fish.append(info)
-                    fish_manager.remove_fish(fish)
-                    print(f"Caught: {info['type']} (+{info['value']} points)")
-
-                    # Add ripple effect where fish was caught
-                    background_manager.add_ripple(event.pos[0], event.pos[1])
 
 
         # Update the fish and background animations
         fish_manager.update()
         background_manager.update()
 
-        #DV- move boat left/right with arrow keys
+        # Move boat left/right with arrow keys
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             boat_x -= boat_speed
@@ -105,16 +87,17 @@ def main():
             boat_x += boat_speed
 
         rod_x = boat_x + boat_image.get_width() - 83
-        rod_top_y = boat_y + 175  # person’s hand area
+        # Person's hand area -> rod_top_y
+        rod_top_y = boat_y + 175
 
-        #DV Handle casting
+        # Handle casting
         if is_casting:
             if rod_length < rod_max_length:
                 rod_length += rod_speed
             else:
                 is_casting = False
         else:
-            # DVReel back up
+            # Reel back up
             if rod_length > 0:
                 fish = fish_manager.get_fish_at_position((hook_rect.centerx, hook_rect.bottom))
                 if fish:
@@ -122,16 +105,16 @@ def main():
                     score += info["value"]
                     caught_fish.append(info)
                     fish_manager.remove_fish(fish)
-                    is_casting = False  # optionally auto reel
-                    #rod_length = 0  # snap back up
+                    # Optional auto reel if fish caught
+                    is_casting = False
                     print(f"Caught by casting: {info['type']} (+{info['value']} points)")
                 rod_length -= rod_speed
 
-        # DvFinal hook position
+        # Final hook position
         hook_x = rod_x
         hook_y = rod_top_y + rod_length
 
-        #dv - # Define hook rect for clicking
+        # Define hook rect for clicking
         hook_rect.x = hook_x - fishing_hook_img.get_width() // 2
         hook_rect.y = hook_y
 
@@ -151,13 +134,13 @@ def main():
         # Draw background elements (rocks, seaweed, bubbles, ripples)
         background_manager.draw(screen)
 
-        #DV- put boat on top of the water line
+        # Put boat on top of the water line
         screen.blit(boat_image, (boat_x, boat_y))
 
-        #DV - draw fishing line
+        # Draw fishing line
         pygame.draw.line(screen, WHITE, (rod_x, rod_top_y), (hook_x, hook_y), 3)
 
-        #DV - display fishing hook
+        # Display fishing hook
         screen.blit(fishing_hook_img, hook_rect)
 
         # Fish
@@ -203,6 +186,7 @@ def main():
 
     pygame.quit()
     sys.exit()
+
 
 if __name__ == '__main__':
     main()

@@ -335,6 +335,7 @@ class BackgroundManager:
     def add_ripple(self, x, y):
         """Add a ripple at a specific position."""
         self.ripples.append(Ripple(x, y))
+        self.ripple_timer += 1
 
     def update(self):
         """Update all background elements."""
