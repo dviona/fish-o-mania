@@ -59,8 +59,8 @@ class DeathAnimation(pygame.sprite.Sprite):
             self.frame_counter += 1
 
             # Move 2 pixels to the right every frame
-            self.rect.x += 1
-            self.rect.y -= 2
+            self.rect.x -= 0
+            self.rect.y -= 6
 
             if self.frame_counter >= self.frame_delay:
                 self.frame_counter = 0
