@@ -1,11 +1,11 @@
 """
-    This is the Classic Mode for the file and push
+    This is the Classic Mode for the game
 """
-
+# Importing the different libraries and methods
 import pygame, sys
-
 from constants import *
 from fish_manager import FishManager
+from background import BackgroundManager
 
 # Initialize pygame
 pygame.init()
@@ -18,39 +18,44 @@ clock = pygame.time.Clock()
 font = pygame.font.Font(None, 24)
 big_font = pygame.font.Font(None, 36)
 
-
+"""
+    This is the main game loop where all in-game features will be defined and called
+"""
 def main():
-    """Main game loop."""
     # Initialize Pygame
     pygame.init()
-    # Running boolean detects if game is running or it should close
+    # 'running' boolean detects if game is running
     running = True
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Fish-O-Mania: Classic Mode")
 
-    # Call the function FishManager() that allows to control fish behaviours
+    # Call the function FishManager() and BackgroundManager() that allows to control fish behaviours
     fish_manager = FishManager()
+    background_manager = BackgroundManager()
 
-    # Spawn initial fish
+    # Spawn initial fishes
     for i in range(start_fishes):
         fish_manager.spawn_fish()
+
     # Defining the Scoreboard and Fish Net variables
     score = 0
     caught_fish = []
 
+    # Main Game
     while running:
-        # Event handling
+        # Event Handling Section - Monitor keypresses, mouse movements etc
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
+            # Monitor for any key-presses
             elif event.type == pygame.KEYDOWN:
+                # exit if 'esc' button pressed
                 if event.key == pygame.K_ESCAPE:
                     running = False
-
+            # Monitor for any mouse-presses
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 # Click on Fish to catch it
                 fish = fish_manager.get_fish_at_position(event.pos)
+                # Get fish info if fish was caught
                 if fish:
                     info = fish.get_info()
                     score += info["value"]
@@ -58,23 +63,37 @@ def main():
                     fish_manager.remove_fish(fish)
                     print(f"Caught: {info['type']} (+{info['value']} points)")
 
-        # Update
-        fish_manager.update()
+                    # Add ripple effect where fish was caught
+                    background_manager.add_ripple(event.pos[0], event.pos[1])
 
-        # Draw
-        # Background
+
+        # Update the fish and background animations
+        fish_manager.update()
+        background_manager.update()
+
+        # Sky Backdrops
         screen.fill(SKY_BLUE)
         pygame.draw.rect(screen, DEEP_BLUE,
                          (0, WATER_SURFACE, SCREEN_WIDTH, SCREEN_HEIGHT - WATER_SURFACE))
         pygame.draw.line(screen, WHITE, (0, WATER_SURFACE), (SCREEN_WIDTH, WATER_SURFACE), 2)
 
+        # Water background with gradient effect
+        for y in range(WATER_SURFACE, SCREEN_HEIGHT):
+            # Create gradient from lighter to darker blue
+            ratio = (y - WATER_SURFACE) / (SCREEN_HEIGHT - WATER_SURFACE)
+            color = tuple(int(AZURE[i] + (DEEP_BLUE[i] - AZURE[i]) * ratio) for i in range(3))
+            pygame.draw.line(screen, color, (0, y), (SCREEN_WIDTH, y))
+
+        # Draw background elements (rocks, seaweed, bubbles, ripples)
+        background_manager.draw(screen)
+
         # Fish
         fish_manager.draw(screen)
 
-        # UI
+        # Get Fish Stats
         stats = fish_manager.get_stats()
 
-        # Score
+        # Display Score
         score_text = big_font.render(f"Score: {score}", True, WHITE)
         screen.blit(score_text, (10, 10))
 
@@ -82,9 +101,9 @@ def main():
         count_text = font.render(f"Fish in water: {stats['total']}", True, WHITE)
         screen.blit(count_text, (10, 50))
 
-        # Instructions
+        # In Game Instructions
         instructions = [
-            "Click fish to catch them!",
+            "Click on fish to catch them!",
             "ESC: Quit"
         ]
         y_offset = 80
