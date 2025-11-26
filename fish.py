@@ -204,7 +204,7 @@ class CommonFish(AnimatedFish):
 
     def __init__(self, x, y):
         super().__init__(
-            sprite_sheet_path="graphics/turtle.png",
+            sprite_sheet_path="graphics/common_fish.png",
             frame_width=48,
             frame_height=48,
             num_frames=6,
@@ -212,7 +212,7 @@ class CommonFish(AnimatedFish):
             y=y,
             speed_x=0.7,
             fish_type="Common Fish",
-            death_animation_path = "graphics/turtle_death.png"
+            death_animation_path = "graphics/common_fish_death.png"
         )
         self.value = 25
         self.rarity = "common"
