@@ -13,7 +13,6 @@ pygame.init()
 # Main parameters for the scene
 SCREEN_RESOLUTION = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode(SCREEN_RESOLUTION)
-screen.fill(SKY_BLUE)
 clock = pygame.time.Clock()
 font = pygame.font.Font(None, 24)
 big_font = pygame.font.Font(None, 36)
@@ -86,8 +85,11 @@ def main():
         if keys[pygame.K_RIGHT]:
             boat_x += boat_speed
 
+        # So the character doesn't disappear off-screen
+        boat_x = max(0, min(boat_x, SCREEN_WIDTH - boat_image.get_width()))
+
+        # Where the hook is attached on the rod
         rod_x = boat_x + boat_image.get_width() - 83
-        # Person's hand area -> rod_top_y
         rod_top_y = boat_y + 175
 
         # Handle casting
