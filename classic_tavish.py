@@ -1,5 +1,6 @@
 """
     This is the Classic Mode for the game
+
 """
 # Importing the different libraries and methods
 import pygame, sys
