@@ -13,7 +13,6 @@ pygame.init()
 # Main parameters for the scene
 SCREEN_RESOLUTION = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode(SCREEN_RESOLUTION)
-screen.fill(SKY_BLUE)
 clock = pygame.time.Clock()
 font = pygame.font.Font(None, 24)
 big_font = pygame.font.Font(None, 36)
