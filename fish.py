@@ -114,7 +114,7 @@ class AnimatedFish(pygame.sprite.Sprite):
         self.rarity = "common"
 
     def load_frames(self):
-        """Extract individual frames from sprite sheet."""
+        # Extract individual frames from sprite sheet
         frames = []
         for i in range(self.num_frames):
             x = i * self.frame_width

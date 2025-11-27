@@ -1,6 +1,5 @@
 """
     This is the Classic Mode for the game
-
 """
 # Importing the different libraries and methods
 import pygame, sys
@@ -138,7 +137,7 @@ def main():
         screen.blit(boat_image, (boat_x, boat_y))
 
         # Draw fishing line
-        pygame.draw.line(screen, WHITE, (rod_x, rod_top_y), (hook_x, hook_y), 3)
+        pygame.draw.line(screen, WHITE, (rod_x - 5, rod_top_y), (hook_x - 5, hook_y), 2)
 
         # Display fishing hook
         screen.blit(fishing_hook_img, hook_rect)
