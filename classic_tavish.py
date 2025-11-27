@@ -2,7 +2,8 @@
     This is the Classic Mode for the game
 """
 # Importing the different libraries and methods
-import pygame, sys
+import pygame
+import sys
 from constants import *
 from fish_manager import FishManager
 from background import BackgroundManager
@@ -34,8 +35,10 @@ rod_max_length = SCREEN_HEIGHT - 300
 is_casting = False
 
 """
-    This is the main game loop where all in-game features will be defined and called
+    Main game loop where all features will be defined and called
 """
+
+
 def main():
     # Initialize Pygame
     pygame.init()
@@ -43,7 +46,7 @@ def main():
     running = True
     pygame.display.set_caption("Fish-O-Mania: Classic Mode")
 
-    # Call the function FishManager() and BackgroundManager() that allows to control fish behaviours
+    # Call the function that allows to control fish and background animations
     fish_manager = FishManager()
     background_manager = BackgroundManager()
 
@@ -73,7 +76,6 @@ def main():
                 if event.key == pygame.K_SPACE:
                     is_casting = True
 
-
         # Update the fish and background animations
         fish_manager.update()
         background_manager.update()
@@ -98,7 +100,8 @@ def main():
         else:
             # Reel back up
             if rod_length > 0:
-                fish = fish_manager.get_fish_at_position((hook_rect.centerx, hook_rect.bottom))
+                fish = fish_manager.get_fish_at_position(
+                    (hook_rect.centerx, hook_rect.bottom))
                 if fish:
                     info = fish.get_info()
                     score += info["value"]
@@ -106,7 +109,8 @@ def main():
                     fish_manager.remove_fish(fish)
                     # Optional auto reel if fish caught
                     is_casting = False
-                    print(f"Caught by casting: {info['type']} (+{info['value']} points)")
+                    print(f"Caught by casting: {info['type']} "
+                          f"(+{info['value']} points)")
                 rod_length -= rod_speed
 
         # Final hook position
@@ -120,14 +124,17 @@ def main():
         # Sky Backdrops
         screen.fill(SKY_BLUE)
         pygame.draw.rect(screen, DEEP_BLUE,
-                         (0, WATER_SURFACE, SCREEN_WIDTH, SCREEN_HEIGHT - WATER_SURFACE))
-        pygame.draw.line(screen, WHITE, (0, WATER_SURFACE), (SCREEN_WIDTH, WATER_SURFACE), 2)
+                         (0, WATER_SURFACE, SCREEN_WIDTH,
+                          SCREEN_HEIGHT - WATER_SURFACE))
+        pygame.draw.line(screen, WHITE, (0, WATER_SURFACE),
+                         (SCREEN_WIDTH, WATER_SURFACE), 2)
 
         # Water background with gradient effect
         for y in range(WATER_SURFACE, SCREEN_HEIGHT):
             # Create gradient from lighter to darker blue
             ratio = (y - WATER_SURFACE) / (SCREEN_HEIGHT - WATER_SURFACE)
-            color = tuple(int(AZURE[i] + (DEEP_BLUE[i] - AZURE[i]) * ratio) for i in range(3))
+            color = tuple(int(AZURE[i] + (DEEP_BLUE[i] -
+                                          AZURE[i]) * ratio) for i in range(3))
             pygame.draw.line(screen, color, (0, y), (SCREEN_WIDTH, y))
 
         # Draw background elements (rocks, seaweed, bubbles, ripples)
@@ -137,7 +144,8 @@ def main():
         screen.blit(boat_image, (boat_x, boat_y))
 
         # Draw fishing line
-        pygame.draw.line(screen, WHITE, (rod_x - 5, rod_top_y), (hook_x - 5, hook_y), 2)
+        pygame.draw.line(screen, WHITE, (rod_x - 5, rod_top_y),
+                         (hook_x - 5, hook_y), 2)
 
         # Display fishing hook
         screen.blit(fishing_hook_img, hook_rect)
@@ -149,12 +157,14 @@ def main():
         stats = fish_manager.get_stats()
 
         # Display Score
-        score_text = big_font.render(f"Score: {score}", True, WHITE)
+        score_text = big_font.render(f"Score: {score}",
+                                     True, WHITE)
         screen.blit(score_text, (10, 10))
 
         # Fish count
         stats = fish_manager.get_stats()
-        count_text = font.render(f"Fish in water: {stats['total']}", True, WHITE)
+        count_text = font.render(f"Fish in water: {stats['total']}",
+                                 True, WHITE)
         screen.blit(count_text, (10, 50))
 
         # In Game Instructions
@@ -179,7 +189,7 @@ def main():
                     (255, 215, 0) if catch['rarity'] == 'rare' else WHITE
                 )
                 screen.blit(catch_text, (SCREEN_WIDTH - 250, 40 + i * 25))
-
+        # Update the entire screen to show the changes
         pygame.display.flip()
         clock.tick(FPS)
 
