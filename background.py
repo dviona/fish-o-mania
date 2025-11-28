@@ -6,7 +6,7 @@ import pygame
 import random
 import math
 from constants import (SCREEN_WIDTH, SCREEN_HEIGHT, WATER_SURFACE,
-                       WATER_BOTTOM, LIGHT_PINK, DEEP_PINK, WHITE)
+                       WATER_BOTTOM, WHITE)
 
 
 class Ripple:
@@ -250,125 +250,98 @@ class Wave:
                 )
 
 
-class Sand:
-    """Sandy ocean floor with texture."""
+class SandLayers:
+    """Sand layers using image files."""
 
-    def __init__(self):
-        self.sand_y = WATER_BOTTOM
-        self.sand_height = SCREEN_HEIGHT - WATER_BOTTOM
+    def __init__(self, layer_files=None, use_terrain_files=False):
+        """
+        Initialize sand layers from image files.
 
-        # Sand colors - various shades of tan/beige
-        self.base_color = (194, 178, 128)
-        self.light_color = (210, 195, 145)
-        self.dark_color = (150, 135, 90)
+        Args:
+            layer_files: List of image file paths for sand layers
+            use_terrain_files: If True, automatically loads terrain sand files
+        """
+        self.base_layers = []  # Bottom layers (a, b, c, d)
+        self.top_layer = None   # Top outline layer
 
-        # Generate random sand particles for texture
-        self.particles = []
-        self.generate_particles()
-        # NEW: Added humps list to store wave patterns
-        self.humps = []
-        self.generate_humps()
+        # Auto-load terrain files if requested
+        if use_terrain_files and not layer_files:
+            # Randomly choose one top variation
+            top_variant = random.choice(['a','b','c','d','e','f','g','h'])
 
-    def generate_humps(self):
-        """Generate wavy sand humps/dunes for texture."""
-        num_waves = random.randint(3, 5)
-        for _ in range(num_waves):
-            self.humps.append({
-                'frequency': random.uniform(0.008, 0.02),
-                'amplitude': random.randint(0, 5),
-                'offset': random.uniform(0, math.pi * 2)
-            })
+            # Load base layers (terrain_sand_X.png)
+            base_files = [
+                "graphics/terrain_sand_d.png",
+                "graphics/terrain_sand_c.png",
+                "graphics/terrain_sand_b.png",
+                "graphics/terrain_sand_a.png",
+            ]
 
-    def get_sand_surface_y(self, x):
-        """Calculate y-position of sand surface at given x (with humps)."""
-        y = WATER_BOTTOM
-        # Add all the hump waves together for natural variation
-        for hump in self.humps:
-            y += (math.sin(x * hump['frequency'] + hump['offset']) *
-                  hump['amplitude'])
-        return y
+            for layer_file in base_files:
+                try:
+                    layer_image = pygame.image.load(layer_file).convert_alpha()
+                    self.base_layers.append(layer_image)
+                    print(f"Loaded base sand layer: {layer_file} ({layer_image.get_width()}x{layer_image.get_height()})")
+                except pygame.error as e:
+                    print(f"Error loading sand layer {layer_file}: {e}")
 
-    def generate_particles(self):
-        """Generate small particles to create sand texture."""
-        num_particles = 200
-        for _ in range(num_particles):
-            x = random.randint(0, SCREEN_WIDTH)
-            y = random.randint(WATER_BOTTOM, SCREEN_HEIGHT)
-            size = random.randint(1, 3)
-            # Random shade of sand color
-            shade = random.choice([self.light_color, self.dark_color,
-                                   self.base_color])
-            self.particles.append({
-                'x': x,
-                'y': y,
-                'size': size,
-                'color': shade
-            })
+            # Load top outline layer only
+            top_outline_file = f"graphics/terrain_sand_top_{top_variant}_outline.png"
+            try:
+                self.top_layer = pygame.image.load(top_outline_file).convert_alpha()
+                print(f"Loaded top sand layer: {top_outline_file} ({self.top_layer.get_width()}x{self.top_layer.get_height()})")
+                print(f"Using terrain top variant: {top_variant}")
+            except pygame.error as e:
+                print(f"Error loading top sand layer {top_outline_file}: {e}")
+                self.top_layer = None
 
     def draw(self, surface):
-        """Draw the sand with wavy surface and texture."""
-        # 1. Generate wavy surface points
-        sand_surface_points = []
-        for x in range(0, SCREEN_WIDTH + 1, 5):
-            y = self.get_sand_surface_y(x)
-            sand_surface_points.append((x, y))
+        """Draw the sand layers tiled horizontally across the screen."""
+        # Start Y position for base layers
+        base_y = WATER_BOTTOM
 
-        # 2. Create polygon from wavy top to screen bottom
-        polygon_points = sand_surface_points.copy()
-        polygon_points.append((SCREEN_WIDTH, SCREEN_HEIGHT))
-        polygon_points.append((0, SCREEN_HEIGHT))
-        pygame.draw.polygon(surface, self.base_color, polygon_points)
+        # Draw base layers (stacked vertically, tiled horizontally)
+        for i, layer in enumerate(self.base_layers):
+            if layer:
+                tile_width = layer.get_width()
+                # Calculate how many tiles we need to cover the screen width
+                num_tiles = (SCREEN_WIDTH // tile_width) + 2  # +2 to ensure full coverage
 
-        # 3. Add gradient shading on the humps
-        for x in range(0, SCREEN_WIDTH, 5):
-            y_start = self.get_sand_surface_y(x)
-            for y_offset in range(0, SCREEN_HEIGHT - int(y_start), 3):
-                y = y_start + y_offset
-                if y < SCREEN_HEIGHT:
-                    denominator = SCREEN_HEIGHT - y_start
-                    ratio = (y_offset / denominator if denominator > 0
-                             else 0)
-                    color = tuple(
-                        int(self.base_color[i] +
-                            (self.dark_color[i] - self.base_color[i]) *
-                            ratio * 0.3)
-                        for i in range(3)
-                    )
-                    pygame.draw.circle(surface, color, (x, int(y)), 2)
+                # Draw tiles across the screen
+                for tile_num in range(num_tiles):
+                    x_pos = tile_num * tile_width
+                    y_pos = base_y + (i * 10)  # Stack each layer slightly below the previous
+                    surface.blit(layer, (x_pos, y_pos))
 
-        # 4. Draw highlight and shadow lines on wavy surface
-        shadow_points = [(p[0], p[1] + 3) for p in sand_surface_points]
-        pygame.draw.lines(surface, self.dark_color, False, shadow_points, 2)
-        pygame.draw.lines(
-            surface,
-            self.light_color,
-            False,
-            sand_surface_points,
-            2
-        )
+        # Draw top outline layer (tiled horizontally, positioned above base layers)
+        if self.top_layer:
+            tile_width = self.top_layer.get_width()
+            num_tiles = (SCREEN_WIDTH // tile_width) + 2
+            top_y = WATER_BOTTOM - 10  # Position slightly above base layers
 
-        # 5. Smart particle placement - only below sand surface!
-        for particle in self.particles:
-            sand_surface_y = self.get_sand_surface_y(particle['x'])
-            if particle['y'] >= sand_surface_y:
-                pygame.draw.circle(
-                    surface,
-                    particle['color'],
-                    (particle['x'], particle['y']),
-                    particle['size']
-                )
+            # Draw tiles across the screen
+            for tile_num in range(num_tiles):
+                x_pos = tile_num * tile_width
+                surface.blit(self.top_layer, (x_pos, top_y))
 
 
 class BackgroundManager:
     """Manages all background elements."""
 
-    def __init__(self):
+    def __init__(self, sand_layer_files=None, use_terrain_files=False):
+        """
+        Initialize background manager.
+
+        Args:
+            sand_layer_files: List of image file paths for sand layers
+            use_terrain_files: If True, automatically loads terrain sand PNG files
+        """
         self.ripples = []
         self.seaweeds = []
         self.rocks = []
         self.bubbles = []
         self.wave = Wave()
-        self.sand = Sand()
+        self.sand = SandLayers(sand_layer_files, use_terrain_files)
 
         # Generate static elements
         self.generate_seaweed()
@@ -396,7 +369,6 @@ class BackgroundManager:
     def add_ripple(self, x, y):
         """Add a ripple at a specific position."""
         self.ripples.append(Ripple(x, y))
-        self.ripple_timer += 1
 
     def update(self):
         """Update all background elements."""
