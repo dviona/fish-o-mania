@@ -8,10 +8,10 @@ import pygame
 class LivesManager:
     """Manages player lives and displays them."""
 
-    def __init__(self, max_lives=3, live_icon_path="graphics/fish_red_outline.png",
-                 dead_icon_path="graphics/fish_red_skeleton_outline.png"):
+    def __init__(self, max_lives=3, live_icon_path="graphics/fish_orange_outline.png",
+                 dead_icon_path="graphics/fish_orange_skeleton_outline.png"):
         """
-        Initialize the lives manager.
+        Initialize the lives_manager.
 
         Args:
             max_lives: Maximum number of lives (default 3)

@@ -12,12 +12,13 @@ class DeathAnimation(pygame.sprite.Sprite):
     """Death animation that plays when a fish is caught."""
 
     def __init__(self, x, y, sprite_sheet_path, frame_width, frame_height,
-                 num_frames):
+                 num_frames, is_danger_fish=False):
         super().__init__()
 
         self.frame_width = frame_width
         self.frame_height = frame_height
         self.num_frames = num_frames
+        self.is_danger_fish = is_danger_fish
 
         # Animation control
         self.current_frame = 0
@@ -56,6 +57,20 @@ class DeathAnimation(pygame.sprite.Sprite):
             # Scale up 2x
             scaled_size = (self.frame_width * 2, self.frame_height * 2)
             frame = pygame.transform.scale(frame, scaled_size)
+
+            # Add red line above if danger fish
+            if self.is_danger_fish:
+                # Create new surface with space above
+                new_frame = pygame.Surface((frame.get_width(), frame.get_height() + 6), pygame.SRCALPHA)
+                # Draw fish at bottom (offset down)
+                new_frame.blit(frame, (0, 6))
+                # Draw red line at top
+                line_y = -10
+                line_x1 = frame.get_width() // 2 - 15
+                line_x2 = frame.get_width() // 2 + 15
+                pygame.draw.line(new_frame, (255, 0, 0), (line_x1, line_y), (line_x2, line_y), 2)
+                frame = new_frame
+
             frames.append(frame)
 
         return frames
@@ -66,7 +81,6 @@ class DeathAnimation(pygame.sprite.Sprite):
             self.frame_counter += 1
 
             # Move upward
-            self.rect.x -= 0
             self.rect.y -= 6
 
             if self.frame_counter >= self.frame_delay:
@@ -135,6 +149,20 @@ class AnimatedFish(pygame.sprite.Sprite):
             # Scale up 2x
             scaled_size = (self.frame_width * 2, self.frame_height * 2)
             frame = pygame.transform.scale(frame, scaled_size)
+
+            # Add red line above if danger fish
+            if self.fish_type == "Danger Fish":
+                # Create new surface with space above
+                new_frame = pygame.Surface((frame.get_width(), frame.get_height() + 6), pygame.SRCALPHA)
+                # Draw fish at bottom (offset down)
+                new_frame.blit(frame, (0, 6))
+                # Draw red line at top
+                line_y = 3
+                line_x1 = frame.get_width() // 2 - 15
+                line_x2 = frame.get_width() // 2 + 15
+                pygame.draw.line(new_frame, (255, 0, 0), (line_x1, line_y), (line_x2, line_y), 2)
+                frame = new_frame
+
             frames.append(frame)
 
         return frames
@@ -177,13 +205,16 @@ class AnimatedFish(pygame.sprite.Sprite):
     def create_death_animation(self):
         """Create and return a death animation sprite."""
         if self.death_animation_path:
+            # Pass is_danger_fish flag to death animation
+            is_danger = (self.fish_type == "Danger Fish")
             return DeathAnimation(
                 self.rect.centerx,
                 self.rect.centery,
                 self.death_animation_path,
                 frame_width=48,
                 frame_height=48,
-                num_frames=6
+                num_frames=6,
+                is_danger_fish=is_danger
             )
         return None
 
@@ -207,23 +238,23 @@ class Turtle(AnimatedFish):
         self.rarity = "rare"
 
 
-class CommonFish(AnimatedFish):
-    """Common fish, easy to catch."""
+class DangerFish(AnimatedFish):
+    """Danger fish - lose a life if caught."""
 
     def __init__(self, x, y):
         super().__init__(
-            sprite_sheet_path="graphics/common_fish.png",
+            sprite_sheet_path="graphics/danger_fish.png",
             frame_width=48,
             frame_height=48,
             num_frames=6,
             x=x,
             y=y,
             speed_x=0.7,
-            fish_type="Common Fish",
-            death_animation_path="graphics/common_fish_death.png"
+            fish_type="Danger Fish",
+            death_animation_path="graphics/danger_fish_death.png"
         )
         self.value = 25
-        self.rarity = "common"
+        self.rarity = "danger"
 
 
 class Shark(AnimatedFish):

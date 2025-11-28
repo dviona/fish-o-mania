@@ -6,7 +6,7 @@ import pygame
 import random
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, MAX_FISH, SPAWN_DELAY
 # Import the fish classes from fish.py
-from fish import Turtle, CommonFish, Shark, Octopus
+from fish import Turtle, DangerFish, Shark, Octopus
 from lives_manager import LivesManager
 
 
@@ -19,7 +19,7 @@ class FishManager:
     def __init__(self):
         # Sprite groups for different fish types
         self.all_fish = pygame.sprite.Group()
-        self.common_fish = pygame.sprite.Group()
+        self.danger_fish = pygame.sprite.Group()
         self.rare_fish = pygame.sprite.Group()
         self.large_fish = pygame.sprite.Group()
 
@@ -29,8 +29,8 @@ class FishManager:
         # Lives manager
         self.lives_manager = LivesManager(
             max_lives=3,
-            live_icon_path="graphics/fish_red_outline.png",
-            dead_icon_path="graphics/fish_red_skeleton_outline.png"
+            live_icon_path="graphics/fish_orange_outline.png",
+            dead_icon_path="graphics/fish_orange_skeleton_outline.png"
         )
 
         # Red flash effect for penalty
@@ -53,7 +53,7 @@ class FishManager:
         animations = {}
         fish_data = {
             "Turtle": {"path": "graphics/turtle.png", "frames": 6},
-            "Common Fish": {"path": "graphics/common_fish.png", "frames": 6},
+            "Danger Fish": {"path": "graphics/danger_fish.png", "frames": 6},
             "Shark": {"path": "graphics/shark.png", "frames": 6},
             "Octopus": {"path": "graphics/octopus.png", "frames": 6}
         }
@@ -93,9 +93,9 @@ class FishManager:
         if fish_class is None:
             # Generate a random number to determine which fish to spawn
             random_num = random.random()
-            # 40% chance for Common Fish type
+            # 40% chance for Danger Fish type
             if random_num < 0.4:
-                fish_class = "common"
+                fish_class = "danger"
             # 30% chance for Shark type
             elif random_num < 0.7:
                 fish_class = "shark"
@@ -110,19 +110,19 @@ class FishManager:
         x = random.randint(-50, SCREEN_WIDTH + 50)
         y = random.randint(100, SCREEN_HEIGHT - 50)
 
-        # Create the appropriate fish type (Turtle, Common, Shark, or Octopus)
+        # Create the appropriate fish type (Turtle, Danger, Shark, or Octopus)
         try:
             if fish_class == "turtle":
                 fish = Turtle(x, y)
                 self.rare_fish.add(fish)
 
-            elif fish_class == "common":
-                fish = CommonFish(x, y)
-                self.common_fish.add(fish)
+            elif fish_class == "danger":
+                fish = DangerFish(x, y)
+                self.danger_fish.add(fish)
 
             elif fish_class == "shark":
                 fish = Shark(x, y)
-                self.common_fish.add(fish)
+                self.danger_fish.add(fish)
 
             else:  # octopus
                 fish = Octopus(x, y)
@@ -240,9 +240,9 @@ class FishManager:
         # Get fish info before removing
         info = fish.get_info()
 
-        # Check if it's a common fish (wrong fish = lose life)
+        # Check if it's a danger fish (wrong fish = lose life)
         penalty = False
-        if info['type'] == "Common Fish":
+        if info['type'] == "Danger Fish":
             self.lives_manager.lose_life()
             penalty = True
             # Trigger red flash effect
@@ -285,7 +285,7 @@ class FishManager:
         """Get statistics about current fish and game state."""
         return {
             "total": len(self.all_fish),
-            "common": len(self.common_fish),
+            "danger": len(self.danger_fish),
             "rare": len(self.rare_fish),
             "large": len(self.large_fish),
             "lives": self.lives_manager.get_current_lives(),
@@ -295,7 +295,7 @@ class FishManager:
     def clear_all(self):
         """Remove all fish (useful for restarting)."""
         self.all_fish.empty()
-        self.common_fish.empty()
+        self.danger_fish.empty()
         self.rare_fish.empty()
         self.large_fish.empty()
         self.death_animations.empty()
