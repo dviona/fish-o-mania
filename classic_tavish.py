@@ -32,6 +32,7 @@ hook_rect = fishing_hook_img.get_rect()
 
 # Defining parameters for fishing rod and casting
 rod_max_length = SCREEN_HEIGHT - 300
+rod_length = 0
 is_casting = False
 
 """
@@ -51,7 +52,7 @@ def main():
     background_manager = BackgroundManager()
 
     # Spawn initial fishes
-    for i in range(start_fishes):
+    for i in range(START_FISHES):
         fish_manager.spawn_fish()
 
     # Defining the Scoreboard and Fish Net variables
@@ -83,9 +84,9 @@ def main():
         # Move boat left/right with arrow keys
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
-            boat_x -= boat_speed
+            boat_x -= BOAT_SPEED
         if keys[pygame.K_RIGHT]:
-            boat_x += boat_speed
+            boat_x += BOAT_SPEED
 
         rod_x = boat_x + boat_image.get_width() - 83
         # Person's hand area -> rod_top_y
@@ -94,7 +95,7 @@ def main():
         # Handle casting
         if is_casting:
             if rod_length < rod_max_length:
-                rod_length += rod_speed
+                rod_length += ROD_SPEED
             else:
                 is_casting = False
         else:
@@ -111,7 +112,7 @@ def main():
                     is_casting = False
                     print(f"Caught by casting: {info['type']} "
                           f"(+{info['value']} points)")
-                rod_length -= rod_speed
+                rod_length -= ROD_SPEED
 
         # Final hook position
         hook_x = rod_x

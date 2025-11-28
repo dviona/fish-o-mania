@@ -4,13 +4,15 @@ This File contains all the fish and fish-related classes.
 
 import pygame
 import random
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT, WATER_SURFACE, WATER_BOTTOM
+from constants import (SCREEN_WIDTH, SCREEN_HEIGHT, WATER_SURFACE,
+                       WATER_BOTTOM)
 
 
 class DeathAnimation(pygame.sprite.Sprite):
     """Death animation that plays when a fish is caught."""
 
-    def __init__(self, x, y, sprite_sheet_path, frame_width, frame_height, num_frames):
+    def __init__(self, x, y, sprite_sheet_path, frame_width, frame_height,
+                 num_frames):
         super().__init__()
 
         self.frame_width = frame_width
@@ -25,7 +27,8 @@ class DeathAnimation(pygame.sprite.Sprite):
 
         # Load sprite sheet
         try:
-            self.sprite_sheet = pygame.image.load(sprite_sheet_path).convert_alpha()
+            sprite_path = sprite_sheet_path
+            self.sprite_sheet = pygame.image.load(sprite_path).convert_alpha()
             self.frames = self.load_frames()
 
             self.image = self.frames[self.current_frame]
@@ -35,7 +38,8 @@ class DeathAnimation(pygame.sprite.Sprite):
             print(f"Error loading death animation: {e}")
             self.finished = True
             # Create a dummy image to prevent further errors
-            self.image = pygame.Surface((frame_width * 2, frame_height * 2), pygame.SRCALPHA)
+            dummy_size = (frame_width * 2, frame_height * 2)
+            self.image = pygame.Surface(dummy_size, pygame.SRCALPHA)
             self.rect = self.image.get_rect()
             self.rect.center = (x, y)
 
@@ -44,11 +48,14 @@ class DeathAnimation(pygame.sprite.Sprite):
         frames = []
         for i in range(self.num_frames):
             x = i * self.frame_width
-            frame = pygame.Surface((self.frame_width, self.frame_height), pygame.SRCALPHA)
-            frame.blit(self.sprite_sheet, (0, 0), (x, 0, self.frame_width, self.frame_height))
+            frame = pygame.Surface((self.frame_width, self.frame_height),
+                                   pygame.SRCALPHA)
+            frame.blit(self.sprite_sheet, (0, 0),
+                       (x, 0, self.frame_width, self.frame_height))
 
             # Scale up 2x
-            frame = pygame.transform.scale(frame, (self.frame_width * 2, self.frame_height * 2))
+            scaled_size = (self.frame_width * 2, self.frame_height * 2)
+            frame = pygame.transform.scale(frame, scaled_size)
             frames.append(frame)
 
         return frames
@@ -58,7 +65,7 @@ class DeathAnimation(pygame.sprite.Sprite):
         if not self.finished:
             self.frame_counter += 1
 
-            # Move 2 pixels to the right every frame
+            # Move upward
             self.rect.x -= 0
             self.rect.y -= 6
 
@@ -80,7 +87,8 @@ class AnimatedFish(pygame.sprite.Sprite):
     """
 
     def __init__(self, sprite_sheet_path, frame_width, frame_height,
-                 num_frames, x, y, speed_x, fish_type="generic", death_animation_path = None):
+                 num_frames, x, y, speed_x, fish_type="generic",
+                 death_animation_path=None):
         super().__init__()
 
         # Fish properties
@@ -100,7 +108,8 @@ class AnimatedFish(pygame.sprite.Sprite):
         self.frame_delay = random.randint(5, 10)
 
         # Load sprite sheet
-        self.sprite_sheet = pygame.image.load(sprite_sheet_path).convert_alpha()
+        sprite_path = sprite_sheet_path
+        self.sprite_sheet = pygame.image.load(sprite_path).convert_alpha()
         self.frames = self.load_frames()
 
         # Set initial image and position
@@ -114,19 +123,18 @@ class AnimatedFish(pygame.sprite.Sprite):
         self.rarity = "common"
 
     def load_frames(self):
-        # Extract individual frames from sprite sheet
+        """Extract individual frames from sprite sheet."""
         frames = []
         for i in range(self.num_frames):
             x = i * self.frame_width
             frame = pygame.Surface((self.frame_width, self.frame_height),
                                    pygame.SRCALPHA)
             frame.blit(self.sprite_sheet, (0, 0),
-                      (x, 0, self.frame_width, self.frame_height))
+                       (x, 0, self.frame_width, self.frame_height))
 
             # Scale up 2x
-            frame = pygame.transform.scale(frame,
-                                          (self.frame_width * 2,
-                                           self.frame_height * 2))
+            scaled_size = (self.frame_width * 2, self.frame_height * 2)
+            frame = pygame.transform.scale(frame, scaled_size)
             frames.append(frame)
 
         return frames
@@ -180,8 +188,8 @@ class AnimatedFish(pygame.sprite.Sprite):
         return None
 
 
-class GoldenTrout(AnimatedFish):
-    """Rare, valuable golden trout."""
+class Turtle(AnimatedFish):
+    """Rare, valuable turtle."""
 
     def __init__(self, x, y):
         super().__init__(
@@ -192,7 +200,7 @@ class GoldenTrout(AnimatedFish):
             x=x,
             y=y,
             speed_x=0.5,
-            fish_type="Golden Trout",
+            fish_type="Turtle",
             death_animation_path="graphics/turtle_death.png"
         )
         self.value = 150
@@ -212,14 +220,14 @@ class CommonFish(AnimatedFish):
             y=y,
             speed_x=0.7,
             fish_type="Common Fish",
-            death_animation_path = "graphics/common_fish_death.png"
+            death_animation_path="graphics/common_fish_death.png"
         )
         self.value = 25
         self.rarity = "common"
 
 
-class FastFish(AnimatedFish):
-    """Fast-moving fish, harder to catch."""
+class Shark(AnimatedFish):
+    """Fast-moving shark, harder to catch."""
 
     def __init__(self, x, y):
         super().__init__(
@@ -230,15 +238,15 @@ class FastFish(AnimatedFish):
             x=x,
             y=y,
             speed_x=0.75,
-            fish_type="Speed Fish",
+            fish_type="Shark",
             death_animation_path="graphics/shark_death.png"
         )
         self.value = 75
         self.rarity = "uncommon"
 
 
-class LargeFish(AnimatedFish):
-    """Large, slow-moving fish."""
+class Octopus(AnimatedFish):
+    """Large, slow-moving octopus."""
 
     def __init__(self, x, y):
         super().__init__(
@@ -249,7 +257,7 @@ class LargeFish(AnimatedFish):
             x=x,
             y=y,
             speed_x=0.5,
-            fish_type="Large Bass",
+            fish_type="Octopus",
             death_animation_path="graphics/octopus_death.png"
         )
         self.value = 100

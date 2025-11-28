@@ -5,7 +5,8 @@ This file manages the background elements like ripples, seaweed, and rocks.
 import pygame
 import random
 import math
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT, WATER_SURFACE, WATER_BOTTOM, LIGHT_PINK, DEEP_PINK, WHITE
+from constants import (SCREEN_WIDTH, SCREEN_HEIGHT, WATER_SURFACE,
+                       WATER_BOTTOM, LIGHT_PINK, DEEP_PINK, WHITE)
 
 
 class Ripple:
@@ -33,15 +34,25 @@ class Ripple:
         """Draw the ripple."""
         if self.alive and self.alpha > 0:
             # Create a temporary surface for transparency
-            ripple_surf = pygame.Surface((self.max_radius * 2, self.max_radius * 2), pygame.SRCALPHA)
+            ripple_surf = pygame.Surface(
+                (self.max_radius * 2, self.max_radius * 2),
+                pygame.SRCALPHA
+            )
 
             # Draw concentric circles for ripple effect
             color = (255, 255, 255, max(0, int(self.alpha)))
-            pygame.draw.circle(ripple_surf, color,
-                             (self.max_radius, self.max_radius),
-                             int(self.radius), 2)
+            pygame.draw.circle(
+                ripple_surf,
+                color,
+                (self.max_radius, self.max_radius),
+                int(self.radius),
+                2
+            )
 
-            surface.blit(ripple_surf, (self.x - self.max_radius, self.y - self.max_radius))
+            surface.blit(
+                ripple_surf,
+                (self.x - self.max_radius, self.y - self.max_radius)
+            )
 
 
 class Seaweed:
@@ -72,7 +83,9 @@ class Seaweed:
         for i in range(1, self.segments + 1):
             # Calculate sway based on height (more sway at the top)
             sway_factor = i / self.segments
-            sway = math.sin(self.time + self.sway_offset + i * 0.3) * self.sway_amount * sway_factor
+            sway_calculation = (self.time + self.sway_offset + i * 0.3)
+            sway = (math.sin(sway_calculation) * self.sway_amount *
+                    sway_factor)
 
             x = self.x + sway
             y = self.base_y - (segment_height * i)
@@ -82,7 +95,13 @@ class Seaweed:
         if len(points) > 1:
             for i in range(len(points) - 1):
                 width = max(2, self.width - i)
-                pygame.draw.line(surface, self.color, points[i], points[i + 1], width)
+                pygame.draw.line(
+                    surface,
+                    self.color,
+                    points[i],
+                    points[i + 1],
+                    width
+                )
 
 
 class Rock:
@@ -104,17 +123,26 @@ class Rock:
     def draw(self, surface):
         """Draw a rock with simple shading."""
         # Main rock body (ellipse)
-        pygame.draw.ellipse(surface, self.color,
-                          (self.x, self.y, self.width, self.height))
+        pygame.draw.ellipse(
+            surface,
+            self.color,
+            (self.x, self.y, self.width, self.height)
+        )
 
         # Highlight (top-left)
-        highlight_rect = (self.x + 5, self.y + 5, self.width // 3, self.height // 3)
+        highlight_rect = (self.x + 5, self.y + 5,
+                          self.width // 3, self.height // 3)
         pygame.draw.ellipse(surface, self.highlight_color, highlight_rect)
 
         # Shadow (bottom-right edge)
-        pygame.draw.arc(surface, self.shadow_color,
-                       (self.x, self.y, self.width, self.height),
-                       math.pi, math.pi * 1.5, 3)
+        pygame.draw.arc(
+            surface,
+            self.shadow_color,
+            (self.x, self.y, self.width, self.height),
+            math.pi,
+            math.pi * 1.5,
+            3
+        )
 
 
 class Bubble:
@@ -144,14 +172,22 @@ class Bubble:
         """Draw bubble with shine effect."""
         if self.alive:
             # Main bubble
-            pygame.draw.circle(surface, (173, 216, 230),
-                             (int(self.x), int(self.y)), self.radius)
+            pygame.draw.circle(
+                surface,
+                (173, 216, 230),
+                (int(self.x), int(self.y)),
+                self.radius
+            )
 
             # Shine highlight
             shine_x = int(self.x - self.radius // 3)
             shine_y = int(self.y - self.radius // 3)
-            pygame.draw.circle(surface, WHITE,
-                             (shine_x, shine_y), max(1, self.radius // 3))
+            pygame.draw.circle(
+                surface,
+                WHITE,
+                (shine_x, shine_y),
+                max(1, self.radius // 3)
+            )
 
 
 class Wave:
@@ -166,9 +202,12 @@ class Wave:
 
         # Create multiple wave layers for depth
         self.layers = [
-            {'speed': 0.05, 'amplitude': 8, 'frequency': 0.02, 'offset': 0},
-            {'speed': 0.03, 'amplitude': 5, 'frequency': 0.015, 'offset': math.pi},
-            {'speed': 0.02, 'amplitude': 8, 'frequency': 0.01, 'offset': 1.1 * math.pi / 2},
+            {'speed': 0.05, 'amplitude': 8, 'frequency': 0.02,
+             'offset': 0},
+            {'speed': 0.03, 'amplitude': 5, 'frequency': 0.015,
+             'offset': math.pi},
+            {'speed': 0.02, 'amplitude': 8, 'frequency': 0.01,
+             'offset': 1.1 * math.pi / 2},
         ]
 
     def update(self):
@@ -183,7 +222,8 @@ class Wave:
         # Generate points across the screen width
         for x in range(0, SCREEN_WIDTH + 1, 5):  # Sample every 5 pixels
             y = self.y_position + math.sin(
-                x * layer['frequency'] + self.time * layer['speed'] + layer['offset']
+                x * layer['frequency'] + self.time * layer['speed'] +
+                layer['offset']
             ) * layer['amplitude']
             points.append((x, y))
 
@@ -201,7 +241,13 @@ class Wave:
             secondary_points = self.get_wave_points(1)
             if len(secondary_points) > 1:
                 # Slightly transparent/lighter color
-                pygame.draw.lines(surface, (200, 230, 255), False, secondary_points, 2)
+                pygame.draw.lines(
+                    surface,
+                    (200, 230, 255),
+                    False,
+                    secondary_points,
+                    2
+                )
 
 
 class Sand:
@@ -223,24 +269,23 @@ class Sand:
         self.humps = []
         self.generate_humps()
 
-        # NEW: This method creates 3-5 random sine waves
     def generate_humps(self):
         """Generate wavy sand humps/dunes for texture."""
         num_waves = random.randint(3, 5)
         for _ in range(num_waves):
             self.humps.append({
-                'frequency': random.uniform(0.008, 0.02),  # Wave tightness
-                'amplitude': random.randint(0, 5),  # Wave height
-                'offset': random.uniform(0, math.pi * 2)  # Starting position
+                'frequency': random.uniform(0.008, 0.02),
+                'amplitude': random.randint(0, 5),
+                'offset': random.uniform(0, math.pi * 2)
             })
 
-    # NEW: Calculates the wavy surface height at any x position
     def get_sand_surface_y(self, x):
-        """Calculate the y-position of sand surface at given x (with humps)."""
+        """Calculate y-position of sand surface at given x (with humps)."""
         y = WATER_BOTTOM
         # Add all the hump waves together for natural variation
         for hump in self.humps:
-            y += math.sin(x * hump['frequency'] + hump['offset']) * hump['amplitude']
+            y += (math.sin(x * hump['frequency'] + hump['offset']) *
+                  hump['amplitude'])
         return y
 
     def generate_particles(self):
@@ -251,7 +296,8 @@ class Sand:
             y = random.randint(WATER_BOTTOM, SCREEN_HEIGHT)
             size = random.randint(1, 3)
             # Random shade of sand color
-            shade = random.choice([self.light_color, self.dark_color, self.base_color])
+            shade = random.choice([self.light_color, self.dark_color,
+                                   self.base_color])
             self.particles.append({
                 'x': x,
                 'y': y,
@@ -260,10 +306,11 @@ class Sand:
             })
 
     def draw(self, surface):
+        """Draw the sand with wavy surface and texture."""
         # 1. Generate wavy surface points
         sand_surface_points = []
         for x in range(0, SCREEN_WIDTH + 1, 5):
-            y = self.get_sand_surface_y(x)  # Uses our hump calculation!
+            y = self.get_sand_surface_y(x)
             sand_surface_points.append((x, y))
 
         # 2. Create polygon from wavy top to screen bottom
@@ -278,24 +325,38 @@ class Sand:
             for y_offset in range(0, SCREEN_HEIGHT - int(y_start), 3):
                 y = y_start + y_offset
                 if y < SCREEN_HEIGHT:
-                    ratio = y_offset / (SCREEN_HEIGHT - y_start) if (SCREEN_HEIGHT - y_start) > 0 else 0
+                    denominator = SCREEN_HEIGHT - y_start
+                    ratio = (y_offset / denominator if denominator > 0
+                             else 0)
                     color = tuple(
-                        int(self.base_color[i] + (self.dark_color[i] - self.base_color[i]) * ratio * 0.3) for i in
-                        range(3))
+                        int(self.base_color[i] +
+                            (self.dark_color[i] - self.base_color[i]) *
+                            ratio * 0.3)
+                        for i in range(3)
+                    )
                     pygame.draw.circle(surface, color, (x, int(y)), 2)
 
         # 4. Draw highlight and shadow lines on wavy surface
         shadow_points = [(p[0], p[1] + 3) for p in sand_surface_points]
         pygame.draw.lines(surface, self.dark_color, False, shadow_points, 2)
-        pygame.draw.lines(surface, self.light_color, False, sand_surface_points, 2)
+        pygame.draw.lines(
+            surface,
+            self.light_color,
+            False,
+            sand_surface_points,
+            2
+        )
 
         # 5. Smart particle placement - only below sand surface!
         for particle in self.particles:
             sand_surface_y = self.get_sand_surface_y(particle['x'])
-            if particle['y'] >= sand_surface_y:  # Only draw if below surface
-                pygame.draw.circle(surface, particle['color'],
-                                   (particle['x'], particle['y']),
-                                   particle['size'])
+            if particle['y'] >= sand_surface_y:
+                pygame.draw.circle(
+                    surface,
+                    particle['color'],
+                    (particle['x'], particle['y']),
+                    particle['size']
+                )
 
 
 class BackgroundManager:
@@ -306,8 +367,8 @@ class BackgroundManager:
         self.seaweeds = []
         self.rocks = []
         self.bubbles = []
-        self.wave = Wave()  # Add wave animation
-        self.sand = Sand()  # Add sand layer
+        self.wave = Wave()
+        self.sand = Sand()
 
         # Generate static elements
         self.generate_seaweed()
@@ -327,7 +388,7 @@ class BackgroundManager:
     def generate_rocks(self):
         """Generate rocks at the bottom."""
         num_rocks = random.randint(5, 10)
-        for i in range(num_rocks):
+        for _ in range(num_rocks):
             x = random.randint(0, SCREEN_WIDTH - 80)
             y = WATER_BOTTOM - random.randint(0, 40)
             self.rocks.append(Rock(x, y))

@@ -1,5 +1,5 @@
 """
-    This file contains all the constants used in the project.
+This file contains all the constants used for the Game.
 """
 
 
@@ -15,7 +15,7 @@ SKY_BLUE = (70, 130, 180)
 AZURE = (240, 255, 255)
 DEEP_BLUE = (0, 105, 148)
 LIGHT_PINK = (255, 182, 193)
-DEEP_PINK = (255,182,211)
+DEEP_PINK = (255, 182, 211)
 
 # Water bounds
 WATER_SURFACE = 200
@@ -24,9 +24,12 @@ WATER_BOTTOM = SCREEN_HEIGHT - 50
 # Game settings
 MAX_FISH = 15
 SPAWN_DELAY = 120  # Frames between fish spawns
+START_FISHES = 5
 start_fishes = 5
 
 # Fishing Rod Constants
-boat_speed = 8
+BOAT_SPEED = 8
+ROD_SPEED = 6
 rod_length = 0
 rod_speed = 6
+boat_speed = 8
