@@ -4,7 +4,7 @@ This File Manages spawning, updating, and tracking all fish.
 
 import pygame
 import random
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT, MAX_FISH, SPAWN_DELAY
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT, MAX_FISH, SPAWN_DELAY, WATER_SURFACE, WATER_BOTTOM
 # Import the fish classes from fish.py
 from fish import Turtle, DangerFish, Shark, Octopus
 from lives_manager import LivesManager
@@ -29,8 +29,8 @@ class FishManager:
         # Lives manager
         self.lives_manager = LivesManager(
             max_lives=3,
-            live_icon_path="graphics/fish_orange_outline.png",
-            dead_icon_path="graphics/fish_orange_skeleton_outline.png"
+            live_icon_path="graphics/fish_blue_outline.png",
+            dead_icon_path="graphics/fish_blue_skeleton_outline.png"
         )
 
         # Red flash effect for penalty
@@ -108,9 +108,9 @@ class FishManager:
 
         # Determine a random position for the Fish to spawn
         x = random.randint(-50, SCREEN_WIDTH + 50)
-        y = random.randint(100, SCREEN_HEIGHT - 50)
+        y = random.randint(WATER_SURFACE + 20, WATER_BOTTOM - 20)
 
-        # Create the appropriate fish type (Turtle, Danger, Shark, or Octopus)
+        # Create the appropriate fish type (Turtle, Danger Fish, Shark, or Octopus)
         try:
             if fish_class == "turtle":
                 fish = Turtle(x, y)
@@ -180,13 +180,13 @@ class FishManager:
             return
 
         # Position below the lives (lives are at y=10 with 64px height)
-        start_y = 60  # 10 (lives y) + 64 (icon height) + 10 (gap)
+        start_y = 84  # 10 (lives y) + 64 (icon height) + 10 (gap)
 
         # Use same spacing as lives (70px)
         spacing = 70
 
         # Create font for values
-        font = pygame.font.Font(None, 20)
+        font = pygame.font.Font(None, 24)
 
         for i, catch in enumerate(self.recent_catches):
             x_pos = start_x + (i * spacing)
@@ -201,7 +201,7 @@ class FishManager:
 
             # Draw value below sprite (centered under the icon)
             value_text = font.render(f"+{catch['value']}", True, (255, 215, 0))
-            value_rect = value_text.get_rect(center=(x_pos + 10, start_y + 50))
+            value_rect = value_text.get_rect(center=(x_pos + 32, start_y + 72))
             surface.blit(value_text, value_rect)
 
     def draw_red_flash(self, surface):

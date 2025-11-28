@@ -65,7 +65,7 @@ class DeathAnimation(pygame.sprite.Sprite):
                 # Draw fish at bottom (offset down)
                 new_frame.blit(frame, (0, 6))
                 # Draw red line at top
-                line_y = -10
+                line_y = 3
                 line_x1 = frame.get_width() // 2 - 15
                 line_x2 = frame.get_width() // 2 + 15
                 pygame.draw.line(new_frame, (255, 0, 0), (line_x1, line_y), (line_x2, line_y), 2)
@@ -113,6 +113,9 @@ class AnimatedFish(pygame.sprite.Sprite):
         self.speed_x = speed_x
         self.speed_y = random.uniform(-0.5, 0.5)
 
+        # Determine if fish should be flipped (moving left)
+        self.flip_horizontal = (speed_x < 0)
+
         # Death animation
         self.death_animation_path = death_animation_path
 
@@ -134,7 +137,7 @@ class AnimatedFish(pygame.sprite.Sprite):
         # Game attributes
         self.is_catchable = True
         self.value = 10
-        self.rarity = "common"
+        self.rarity = "danger"
 
     def load_frames(self):
         """Extract individual frames from sprite sheet."""
@@ -222,7 +225,10 @@ class AnimatedFish(pygame.sprite.Sprite):
 class Turtle(AnimatedFish):
     """Rare, valuable turtle."""
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, moving_right=True):
+        # Set speed direction based on spawn side
+        speed = 0.5 if moving_right else -0.5
+
         super().__init__(
             sprite_sheet_path="graphics/turtle.png",
             frame_width=48,
@@ -230,7 +236,7 @@ class Turtle(AnimatedFish):
             num_frames=6,
             x=x,
             y=y,
-            speed_x=0.5,
+            speed_x=speed,
             fish_type="Turtle",
             death_animation_path="graphics/turtle_death.png"
         )
@@ -241,7 +247,10 @@ class Turtle(AnimatedFish):
 class DangerFish(AnimatedFish):
     """Danger fish - lose a life if caught."""
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, moving_right=True):
+        # Set speed direction based on spawn side
+        speed = 0.7 if moving_right else -0.7
+
         super().__init__(
             sprite_sheet_path="graphics/danger_fish.png",
             frame_width=48,
@@ -249,7 +258,7 @@ class DangerFish(AnimatedFish):
             num_frames=6,
             x=x,
             y=y,
-            speed_x=0.7,
+            speed_x=speed,
             fish_type="Danger Fish",
             death_animation_path="graphics/danger_fish_death.png"
         )
@@ -260,7 +269,10 @@ class DangerFish(AnimatedFish):
 class Shark(AnimatedFish):
     """Fast-moving shark, harder to catch."""
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, moving_right=True):
+        # Set speed direction based on spawn side
+        speed = 0.75 if moving_right else -0.75
+
         super().__init__(
             sprite_sheet_path="graphics/shark.png",
             frame_width=48,
@@ -268,7 +280,7 @@ class Shark(AnimatedFish):
             num_frames=6,
             x=x,
             y=y,
-            speed_x=0.75,
+            speed_x=speed,
             fish_type="Shark",
             death_animation_path="graphics/shark_death.png"
         )
@@ -279,7 +291,10 @@ class Shark(AnimatedFish):
 class Octopus(AnimatedFish):
     """Large, slow-moving octopus."""
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, moving_right=True):
+        # Set speed direction based on spawn side
+        speed = 0.5 if moving_right else -0.5
+
         super().__init__(
             sprite_sheet_path="graphics/octopus.png",
             frame_width=48,
@@ -287,7 +302,7 @@ class Octopus(AnimatedFish):
             num_frames=6,
             x=x,
             y=y,
-            speed_x=0.5,
+            speed_x=speed,
             fish_type="Octopus",
             death_animation_path="graphics/octopus_death.png"
         )
