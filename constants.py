@@ -28,8 +28,6 @@ START_FISHES = 5
 start_fishes = 5
 
 # Fishing Rod Constants
-BOAT_SPEED = 8
-ROD_SPEED = 6
+boat_speed = 8
 rod_length = 0
 rod_speed = 6
-boat_speed = 8
