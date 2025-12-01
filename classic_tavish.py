@@ -1,9 +1,9 @@
 """
     This is the Classic Mode for the game
-
 """
 # Importing the different libraries and methods
-import pygame, sys
+import pygame
+import sys
 from constants import *
 from fish_manager import FishManager
 from background import BackgroundManager
@@ -32,11 +32,14 @@ hook_rect = fishing_hook_img.get_rect()
 
 # Defining parameters for fishing rod and casting
 rod_max_length = SCREEN_HEIGHT - 300
+rod_length = 0
 is_casting = False
 
 """
-    This is the main game loop where all in-game features will be defined and called
+    Main game loop where all features will be defined and called
 """
+
+
 def main():
     # Initialize Pygame
     pygame.init()
@@ -44,12 +47,12 @@ def main():
     running = True
     pygame.display.set_caption("Fish-O-Mania: Classic Mode")
 
-    # Call the function FishManager() and BackgroundManager() that allows to control fish behaviours
+    # Call the function that allows to control fish and background animations
     fish_manager = FishManager()
-    background_manager = BackgroundManager()
+    background_manager = BackgroundManager(use_terrain_files=True)
 
     # Spawn initial fishes
-    for i in range(start_fishes):
+    for i in range(START_FISHES):
         fish_manager.spawn_fish()
 
     # Defining the Scoreboard and Fish Net variables
@@ -59,7 +62,12 @@ def main():
     # Defining global casting variables
     global boat_x, is_casting, rod_length
 
-    # Main Game
+    # Add game_over flag before the while loop
+    game_over = False
+
+    # Fade in from black
+    fade_alpha = 255
+
     while running:
         # Event Handling Section - Monitor keypresses, mouse movements etc
         for event in pygame.event.get():
@@ -70,75 +78,103 @@ def main():
                 # Exit if 'esc' button pressed
                 if event.key == pygame.K_ESCAPE:
                     running = False
-                # Press space to cast fishing rod
-                if event.key == pygame.K_SPACE:
-                    is_casting = True
+                # Press SPACE to restart if game over, or cast rod if playing
+                elif event.key == pygame.K_SPACE:
+                    if not game_over:
+                        # Cast fishing rod
+                        is_casting = not is_casting
+                elif event.key == pygame.K_RETURN:
+                    if game_over:
+                        # Restart the game
+                        fish_manager.clear_all()
+                        score = 0
+                        caught_fish = []
+                        for i in range(START_FISHES):
+                            fish_manager.spawn_fish()
+                        game_over = False
+                        rod_length = 0
+                        is_casting = False
 
+        # Only update game elements if not game over
+        if not game_over:
+            # Update the fish and background animations
+            fish_manager.update()
+            background_manager.update()
 
-        # Update the fish and background animations
-        fish_manager.update()
-        background_manager.update()
+            # Move boat left/right with arrow keys
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_LEFT]:
+                boat_x -= BOAT_SPEED
+            if keys[pygame.K_RIGHT]:
+                boat_x += BOAT_SPEED
 
-        # Move boat left/right with arrow keys
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-            boat_x -= boat_speed
-        if keys[pygame.K_RIGHT]:
-            boat_x += boat_speed
+            rod_x = boat_x + boat_image.get_width() - 83
+            # Person's hand area -> rod_top_y
+            rod_top_y = boat_y + 175
 
-        rod_x = boat_x + boat_image.get_width() - 83
-        # Person's hand area -> rod_top_y
-        rod_top_y = boat_y + 175
-
-        # Handle casting
-        if is_casting:
-            if rod_length < rod_max_length:
-                rod_length += rod_speed
-            else:
-                is_casting = False
-        else:
-            # Reel back up
-            if rod_length > 0:
-                fish = fish_manager.get_fish_at_position((hook_rect.centerx, hook_rect.bottom))
-                if fish:
-                    info = fish.get_info()
-                    score += info["value"]
-                    caught_fish.append(info)
-                    fish_manager.remove_fish(fish)
-                    # Optional auto reel if fish caught
+            # Handle casting
+            if is_casting:
+                if rod_length < rod_max_length:
+                    rod_length += ROD_SPEED
+                else:
+                    # If hook reaches bottom, reel back up
                     is_casting = False
-                    print(f"Caught by casting: {info['type']} (+{info['value']} points)")
-                rod_length -= rod_speed
+            else:
+                # Reel back up
+                if rod_length > 0:
+                    rod_length -= (ROD_SPEED - 6)
+                    # Check for fish while reeling
+                    fish = fish_manager.get_fish_at_position(
+                        (hook_rect.centerx, hook_rect.bottom))
+                    if fish:
+                        result = fish_manager.remove_fish(fish)
 
-        # Final hook position
-        hook_x = rod_x
-        hook_y = rod_top_y + rod_length
+                        # Only add score if not a penalty fish
+                        if not result['penalty']:
+                            score += result["value"]
 
-        # Define hook rect for clicking
-        hook_rect.x = hook_x - fishing_hook_img.get_width() // 2
-        hook_rect.y = hook_y
+                        caught_fish.append(result)
 
+                        # Check if game over
+                        if result['game_over']:
+                            print("GAME OVER!")
+                            game_over = True
+
+                    rod_length -= ROD_SPEED
+
+            # Final hook position
+            hook_x = rod_x
+            hook_y = rod_top_y + rod_length
+
+            # Define hook rect for clicking
+            hook_rect.x = hook_x - fishing_hook_img.get_width() // 2
+            hook_rect.y = hook_y
+
+        # DRAWING SECTION (always draw, even when paused)
         # Sky Backdrops
         screen.fill(SKY_BLUE)
         pygame.draw.rect(screen, DEEP_BLUE,
-                         (0, WATER_SURFACE, SCREEN_WIDTH, SCREEN_HEIGHT - WATER_SURFACE))
-        pygame.draw.line(screen, WHITE, (0, WATER_SURFACE), (SCREEN_WIDTH, WATER_SURFACE), 2)
+                         (0, WATER_SURFACE, SCREEN_WIDTH,
+                          SCREEN_HEIGHT - WATER_SURFACE))
+        pygame.draw.line(screen, WHITE, (0, WATER_SURFACE),
+                         (SCREEN_WIDTH, WATER_SURFACE), 2)
 
         # Water background with gradient effect
         for y in range(WATER_SURFACE, SCREEN_HEIGHT):
-            # Create gradient from lighter to darker blue
             ratio = (y - WATER_SURFACE) / (SCREEN_HEIGHT - WATER_SURFACE)
-            color = tuple(int(AZURE[i] + (DEEP_BLUE[i] - AZURE[i]) * ratio) for i in range(3))
+            color = tuple(int(AZURE[i] + (DEEP_BLUE[i] - AZURE[i]) * ratio)
+                          for i in range(3))
             pygame.draw.line(screen, color, (0, y), (SCREEN_WIDTH, y))
 
-        # Draw background elements (rocks, seaweed, bubbles, ripples)
+        # Draw background elements
         background_manager.draw(screen)
 
         # Put boat on top of the water line
         screen.blit(boat_image, (boat_x, boat_y))
 
         # Draw fishing line
-        pygame.draw.line(screen, WHITE, (rod_x, rod_top_y), (hook_x, hook_y), 3)
+        pygame.draw.line(screen, WHITE, (rod_x - 5, rod_top_y),
+                         (hook_x - 5, hook_y), 2)
 
         # Display fishing hook
         screen.blit(fishing_hook_img, hook_rect)
@@ -154,39 +190,64 @@ def main():
         screen.blit(score_text, (10, 10))
 
         # Fish count
-        stats = fish_manager.get_stats()
         count_text = font.render(f"Fish in water: {stats['total']}", True, WHITE)
         screen.blit(count_text, (10, 50))
 
-        # In Game Instructions
-        instructions = [
-            "Press SPACE to cast and catch fish!",
-            "ESC: Quit"
-        ]
-        y_offset = 80
-        for instruction in instructions:
-            text = font.render(instruction, True, WHITE)
-            screen.blit(text, (10, y_offset))
-            y_offset += 25
+        # In Game Instructions (only show if not game over)
+        if not game_over:
+            instructions = [
+                "Press SPACE to cast and catch fish!",
+                "ESC: Quit"
+            ]
+            y_offset = 80
+            for instruction in instructions:
+                text = font.render(instruction, True, WHITE)
+                screen.blit(text, (10, y_offset))
+                y_offset += 25
 
-        # Recent catches
-        if caught_fish:
-            recent_text = font.render("Recent Catches:", True, WHITE)
-            screen.blit(recent_text, (SCREEN_WIDTH - 250, 10))
-            for i, catch in enumerate(caught_fish[-5:]):
-                catch_text = font.render(
-                    f"{catch['type']} (+{catch['value']})",
-                    True,
-                    (255, 215, 0) if catch['rarity'] == 'rare' else WHITE
-                )
-                screen.blit(catch_text, (SCREEN_WIDTH - 250, 40 + i * 25))
 
+        # Display game over screen
+        if game_over:
+            # Semi-transparent overlay
+            overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+            overlay.set_alpha(180)
+            overlay.fill((0, 0, 0))
+            screen.blit(overlay, (0, 0))
+
+            # Game over text
+            game_over_text = big_font.render("GAME OVER!", True, (255, 0, 0))
+            game_over_rect = game_over_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50))
+            screen.blit(game_over_text, game_over_rect)
+
+            # Final score
+            final_score_text = big_font.render(f"Final Score: {score}", True, WHITE)
+            final_score_rect = final_score_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 10))
+            screen.blit(final_score_text, final_score_rect)
+
+            # Restart instruction
+            restart_text = font.render("Press Enter to Restart", True, (255, 215, 0))
+            restart_rect = restart_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 60))
+            screen.blit(restart_text, restart_rect)
+
+            quit_text = font.render("Press ESC to Quit", True, WHITE)
+            quit_rect = quit_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 90))
+            screen.blit(quit_text, quit_rect)
+
+        # Draw red flash effect if penalty occurred
+        fish_manager.draw_red_flash(screen)
+
+        # Fade in from black at start
+        if fade_alpha > 0:
+            fade_surf = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+            fade_surf.fill((0, 0, 0))
+            fade_surf.set_alpha(fade_alpha)
+            screen.blit(fade_surf, (0, 0))
+            fade_alpha -= 8
+
+        # Update the entire screen to show the changes
         pygame.display.flip()
         clock.tick(FPS)
-
-    pygame.quit()
-    sys.exit()
-
+    return score
 
 if __name__ == '__main__':
     main()
