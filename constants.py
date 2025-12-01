@@ -28,5 +28,6 @@ start_fishes = 5
 
 # Fishing Rod Constants
 boat_speed = 8
-rod_length = 0
 rod_speed = 6
+rod_length = 0
+rod_max_length = SCREEN_HEIGHT - 300
