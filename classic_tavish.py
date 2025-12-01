@@ -247,6 +247,7 @@ def main():
         # Update the entire screen to show the changes
         pygame.display.flip()
         clock.tick(FPS)
+    return score
 
 if __name__ == '__main__':
     main()
