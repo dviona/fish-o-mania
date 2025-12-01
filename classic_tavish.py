@@ -65,6 +65,9 @@ def main():
     # Add game_over flag before the while loop
     game_over = False
 
+    # Fade in from black
+    fade_alpha = 255
+
     while running:
         # Event Handling Section - Monitor keypresses, mouse movements etc
         for event in pygame.event.get():
@@ -77,6 +80,10 @@ def main():
                     running = False
                 # Press SPACE to restart if game over, or cast rod if playing
                 elif event.key == pygame.K_SPACE:
+                    if not game_over:
+                        # Cast fishing rod
+                        is_casting = not is_casting
+                elif event.key == pygame.K_RETURN:
                     if game_over:
                         # Restart the game
                         fish_manager.clear_all()
@@ -87,9 +94,6 @@ def main():
                         game_over = False
                         rod_length = 0
                         is_casting = False
-                    else:
-                        # Cast fishing rod
-                        is_casting = True
 
         # Only update game elements if not game over
         if not game_over:
@@ -113,10 +117,13 @@ def main():
                 if rod_length < rod_max_length:
                     rod_length += ROD_SPEED
                 else:
+                    # If hook reaches bottom, reel back up
                     is_casting = False
             else:
                 # Reel back up
                 if rod_length > 0:
+                    rod_length -= (ROD_SPEED - 6)
+                    # Check for fish while reeling
                     fish = fish_manager.get_fish_at_position(
                         (hook_rect.centerx, hook_rect.bottom))
                     if fish:
@@ -127,7 +134,6 @@ def main():
                             score += result["value"]
 
                         caught_fish.append(result)
-                        is_casting = False
 
                         # Check if game over
                         if result['game_over']:
@@ -219,7 +225,7 @@ def main():
             screen.blit(final_score_text, final_score_rect)
 
             # Restart instruction
-            restart_text = font.render("Press SPACE to Restart", True, (255, 215, 0))
+            restart_text = font.render("Press Enter to Restart", True, (255, 215, 0))
             restart_rect = restart_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 60))
             screen.blit(restart_text, restart_rect)
 
@@ -229,6 +235,14 @@ def main():
 
         # Draw red flash effect if penalty occurred
         fish_manager.draw_red_flash(screen)
+
+        # Fade in from black at start
+        if fade_alpha > 0:
+            fade_surf = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+            fade_surf.fill((0, 0, 0))
+            fade_surf.set_alpha(fade_alpha)
+            screen.blit(fade_surf, (0, 0))
+            fade_alpha -= 8
 
         # Update the entire screen to show the changes
         pygame.display.flip()

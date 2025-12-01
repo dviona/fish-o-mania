@@ -29,8 +29,8 @@ class FishManager:
         # Lives manager
         self.lives_manager = LivesManager(
             max_lives=3,
-            live_icon_path="graphics/fish_blue_outline.png",
-            dead_icon_path="graphics/fish_blue_skeleton_outline.png"
+            live_icon_path="graphics/fish_orange_outline.png",
+            dead_icon_path="graphics/fish_orange_skeleton_outline.png"
         )
 
         # Red flash effect for penalty
@@ -93,21 +93,21 @@ class FishManager:
         if fish_class is None:
             # Generate a random number to determine which fish to spawn
             random_num = random.random()
-            # 40% chance for Danger Fish type
-            if random_num < 0.4:
+            # 30% chance for Danger Fish type
+            if random_num < 0.3:
                 fish_class = "danger"
             # 30% chance for Shark type
-            elif random_num < 0.7:
+            elif random_num < 0.6:
                 fish_class = "shark"
-            # 20% chance for Octopus type
-            elif random_num < 0.9:
+            # 25% chance for Octopus type
+            elif random_num < 0.85:
                 fish_class = "octopus"
-            # 10% chance for Turtle Type
+            # 15% chance for Turtle Type
             else:
                 fish_class = "turtle"
 
         # Determine a random position for the Fish to spawn
-        x = random.randint(-50, SCREEN_WIDTH + 50)
+        x = random.randint(50, SCREEN_WIDTH - 50)
         y = random.randint(WATER_SURFACE + 20, WATER_BOTTOM - 20)
 
         # Create the appropriate fish type (Turtle, Danger Fish, Shark, or Octopus)
