@@ -3,7 +3,7 @@
 import pygame
 import sys
 from constants import *
-import classic  #main code file
+import classic_aradhya  #main code file
 
 
 def draw_center_text(surface, text, font, color, y):
@@ -56,7 +56,7 @@ def main():
                         option = menu_items[selected]
 
                         if option == "Start Game":
-                            score = classic.main()     # run the game
+                            score = classic_aradhya.main()     # run the game
                             if score > high_score:
                                 high_score = score
 
