@@ -7,10 +7,10 @@ import sys
 from constants import *
 from fish_manager import FishManager
 from background import BackgroundManager
-from casting import CastingRod
 
 # Initialize pygame
-pygame.init()`
+# Test comment
+pygame.init()
 
 # Main parameters for the scene
 SCREEN_RESOLUTION = (SCREEN_WIDTH, SCREEN_HEIGHT)
