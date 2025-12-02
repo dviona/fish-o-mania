@@ -2,12 +2,13 @@
 This File Manages spawning, updating, and tracking all fish.
 """
 
-import pygame
+import pygame, sys
 import random
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, MAX_FISH, SPAWN_DELAY, WATER_SURFACE, WATER_BOTTOM
 # Import the fish classes from fish.py
 from fish import Turtle, DangerFish, Shark, Octopus
 from lives_manager import LivesManager
+
 
 
 class FishManager:
@@ -239,11 +240,16 @@ class FishManager:
         """
         # Get fish info before removing
         info = fish.get_info()
+        # Sound Effects
+        pygame.mixer.music.load("sounds/dead.mp3")
+        dead_fish_sound = pygame.mixer.Sound("sounds/dead.mp3")
+        dead_fish_sound.set_volume(0.3)
 
         # Check if it's a danger fish (wrong fish = lose life)
         penalty = False
         if info['type'] == "Danger Fish":
             self.lives_manager.lose_life()
+            dead_fish_sound.play()
             penalty = True
             # Trigger red flash effect
             self.red_flash_timer = self.red_flash_duration

@@ -10,7 +10,8 @@ from background import BackgroundManager
 from casting import CastingRod
 
 # Initialize pygame
-pygame.init()`
+pygame.init()
+
 
 # Main parameters for the scene
 SCREEN_RESOLUTION = (SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -19,10 +20,22 @@ clock = pygame.time.Clock()
 font = pygame.font.Font(None, 24)
 big_font = pygame.font.Font(None, 36)
 
+# Sound Effects
+pygame.mixer.music.load("sounds/classic.mp3")
+bg_sound = pygame.mixer.Sound("sounds/classic.mp3")
+bg_sound.set_volume(0.3)
+
+pygame.mixer.music.load("sounds/casting-whoosh.mp3")
+casting_sound = pygame.mixer.Sound("sounds/casting-whoosh.mp3")
+casting_sound.set_volume(0.4)
+
+pygame.mixer.music.load("sounds/bubble.mp3")
+bubble_sound = pygame.mixer.Sound("sounds/bubble.mp3")
+bubble_sound.set_volume(0.5)
+
 # Defining parameters for the boat
 boat_image = pygame.image.load("graphics/boat.png")
 boat_image = pygame.transform.scale(boat_image, (310, 260))
-
 boat_x = SCREEN_WIDTH // 2 - boat_image.get_width() // 2 - 300
 boat_y = WATER_SURFACE - boat_image.get_height() // 2 - 52
 
@@ -30,11 +43,6 @@ boat_y = WATER_SURFACE - boat_image.get_height() // 2 - 52
 fishing_hook_img = pygame.image.load("graphics/fishing_hook.png")
 fishing_hook_img = pygame.transform.scale(fishing_hook_img, (30, 30))
 hook_rect = fishing_hook_img.get_rect()
-
-# Defining parameters for fishing rod and casting
-rod_max_length = SCREEN_HEIGHT - 300
-rod_length = 0
-is_casting = False
 
 """
     Main game loop where all features will be defined and called
@@ -44,6 +52,8 @@ is_casting = False
 def main():
     # Initialize Pygame
     pygame.init()
+    bg_sound.play(-1)
+
     # 'running' boolean detects if game is running
     running = True
     pygame.display.set_caption("Fish-O-Mania: Classic Mode")
@@ -51,6 +61,7 @@ def main():
     # Call the function that allows to control fish and background animations
     fish_manager = FishManager()
     background_manager = BackgroundManager(use_terrain_files=True)
+    casting_manager = CastingRod(rod_max_length, rod_speed)
 
     # Spawn initial fishes
     for i in range(START_FISHES):
@@ -69,11 +80,13 @@ def main():
     # Fade in from black
     fade_alpha = 255
 
+    # Main Game
     while running:
         # Event Handling Section - Monitor keypresses, mouse movements etc
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
             # Monitor for any key-presses
             elif event.type == pygame.KEYDOWN:
                 # Exit if 'esc' button pressed
@@ -82,8 +95,11 @@ def main():
                 # Press SPACE to restart if game over, or cast rod if playing
                 elif event.key == pygame.K_SPACE:
                     if not game_over:
-                        # Cast fishing rod
-                        is_casting = not is_casting
+
+                        casting_manager.toggle_cast()
+                        casting_sound.play()
+
+                # Press Enter to restart the game
                 elif event.key == pygame.K_RETURN:
                     if game_over:
                         # Restart the game
@@ -93,8 +109,8 @@ def main():
                         for i in range(START_FISHES):
                             fish_manager.spawn_fish()
                         game_over = False
-                        rod_length = 0
-                        is_casting = False
+                        #rod_length = 0
+                        #is_casting = False
 
         # Only update game elements if not game over
         if not game_over:
@@ -106,14 +122,19 @@ def main():
             keys = pygame.key.get_pressed()
             if keys[pygame.K_LEFT]:
                 boat_x -= BOAT_SPEED
+
             if keys[pygame.K_RIGHT]:
                 boat_x += BOAT_SPEED
 
+            # So the character doesn't disappear off-screen
+            boat_x = max(0, min(boat_x, SCREEN_WIDTH - boat_image.get_width()))
+
+            # Where the hook is attached on the rod
             rod_x = boat_x + boat_image.get_width() - 83
-            # Person's hand area -> rod_top_y
             rod_top_y = boat_y + 175
 
-            # Handle casting
+            # Casting Rod Logic
+            '''
             if is_casting:
                 if rod_length < rod_max_length:
                     rod_length += ROD_SPEED
@@ -142,10 +163,18 @@ def main():
                             game_over = True
 
                     rod_length -= ROD_SPEED
+            '''
+            # Casting Rod Logic
+            caught = casting_manager.update(hook_rect, fish_manager, bubble_sound)
+            if caught:
+                info = caught
+                score += info["value"]
+                caught_fish.append(info)
+                print(f"Caught: {info['type']} (+{info['value']} points)")
 
             # Final hook position
             hook_x = rod_x
-            hook_y = rod_top_y + rod_length
+            hook_y = rod_top_y + casting_manager.rod_length
 
             # Define hook rect for clicking
             hook_rect.x = hook_x - fishing_hook_img.get_width() // 2

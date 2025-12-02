@@ -2,7 +2,6 @@
 This file contains all the constants used for the Game.
 """
 
-
 # Screen settings
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 800
@@ -28,6 +27,10 @@ START_FISHES = 5
 start_fishes = 5
 
 # Fishing Rod Constants
+BOAT_SPEED = 8
+ROD_LENGTH = 8
+ROD_SPEED = 6
+rod_max_length = 500
 boat_speed = 8
 rod_length = 0
 rod_speed = 6

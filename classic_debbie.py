@@ -19,8 +19,8 @@ font = pygame.font.Font(None, 24)
 big_font = pygame.font.Font(None, 36)
 
 # Sound Effects
-pygame.mixer.music.load("sounds/mania.mp3")
-bg_sound = pygame.mixer.Sound("sounds/mania.mp3")
+pygame.mixer.music.load("sounds/classic.mp3")
+bg_sound = pygame.mixer.Sound("sounds/classic.mp3")
 bg_sound.set_volume(0.3)
 
 pygame.mixer.music.load("sounds/casting-whoosh.mp3")
