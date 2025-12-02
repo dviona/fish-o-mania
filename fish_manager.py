@@ -27,6 +27,13 @@ class FishManager:
         # Death animations group
         self.death_animations = pygame.sprite.Group()
 
+        # Sound effects - Good Catches
+        self.catch_sound = pygame.mixer.Sound("sounds/bubble.mp3")
+        self.catch_sound.set_volume(0.5)
+        # Sound effects - Bad Catches
+        self.penalty_sound = pygame.mixer.Sound("sounds/dead.mp3")
+        self.penalty_sound.set_volume(0.5)
+
         # Lives manager
         self.lives_manager = LivesManager(
             max_lives=3,
@@ -240,22 +247,19 @@ class FishManager:
         """
         # Get fish info before removing
         info = fish.get_info()
-        # Sound Effects
-        pygame.mixer.music.load("sounds/dead.mp3")
-        dead_fish_sound = pygame.mixer.Sound("sounds/dead.mp3")
-        dead_fish_sound.set_volume(0.3)
 
         # Check if it's a danger fish (wrong fish = lose life)
         penalty = False
         if info['type'] == "Danger Fish":
             self.lives_manager.lose_life()
-            dead_fish_sound.play()
+            self.penalty_sound.play()
             penalty = True
             # Trigger red flash effect
             self.red_flash_timer = self.red_flash_duration
             print(f"Wrong fish! Lost a life. Lives remaining: {self.lives_manager.get_current_lives()}")
         else:
             print(f"Caught: {info['type']} (+{info['value']} points)")
+            self.catch_sound.play()
 
             # Add to recent catches with animation data (only if not penalty)
             catch_data = {

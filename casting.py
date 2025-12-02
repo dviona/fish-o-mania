@@ -30,11 +30,9 @@ class CastingRod:
                 )
 
                 if fish:
-                    bubble_sound.play()
-                    info = fish.get_info()
-                    fish_manager.remove_fish(fish)
+                    result = fish_manager.remove_fish(fish)
                     self.is_casting = False
-                    return info  # Return caught fish
+                    return result  # Return caught fish
 
                 self.rod_length -= self.rod_speed
 

@@ -21,7 +21,7 @@ clock = pygame.time.Clock()
 
 
 class Button:
-    """Simple menu button with hover effect."""
+    """Simple menu button with hover and selection effect."""
 
     def __init__(self, x, y, width, height, text, enabled=True):
         self.base_x = x
@@ -33,12 +33,15 @@ class Button:
         self.text = text
         self.enabled = enabled
         self.hovered = False
+        self.selected = False  # For keyboard navigation
 
         # Colors
         self.normal_color = (0, 105, 148)
         self.hover_color = (0, 140, 190)
+        self.selected_color = (0, 160, 210)  # Brighter for keyboard selection
         self.disabled_color = (80, 80, 100)
         self.border_color = WHITE
+        self.selected_border_color = (255, 215, 0)  # Gold border when selected
 
         self.font = pygame.font.Font(None, 36)
 
@@ -52,16 +55,20 @@ class Button:
         if not self.enabled:
             bg_color = self.disabled_color
             text_color = (150, 150, 150)
-        elif self.hovered:
-            bg_color = self.hover_color
+            border_color = self.border_color
+        elif self.selected or self.hovered:
+            bg_color = self.selected_color if self.selected else self.hover_color
             text_color = WHITE
+            border_color = self.selected_border_color if self.selected else self.border_color
         else:
             bg_color = self.normal_color
             text_color = WHITE
+            border_color = self.border_color
 
         rect = pygame.Rect(self.x, self.y, self.width, self.height)
         pygame.draw.rect(surface, bg_color, rect, border_radius=10)
-        pygame.draw.rect(surface, self.border_color, rect, 3, border_radius=10)
+        border_width = 4 if self.selected else 3
+        pygame.draw.rect(surface, border_color, rect, border_width, border_radius=10)
 
         text_surf = self.font.render(self.text, True, text_color)
         text_rect = text_surf.get_rect(center=rect.center)
@@ -99,25 +106,30 @@ class MainMenu:
         self.boat_y = WATER_SURFACE - 130
 
         # Title position
-        self.title_y = 100
+        self.title_y = 80
 
         # Fonts
         self.title_font = pygame.font.Font(None, 80)
         self.subtitle_font = pygame.font.Font(None, 32)
+        self.instruction_font = pygame.font.Font(None, 24)
 
-        # Buttons
+        # Buttons - positioned higher
         btn_w, btn_h = 250, 50
         btn_x = SCREEN_WIDTH // 2 - btn_w // 2
-        start_y = SCREEN_HEIGHT // 2 + 20
-        spacing = 70
+        start_y = SCREEN_HEIGHT // 2 - 80  # Moved up from +20 to -80
+        spacing = 60  # Slightly tighter spacing
 
         self.buttons = [
             Button(btn_x, start_y, btn_w, btn_h, "Classic Mode", True),
-            Button(btn_x, start_y + spacing, btn_w, btn_h, "Time Attack", False),
-            Button(btn_x, start_y + spacing * 2, btn_w, btn_h, "Endless Mode", False),
+            Button(btn_x, start_y + spacing, btn_w, btn_h, "Time Attack", True),
+            Button(btn_x, start_y + spacing * 2, btn_w, btn_h, "Endless Mode", True),
             Button(btn_x, start_y + spacing * 3, btn_w, btn_h, "Settings", False),
             Button(btn_x, start_y + spacing * 4, btn_w, btn_h, "Quit", True),
         ]
+
+        # Keyboard navigation
+        self.selected_index = 0
+        self.buttons[self.selected_index].selected = True
 
         # Transition state
         self.transitioning = False
@@ -125,6 +137,35 @@ class MainMenu:
         self.transition_target = None
         self.transition_done = False
         self.fade_alpha = 0
+
+    def move_selection(self, direction):
+        """Move keyboard selection up or down."""
+        # Deselect current
+        self.buttons[self.selected_index].selected = False
+
+        # Move to next enabled button
+        attempts = 0
+        while attempts < len(self.buttons):
+            self.selected_index = (self.selected_index + direction) % len(self.buttons)
+            if self.buttons[self.selected_index].enabled:
+                break
+            attempts += 1
+
+        # Select new
+        self.buttons[self.selected_index].selected = True
+
+    def select_current(self):
+        """Activate the currently selected button."""
+        if self.buttons[self.selected_index].enabled:
+            if self.selected_index == 0:
+                return "classic"
+            elif self.selected_index == 1:
+                return "time_attack"
+            elif self.selected_index == 2:
+                return "endless"
+            elif self.selected_index == 4:
+                return "quit"
+        return None
 
     def start_transition(self, target):
         """Start the exit transition."""
@@ -209,6 +250,13 @@ class MainMenu:
         for btn in self.buttons:
             btn.draw(surface)
 
+        # Instructions (only when not transitioning)
+        if not self.transitioning:
+            instructions = self.instruction_font.render(
+                "UP/DOWN to navigate, ENTER to select", True, (180, 200, 220))
+            instructions_rect = instructions.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT - 30))
+            surface.blit(instructions, instructions_rect)
+
         # Fade overlay
         if self.fade_alpha > 0:
             fade_surf = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -222,6 +270,10 @@ class MainMenu:
             if btn.is_clicked(mouse_pos, True):
                 if i == 0:
                     return "classic"
+                elif i == 1:
+                    return "time_attack"
+                elif i == 2:
+                    return "endless"
                 elif i == 4:
                     return "quit"
         return None
@@ -244,12 +296,24 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+                elif not menu.transitioning:
+                    # Keyboard navigation
+                    if event.key == pygame.K_UP:
+                        menu.move_selection(-1)
+                    elif event.key == pygame.K_DOWN:
+                        menu.move_selection(1)
+                    elif event.key == pygame.K_RETURN:
+                        action = menu.select_current()
+                        if action in ["classic", "time_attack", "endless"]:
+                            menu.start_transition(action)
+                        elif action == "quit":
+                            running = False
 
-        # Handle clicks
+        # Handle mouse clicks
         if mouse_clicked and not menu.transitioning:
             action = menu.handle_click(pygame.mouse.get_pos())
-            if action == "classic":
-                menu.start_transition("classic")
+            if action in ["classic", "time_attack", "endless"]:
+                menu.start_transition(action)
             elif action == "quit":
                 running = False
 
@@ -259,10 +323,24 @@ def main():
         if result == "classic":
             print("Launching Classic Mode...")
             pygame.display.set_caption("Fish-O-Mania: Classic Mode")
-
-            from classic_tavish import main as classic_main
+            from classic_tavish_copy import main as classic_main
             classic_main()
+            pygame.display.set_caption("Fish-O-Mania")
+            menu = MainMenu()
 
+        elif result == "time_attack":
+            print("Launching Time Attack...")
+            pygame.display.set_caption("Fish-O-Mania: Time Attack")
+            from time_attack import main as time_attack_main
+            time_attack_main()
+            pygame.display.set_caption("Fish-O-Mania")
+            menu = MainMenu()
+
+        elif result == "endless":
+            print("Launching Endless Mode...")
+            pygame.display.set_caption("Fish-O-Mania: Endless Mode")
+            from endless import main as endless_main
+            endless_main()
             pygame.display.set_caption("Fish-O-Mania")
             menu = MainMenu()
 
