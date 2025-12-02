@@ -13,7 +13,7 @@ from lives_manager import LivesManager
 
 class FishManager:
     """
-    Manages all fish in the game.
+    Manages all fish in the game_copy.
     Handles spawning, updating, and organizing fish into groups.
     """
 
@@ -243,7 +243,7 @@ class FishManager:
         Also handles lives logic for catching wrong fish.
 
         Returns:
-            dict: Information about the caught fish and game state
+            dict: Information about the caught fish and game_copy state
         """
         # Get fish info before removing
         info = fish.get_info()
@@ -284,7 +284,7 @@ class FishManager:
         # Remove fish from all groups
         fish.kill()
 
-        # Return info with penalty flag and game over status
+        # Return info with penalty flag and game_copy over status
         return {
             **info,
             'penalty': penalty,
@@ -292,7 +292,7 @@ class FishManager:
         }
 
     def get_stats(self):
-        """Get statistics about current fish and game state."""
+        """Get statistics about current fish and game_copy state."""
         return {
             "total": len(self.all_fish),
             "danger": len(self.danger_fish),

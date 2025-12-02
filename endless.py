@@ -1,53 +1,75 @@
 """
-Endless Mode - Relaxing fishing with no lives or timer.
-Play at your own pace!
+Endless Mode for Fish-O-Mania.
+
+A relaxing game_copy mode with no lives or timer. Players can fish at their
+own pace without any penalties. Perfect for casual play and practicing.
+
+Classes:
+    RelaxedFishManager: Fish manager without penalty system.
+
+Functions:
+    format_time: Formats seconds into MM:SS string.
+    main: Main game_copy loop for endless mode.
 """
 
 import pygame
-import sys
-from constants import *
+from constants import (
+    SCREEN_WIDTH,
+    SCREEN_HEIGHT,
+    FPS,
+    WHITE,
+    SKY_BLUE,
+    AZURE,
+    DEEP_BLUE,
+    WATER_SURFACE,
+    BOAT_SPEED,
+    ROD_MAX_LENGTH,
+    ROD_SPEED,
+    START_FISHES
+)
 from fish_manager import FishManager
 from background import BackgroundManager
 from casting import CastingRod
+from scores import update_high_score, get_high_score
 
+# Initialize pygame
 pygame.init()
 
+# Display setup
 SCREEN_RESOLUTION = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode(SCREEN_RESOLUTION)
 clock = pygame.time.Clock()
 font = pygame.font.Font(None, 24)
 big_font = pygame.font.Font(None, 36)
 
-# Sound Effects
-bg_sound = pygame.mixer.Sound("sounds/classic.mp3")
-bg_sound.set_volume(0.25)  # Slightly quieter for relaxing mode
-
-casting_sound = pygame.mixer.Sound("sounds/casting-whoosh.mp3")
-casting_sound.set_volume(0.4)
-
-# Boat setup
-boat_image = pygame.image.load("graphics/boat.png")
-boat_image = pygame.transform.scale(boat_image, (310, 260))
-boat_x = SCREEN_WIDTH // 2 - boat_image.get_width() // 2 - 300
-boat_y = WATER_SURFACE - boat_image.get_height() // 2 - 52
-
-# Fishing hook
-fishing_hook_img = pygame.image.load("graphics/fishing_hook.png")
-fishing_hook_img = pygame.transform.scale(fishing_hook_img, (30, 30))
-hook_rect = fishing_hook_img.get_rect()
-
 
 class RelaxedFishManager(FishManager):
-    """Fish manager without lives system for endless mode."""
+    """
+    Fish manager variant without life penalties.
+
+    All fish can be caught without consequence, making for a
+    relaxed, stress-free fishing experience.
+    """
 
     def remove_fish(self, fish):
-        """Remove fish without penalty - just catch everything!"""
+        """
+        Remove a caught fish without any penalties.
+
+        Unlike the standard FishManager, catching danger fish
+        does not cost lives or trigger game_copy over.
+
+        Args:
+            fish: The fish sprite that was caught.
+
+        Returns:
+            dict: Fish information with penalty=False, game_over=False.
+        """
         info = fish.get_info()
 
         # Play catch sound for all fish
         self.catch_sound.play()
 
-        # Add to recent catches
+        # Add to recent catches display
         catch_data = {
             'type': info['type'],
             'value': info['value'],
@@ -67,7 +89,7 @@ class RelaxedFishManager(FishManager):
 
         fish.kill()
 
-        # Return info - no penalty, no game over
+        # Return info - never any penalty or game_copy over
         return {
             **info,
             'penalty': False,
@@ -75,60 +97,195 @@ class RelaxedFishManager(FishManager):
         }
 
     def draw(self, surface):
-        """Draw fish without lives display."""
+        """
+        Draw fish without lives display.
+
+        Overrides parent to skip drawing the lives UI since
+        endless mode doesn't use the lives system.
+
+        Args:
+            surface (pygame.Surface): Surface to draw on.
+        """
         self.all_fish.draw(surface)
         self.death_animations.draw(surface)
-        # Don't draw lives - endless mode!
+        # Skip lives display - endless mode doesn't need it
         self.draw_recent_catches(surface, SCREEN_WIDTH - 220)
 
 
 def format_time(seconds):
-    """Format seconds into MM:SS."""
+    """
+    Format seconds into MM:SS display string.
+
+    Args:
+        seconds (float): Time in seconds.
+
+    Returns:
+        str: Formatted time string (e.g., "05:30").
+    """
     mins = int(seconds // 60)
     secs = int(seconds % 60)
     return f"{mins:02d}:{secs:02d}"
 
 
-def main():
-    pygame.init()
-    bg_sound.play(-1)
+def load_sounds():
+    """
+    Load and configure all sound effects.
 
+    Returns:
+        dict: Dictionary of loaded sound objects.
+    """
+    sounds = {
+        'background': pygame.mixer.Sound("sounds/classic.mp3"),
+        'casting': pygame.mixer.Sound("sounds/casting-whoosh.mp3"),
+    }
+
+    # Slightly quieter for relaxing mode
+    sounds['background'].set_volume(0.25)
+    sounds['casting'].set_volume(0.4)
+
+    return sounds
+
+
+def load_graphics():
+    """
+    Load and configure all graphic assets.
+
+    Returns:
+        dict: Dictionary containing loaded images and their rects.
+    """
+    # Load boat
+    boat_image = pygame.image.load("graphics/boat.png")
+    boat_image = pygame.transform.scale(boat_image, (310, 260))
+    boat_x = SCREEN_WIDTH // 2 - boat_image.get_width() // 2 - 300
+    boat_y = WATER_SURFACE - boat_image.get_height() // 2 - 52
+
+    # Load fishing hook
+    hook_image = pygame.image.load("graphics/fishing_hook.png")
+    hook_image = pygame.transform.scale(hook_image, (30, 30))
+    hook_rect = hook_image.get_rect()
+
+    return {
+        'boat_image': boat_image,
+        'boat_x': boat_x,
+        'boat_y': boat_y,
+        'hook_image': hook_image,
+        'hook_rect': hook_rect
+    }
+
+
+def draw_water_background(surface):
+    """
+    Draw the sky and water gradient background.
+
+    Args:
+        surface (pygame.Surface): Surface to draw on.
+    """
+    surface.fill(SKY_BLUE)
+    pygame.draw.rect(
+        surface,
+        DEEP_BLUE,
+        (0, WATER_SURFACE, SCREEN_WIDTH, SCREEN_HEIGHT - WATER_SURFACE)
+    )
+
+    for y in range(WATER_SURFACE, SCREEN_HEIGHT):
+        ratio = (y - WATER_SURFACE) / (SCREEN_HEIGHT - WATER_SURFACE)
+        color = tuple(
+            int(AZURE[i] + (DEEP_BLUE[i] - AZURE[i]) * ratio)
+            for i in range(3)
+        )
+        pygame.draw.line(surface, color, (0, y), (SCREEN_WIDTH, y))
+
+
+def draw_pause_overlay(surface):
+    """
+    Draw the pause screen overlay.
+
+    Args:
+        surface (pygame.Surface): Surface to draw on.
+    """
+    overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    overlay.set_alpha(150)
+    overlay.fill((0, 0, 50))
+    surface.blit(overlay, (0, 0))
+
+    center_x = SCREEN_WIDTH // 2
+    center_y = SCREEN_HEIGHT // 2
+
+    pause_text = big_font.render("PAUSED", True, WHITE)
+    pause_rect = pause_text.get_rect(center=(center_x, center_y - 20))
+    surface.blit(pause_text, pause_rect)
+
+    resume_text = font.render("Press P to Resume", True, (200, 200, 255))
+    resume_rect = resume_text.get_rect(center=(center_x, center_y + 20))
+    surface.blit(resume_text, resume_rect)
+
+
+def main():
+    """
+    Main game_copy loop for Endless Mode.
+
+    Returns:
+        int: Final score achieved.
+    """
+    pygame.init()
+
+    # Load assets
+    sounds = load_sounds()
+    graphics = load_graphics()
+    sounds['background'].play(-1)
+
+    # Initialize game_copy state
     running = True
+    paused = False
     pygame.display.set_caption("Fish-O-Mania: Endless Mode")
 
+    # Initialize managers
     fish_manager = RelaxedFishManager()
     background_manager = BackgroundManager(use_terrain_files=True)
-    casting_manager = CastingRod(rod_max_length, rod_speed)
+    casting_manager = CastingRod(ROD_MAX_LENGTH, ROD_SPEED)
 
-    for i in range(START_FISHES):
+    # Spawn initial fish
+    for _ in range(START_FISHES):
         fish_manager.spawn_fish()
 
+    # Game variables
     score = 0
     caught_fish = []
     fish_caught_count = 0
+    boat_x = graphics['boat_x']
+    boat_y = graphics['boat_y']
 
-    global boat_x
-    paused = False
-    fade_alpha = 255
-
-    # Session timer (just for display, no limit)
+    # Session timer (display only, no limit)
     start_ticks = pygame.time.get_ticks()
 
+    # Fade in effect
+    fade_alpha = 255
+
+    # Main game_copy loop
     while running:
+        # Event handling
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
+                    # Save score before quitting
+                    elapsed = (pygame.time.get_ticks() - start_ticks) / 1000
+                    update_high_score(
+                        "endless", score, fish_caught_count, elapsed
+                    )
                     running = False
+
                 elif event.key == pygame.K_SPACE:
                     if not paused:
                         casting_manager.toggle_cast()
-                        casting_sound.play()
+                        sounds['casting'].play()
+
                 elif event.key == pygame.K_p:
                     paused = not paused
 
+        # Update game_copy state (when not paused)
         if not paused:
             fish_manager.update()
             background_manager.update()
@@ -139,47 +296,69 @@ def main():
                 boat_x -= BOAT_SPEED
             if keys[pygame.K_RIGHT]:
                 boat_x += BOAT_SPEED
-            boat_x = max(0, min(boat_x, SCREEN_WIDTH - boat_image.get_width()))
+
+            boat_x = max(
+                0,
+                min(boat_x, SCREEN_WIDTH - graphics['boat_image'].get_width())
+            )
 
             # Hook position
-            rod_x = boat_x + boat_image.get_width() - 83
+            rod_x = boat_x + graphics['boat_image'].get_width() - 83
             rod_top_y = boat_y + 175
 
-            # Casting logic
-            result = casting_manager.update(hook_rect, fish_manager, casting_sound)
+            # Casting
+            result = casting_manager.update(
+                graphics['hook_rect'],
+                fish_manager,
+                sounds['casting']
+            )
+
             if result:
                 score += result["value"]
                 fish_caught_count += 1
                 caught_fish.append(result)
 
+            # Update hook rect
             hook_x = rod_x
             hook_y = rod_top_y + casting_manager.rod_length
-            hook_rect.x = hook_x - fishing_hook_img.get_width() // 2
-            hook_rect.y = hook_y
+            graphics['hook_rect'].x = (
+                hook_x - graphics['hook_image'].get_width() // 2
+            )
+            graphics['hook_rect'].y = hook_y
 
         # Session time
         elapsed = (pygame.time.get_ticks() - start_ticks) / 1000
 
-        # DRAWING
-        screen.fill(SKY_BLUE)
-        pygame.draw.rect(screen, DEEP_BLUE,
-                         (0, WATER_SURFACE, SCREEN_WIDTH,
-                          SCREEN_HEIGHT - WATER_SURFACE))
-
-        for y in range(WATER_SURFACE, SCREEN_HEIGHT):
-            ratio = (y - WATER_SURFACE) / (SCREEN_HEIGHT - WATER_SURFACE)
-            color = tuple(int(AZURE[i] + (DEEP_BLUE[i] - AZURE[i]) * ratio)
-                          for i in range(3))
-            pygame.draw.line(screen, color, (0, y), (SCREEN_WIDTH, y))
-
+        # Drawing
+        draw_water_background(screen)
         background_manager.draw(screen)
-        screen.blit(boat_image, (boat_x, boat_y))
-        pygame.draw.line(screen, WHITE, (rod_x - 5, rod_top_y),
-                         (hook_x - 5, hook_y), 2)
-        screen.blit(fishing_hook_img, hook_rect)
+
+        # Boat
+        screen.blit(graphics['boat_image'], (boat_x, boat_y))
+
+        # Fishing line
+        rod_x = boat_x + graphics['boat_image'].get_width() - 83
+        rod_top_y = boat_y + 175
+        hook_x = rod_x
+        hook_y = rod_top_y + casting_manager.rod_length
+
+        pygame.draw.line(
+            screen,
+            WHITE,
+            (rod_x - 5, rod_top_y),
+            (hook_x - 5, hook_y),
+            2
+        )
+
+        # Hook
+        screen.blit(graphics['hook_image'], graphics['hook_rect'])
+
+        # Fish
         fish_manager.draw(screen)
 
         # UI - Score and stats
+        current_high = get_high_score("endless")
+
         score_text = big_font.render(f"Score: {score}", True, WHITE)
         screen.blit(score_text, (10, 10))
 
@@ -189,8 +368,19 @@ def main():
         time_text = font.render(f"Time: {format_time(elapsed)}", True, WHITE)
         screen.blit(time_text, (10, 75))
 
+        high_text = font.render(
+            f"High Score: {current_high}",
+            True,
+            (200, 200, 200)
+        )
+        screen.blit(high_text, (10, 100))
+
         # Mode indicator
-        mode_text = font.render("ENDLESS MODE - No lives, just vibes", True, (200, 255, 200))
+        mode_text = font.render(
+            "ENDLESS MODE - No lives, just vibes",
+            True,
+            (200, 255, 200)
+        )
         mode_rect = mode_text.get_rect(center=(SCREEN_WIDTH // 2, 20))
         screen.blit(mode_text, mode_rect)
 
@@ -198,7 +388,7 @@ def main():
         instructions = [
             "SPACE: Cast",
             "P: Pause",
-            "ESC: Quit"
+            "ESC: Save & Quit"
         ]
         y_offset = SCREEN_HEIGHT - 80
         for instruction in instructions:
@@ -208,18 +398,7 @@ def main():
 
         # Pause overlay
         if paused:
-            overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-            overlay.set_alpha(150)
-            overlay.fill((0, 0, 50))
-            screen.blit(overlay, (0, 0))
-
-            pause_text = big_font.render("PAUSED", True, WHITE)
-            pause_rect = pause_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 20))
-            screen.blit(pause_text, pause_rect)
-
-            resume_text = font.render("Press P to Resume", True, (200, 200, 255))
-            resume_rect = resume_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 20))
-            screen.blit(resume_text, resume_rect)
+            draw_pause_overlay(screen)
 
         # Fade in
         if fade_alpha > 0:
@@ -232,7 +411,8 @@ def main():
         pygame.display.flip()
         clock.tick(FPS)
 
-    bg_sound.stop()
+    # Cleanup
+    sounds['background'].stop()
     return score
 
 

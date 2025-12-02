@@ -1,35 +1,59 @@
 """
-This file contains all the constants used for the Game.
+Constants Module for Fish-O-Mania.
+
+This module contains all game_copy configuration constants including screen settings,
+colors, water boundaries, and gameplay parameters. Centralizing these values
+allows for easy tuning and maintains consistency across all game_copy modules.
+
+Usage:
+    from constants import SCREEN_WIDTH, SCREEN_HEIGHT, FPS
 """
 
-# Screen settings
-SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = 800
-FPS = 60
+# =============================================================================
+# SCREEN SETTINGS
+# =============================================================================
 
-# Colors
+SCREEN_WIDTH = 1200  # Game window width in pixels
+SCREEN_HEIGHT = 800  # Game window height in pixels
+FPS = 60  # Target frames per second
+
+# =============================================================================
+# COLOR DEFINITIONS (RGB tuples)
+# =============================================================================
+
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-SKY_BLUE = (70, 130, 180)
-AZURE = (240, 255, 255)
-DEEP_BLUE = (0, 105, 148)
-LIGHT_PINK = (255, 182, 193)
-DEEP_PINK = (255, 182, 211)
+SKY_BLUE = (70, 130, 180)  # Sky background color
+AZURE = (240, 255, 255)  # Light water color (near surface)
+DEEP_BLUE = (0, 105, 148)  # Dark water color (near bottom)
+LIGHT_PINK = (255, 182, 193)  # UI accent color
+DEEP_PINK = (255, 182, 211)  # UI accent color
 
-# Water bounds
+# =============================================================================
+# WATER BOUNDARIES
+# =============================================================================
+
+# Y-coordinate where water surface begins (top of playable water area)
 WATER_SURFACE = 200
+
+# Y-coordinate where water bottom is (bottom of playable water area)
 WATER_BOTTOM = SCREEN_HEIGHT - 50
 
-# Game settings
-MAX_FISH = 15
-SPAWN_DELAY = 120  # Frames between fish spawns
-START_FISHES = 5
-start_fishes = 5
+# =============================================================================
+# FISH SPAWNING SETTINGS
+# =============================================================================
 
-# Fishing Rod Constants
-BOAT_SPEED = 8
-ROD_LENGTH = 8
-ROD_SPEED = 6
+MAX_FISH = 15  # Maximum number of fish allowed in water at once
+SPAWN_DELAY = 120  # Frames between automatic fish spawns (2 seconds at 60 FPS)
+START_FISHES = 5  # Number of fish spawned at game_copy start
+
+# =============================================================================
+# BOAT AND FISHING ROD SETTINGS
+# =============================================================================
+
+BOAT_SPEED = 8  # Horizontal movement speed of the boat (pixels per frame)
+ROD_MAX_LENGTH = 500  # Maximum depth the fishing line can extend (pixels)
+ROD_SPEED = 6  # Speed of casting/reeling the fishing line (pixels per frame)
 rod_max_length = 500
 boat_speed = 8
 rod_length = 0

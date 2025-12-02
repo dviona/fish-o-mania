@@ -50,7 +50,7 @@ class LivesManager:
         Decrease lives by 1.
 
         Returns:
-            bool: True if still alive, False if game over
+            bool: True if still alive, False if game_copy over
         """
         if self.current_lives > 0:
             self.current_lives -= 1
@@ -69,7 +69,7 @@ class LivesManager:
         print("Lives reset!")
 
     def is_game_over(self):
-        """Check if game is over."""
+        """Check if game_copy is over."""
         return self.game_over
 
     def get_current_lives(self):

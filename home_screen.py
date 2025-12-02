@@ -9,6 +9,7 @@ import random
 from constants import (SCREEN_WIDTH, SCREEN_HEIGHT, FPS, WHITE, SKY_BLUE,
                        AZURE, DEEP_BLUE, WATER_SURFACE, WATER_BOTTOM)
 from background import BackgroundManager
+from scores import get_all_high_scores
 
 
 # Initialize pygame
@@ -116,20 +117,23 @@ class MainMenu:
         # Buttons - positioned higher
         btn_w, btn_h = 250, 50
         btn_x = SCREEN_WIDTH // 2 - btn_w // 2
-        start_y = SCREEN_HEIGHT // 2 - 80  # Moved up from +20 to -80
-        spacing = 60  # Slightly tighter spacing
+        start_y = SCREEN_HEIGHT // 2 - 80
+        spacing = 60
 
         self.buttons = [
             Button(btn_x, start_y, btn_w, btn_h, "Classic Mode", True),
             Button(btn_x, start_y + spacing, btn_w, btn_h, "Time Attack", True),
             Button(btn_x, start_y + spacing * 2, btn_w, btn_h, "Endless Mode", True),
-            Button(btn_x, start_y + spacing * 3, btn_w, btn_h, "Settings", False),
+            Button(btn_x, start_y + spacing * 3, btn_w, btn_h, "High Scores", True),
             Button(btn_x, start_y + spacing * 4, btn_w, btn_h, "Quit", True),
         ]
 
         # Keyboard navigation
         self.selected_index = 0
         self.buttons[self.selected_index].selected = True
+
+        # High scores screen state
+        self.showing_high_scores = False
 
         # Transition state
         self.transitioning = False
@@ -163,6 +167,8 @@ class MainMenu:
                 return "time_attack"
             elif self.selected_index == 2:
                 return "endless"
+            elif self.selected_index == 3:
+                return "high_scores"
             elif self.selected_index == 4:
                 return "quit"
         return None
@@ -212,6 +218,66 @@ class MainMenu:
 
         return None
 
+    def draw_high_scores(self, surface):
+        """Draw the high scores screen."""
+        scores = get_all_high_scores()
+
+        # Semi-transparent overlay
+        overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+        overlay.set_alpha(200)
+        overlay.fill((0, 30, 60))
+        surface.blit(overlay, (0, 0))
+
+        # Title
+        title = self.title_font.render("High Scores", True, (255, 215, 0))
+        title_rect = title.get_rect(center=(SCREEN_WIDTH // 2, 80))
+        surface.blit(title, title_rect)
+
+        # Score entries
+        y_pos = 160
+        mode_font = pygame.font.Font(None, 40)
+        score_font = pygame.font.Font(None, 32)
+
+        modes = [
+            ("Classic Mode", "classic"),
+            ("Time Attack", "time_attack"),
+            ("Endless Mode", "endless")
+        ]
+
+        for mode_name, mode_key in modes:
+            # Mode name
+            mode_text = mode_font.render(mode_name, True, WHITE)
+            mode_rect = mode_text.get_rect(center=(SCREEN_WIDTH // 2, y_pos))
+            surface.blit(mode_text, mode_rect)
+
+            # Score
+            high_score = scores[mode_key]["high_score"]
+            fish_count = scores[mode_key].get("best_fish_count", 0)
+            date = scores[mode_key].get("date", "---")
+
+            score_str = f"Score: {high_score}  |  Fish: {fish_count}"
+            if mode_key == "endless":
+                best_time = scores[mode_key].get("best_time", 0)
+                mins = int(best_time // 60)
+                secs = int(best_time % 60)
+                score_str += f"  |  Best Time: {mins:02d}:{secs:02d}"
+
+            score_text = score_font.render(score_str, True, (180, 200, 220))
+            score_rect = score_text.get_rect(center=(SCREEN_WIDTH // 2, y_pos + 35))
+            surface.blit(score_text, score_rect)
+
+            if date:
+                date_text = pygame.font.Font(None, 24).render(f"Set: {date}", True, (120, 140, 160))
+                date_rect = date_text.get_rect(center=(SCREEN_WIDTH // 2, y_pos + 60))
+                surface.blit(date_text, date_rect)
+
+            y_pos += 110
+
+        # Instructions
+        instruction_text = self.instruction_font.render("Press ESC or ENTER to return", True, WHITE)
+        instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT - 50))
+        surface.blit(instruction_text, instruction_rect)
+
     def draw(self, surface):
         """Draw menu."""
         # Sky
@@ -253,8 +319,8 @@ class MainMenu:
         # Instructions (only when not transitioning)
         if not self.transitioning:
             instructions = self.instruction_font.render(
-                "UP/DOWN to navigate, ENTER to select", True, (180, 200, 220))
-            instructions_rect = instructions.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT - 30))
+                "UP/DOWN to navigate, ENTER to select", True, WHITE)
+            instructions_rect = instructions.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT - 125))
             surface.blit(instructions, instructions_rect)
 
         # Fade overlay
@@ -263,6 +329,10 @@ class MainMenu:
             fade_surf.fill((0, 0, 0))
             fade_surf.set_alpha(self.fade_alpha)
             surface.blit(fade_surf, (0, 0))
+
+        # Draw high scores screen on top if active
+        if self.showing_high_scores:
+            self.draw_high_scores(surface)
 
     def handle_click(self, mouse_pos):
         """Handle click."""
@@ -274,6 +344,8 @@ class MainMenu:
                     return "time_attack"
                 elif i == 2:
                     return "endless"
+                elif i == 3:
+                    return "high_scores"
                 elif i == 4:
                     return "quit"
         return None
@@ -295,25 +367,37 @@ def main():
                     mouse_clicked = True
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    running = False
+                    if menu.showing_high_scores:
+                        menu.showing_high_scores = False
+                    else:
+                        running = False
                 elif not menu.transitioning:
-                    # Keyboard navigation
-                    if event.key == pygame.K_UP:
-                        menu.move_selection(-1)
-                    elif event.key == pygame.K_DOWN:
-                        menu.move_selection(1)
-                    elif event.key == pygame.K_RETURN:
-                        action = menu.select_current()
-                        if action in ["classic", "time_attack", "endless"]:
-                            menu.start_transition(action)
-                        elif action == "quit":
-                            running = False
+                    # If showing high scores, close on any key
+                    if menu.showing_high_scores:
+                        if event.key in [pygame.K_RETURN, pygame.K_ESCAPE]:
+                            menu.showing_high_scores = False
+                    else:
+                        # Keyboard navigation
+                        if event.key == pygame.K_UP:
+                            menu.move_selection(-1)
+                        elif event.key == pygame.K_DOWN:
+                            menu.move_selection(1)
+                        elif event.key == pygame.K_RETURN:
+                            action = menu.select_current()
+                            if action in ["classic", "time_attack", "endless"]:
+                                menu.start_transition(action)
+                            elif action == "high_scores":
+                                menu.showing_high_scores = True
+                            elif action == "quit":
+                                running = False
 
         # Handle mouse clicks
-        if mouse_clicked and not menu.transitioning:
+        if mouse_clicked and not menu.transitioning and not menu.showing_high_scores:
             action = menu.handle_click(pygame.mouse.get_pos())
             if action in ["classic", "time_attack", "endless"]:
                 menu.start_transition(action)
+            elif action == "high_scores":
+                menu.showing_high_scores = True
             elif action == "quit":
                 running = False
 
@@ -323,7 +407,7 @@ def main():
         if result == "classic":
             print("Launching Classic Mode...")
             pygame.display.set_caption("Fish-O-Mania: Classic Mode")
-            from classic_tavish_copy import main as classic_main
+            from classic import main as classic_main
             classic_main()
             pygame.display.set_caption("Fish-O-Mania")
             menu = MainMenu()
