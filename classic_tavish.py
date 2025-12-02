@@ -9,6 +9,7 @@ from fish_manager import FishManager
 from background import BackgroundManager
 
 # Initialize pygame
+# Test comment
 pygame.init()
 
 # Main parameters for the scene
