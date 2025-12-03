@@ -26,7 +26,7 @@ from mechanics.constants import (
     ROD_MAX_LENGTH,
     ROD_SPEED
 )
-from fish_manager import FishManager
+from fish.fish_manager import FishManager
 from background import BackgroundManager
 from mechanics.casting import CastingRod
 from mechanics.scores import update_high_score, get_high_score
