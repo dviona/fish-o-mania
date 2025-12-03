@@ -415,7 +415,7 @@ def main():
         if result == "classic":
             print("Launching Classic Mode...")
             pygame.display.set_caption("Fish-O-Mania: Classic Mode")
-            from mode_classic import main as classic_main
+            from modes.mode_classic import main as classic_main
             classic_main()
             pygame.display.set_caption("Fish-O-Mania")
             menu = MainMenu()
@@ -423,7 +423,7 @@ def main():
         elif result == "time_attack":
             print("Launching Time Attack...")
             pygame.display.set_caption("Fish-O-Mania: Time Attack")
-            from mode_time_attack import main as time_attack_main
+            from modes.mode_time_attack import main as time_attack_main
             time_attack_main()
             pygame.display.set_caption("Fish-O-Mania")
             menu = MainMenu()
@@ -431,7 +431,7 @@ def main():
         elif result == "endless":
             print("Launching Endless Mode...")
             pygame.display.set_caption("Fish-O-Mania: Endless Mode")
-            from mode_endless import main as endless_main
+            from modes.mode_endless import main as endless_main
             endless_main()
             pygame.display.set_caption("Fish-O-Mania")
             menu = MainMenu()
