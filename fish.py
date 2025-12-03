@@ -4,7 +4,7 @@ This File contains all the fish and fish-related classes.
 
 import pygame
 import random
-from constants import (SCREEN_WIDTH, SCREEN_HEIGHT, WATER_SURFACE,
+from mechanics.constants import (SCREEN_WIDTH, SCREEN_HEIGHT, WATER_SURFACE,
                        WATER_BOTTOM)
 
 

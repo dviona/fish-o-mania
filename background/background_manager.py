@@ -6,7 +6,7 @@ all background visual elements.
 """
 
 import random
-from constants import SCREEN_WIDTH, WATER_SURFACE, WATER_BOTTOM
+from mechanics.constants import SCREEN_WIDTH, WATER_SURFACE, WATER_BOTTOM
 from background.ripple import Ripple
 from background.seaweed import Seaweed
 from background.rock import Rock
