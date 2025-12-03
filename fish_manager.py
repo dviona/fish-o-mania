@@ -7,7 +7,7 @@ import random
 from mechanics.constants import SCREEN_WIDTH, SCREEN_HEIGHT, MAX_FISH, SPAWN_DELAY, WATER_SURFACE, WATER_BOTTOM
 # Import the fish classes from fish.py
 from fish import Turtle, DangerFish, Shark, Octopus
-from lives_manager import LivesManager
+from mechanics.lives_manager import LivesManager
 
 
 
