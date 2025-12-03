@@ -10,7 +10,7 @@ Functions:
 """
 
 import pygame
-from constants import (
+from mechanics.constants import (
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
     FPS,
@@ -26,8 +26,8 @@ from constants import (
 )
 from fish_manager import FishManager
 from background import BackgroundManager
-from casting import CastingRod
-from scores import update_high_score, get_high_score
+from mechanics.casting import CastingRod
+from mechanics.scores import update_high_score, get_high_score
 
 # Initialize pygame
 pygame.init()

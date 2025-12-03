@@ -7,7 +7,7 @@ This module contains the Bubble class for rising bubble effects.
 import pygame
 import random
 import math
-from constants import WATER_SURFACE, WHITE
+from mechanics.constants import WATER_SURFACE, WHITE
 
 
 class Bubble:

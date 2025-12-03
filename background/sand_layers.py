@@ -6,7 +6,7 @@ This module contains the SandLayers class for terrain rendering.
 
 import pygame
 import random
-from constants import SCREEN_WIDTH, WATER_BOTTOM
+from mechanics.constants import SCREEN_WIDTH, WATER_BOTTOM
 
 
 class SandLayers:

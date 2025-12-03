@@ -6,7 +6,7 @@ This module contains the Wave class for animated water surface effects.
 
 import pygame
 import math
-from constants import SCREEN_WIDTH, WATER_SURFACE, WHITE
+from mechanics.constants import SCREEN_WIDTH, WATER_SURFACE, WHITE
 
 
 class Wave:

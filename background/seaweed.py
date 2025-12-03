@@ -7,7 +7,7 @@ This module contains the Seaweed class for animated underwater plants.
 import pygame
 import random
 import math
-from constants import SCREEN_HEIGHT
+from mechanics.constants import SCREEN_HEIGHT
 
 
 class Seaweed:

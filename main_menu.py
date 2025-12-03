@@ -6,10 +6,10 @@ import pygame
 import sys
 import math
 import random
-from constants import (SCREEN_WIDTH, SCREEN_HEIGHT, FPS, WHITE, SKY_BLUE,
+from mechanics.constants import (SCREEN_WIDTH, SCREEN_HEIGHT, FPS, WHITE, SKY_BLUE,
                        AZURE, DEEP_BLUE, WATER_SURFACE, WATER_BOTTOM)
 from background import BackgroundManager
-from scores import get_all_high_scores
+from mechanics.scores import get_all_high_scores
 
 
 # Initialize pygame

@@ -16,7 +16,7 @@ import json
 # Add parent directory to path so we can import game modules
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from scores import (
+from mechanics.scores import (
     SCORES_FILE,
     get_default_scores,
     load_scores,
