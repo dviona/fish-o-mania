@@ -1,8 +1,8 @@
 """
-High Score System for Fish-O-Mania.
+High Score System
 
 This module handles saving and loading high scores to/from a JSON file.
-It supports multiple game modes with different tracking metrics.
+It supports all 3 game modes with only time attack having an added metric.
 
 Functions:
     get_default_scores: Returns the default score structure.
@@ -109,16 +109,16 @@ def save_scores(scores):
 
 def update_high_score(mode, score, fish_count=0, time_played=0):
     """
-    Update high score for a game mode if the new score is higher.
+    Update high score for a game mode if the new score is higher
 
     Also updates best fish count and best time (for endless mode)
-    if those records are beaten.
+    if records are beaten
 
     Args:
-        mode (str): Game mode ("classic", "time_attack", or "endless").
-        score (int): The player's score.
-        fish_count (int): Number of fish caught this session.
-        time_played (float): Time played in seconds (endless mode only).
+        mode (str): Game mode ("classic", "time_attack", or "endless")
+        score (int): The player score
+        fish_count (int): Number of fish caught this session
+        time_played (float): Time played in seconds (endless mode only)
 
     Returns:
         dict: Contains "is_new_high", "old_score", and "new_score".
