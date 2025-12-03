@@ -15,10 +15,6 @@ from scores import get_all_high_scores
 # Initialize pygame
 pygame.init()
 
-# Sounds
-pygame.mixer.music.load("sounds/ambience_menu.mp3")
-pygame.mixer.music.set_volume(0.3)
-pygame.mixer.music.play(-1)
 
 # Screen setup
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -97,6 +93,10 @@ class MainMenu:
 
     def __init__(self):
         self.background = BackgroundManager(use_terrain_files=True)
+        # Load Sounds
+        pygame.mixer.music.load("sounds/ambience_menu.mp3")
+        pygame.mixer.music.set_volume(0.3)
+        pygame.mixer.music.play(-1)
 
         # Load boat
         try:
@@ -390,6 +390,7 @@ def main():
                         elif event.key == pygame.K_RETURN:
                             action = menu.select_current()
                             if action in ["classic", "time_attack", "endless"]:
+                                pygame.mixer.music.stop()
                                 menu.start_transition(action)
                             elif action == "high_scores":
                                 menu.showing_high_scores = True
