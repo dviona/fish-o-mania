@@ -15,6 +15,11 @@ from scores import get_all_high_scores
 # Initialize pygame
 pygame.init()
 
+# Sounds
+pygame.mixer.music.load("sounds/ambience_menu.mp3")
+pygame.mixer.music.set_volume(0.3)
+pygame.mixer.music.play(-1)
+
 # Screen setup
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Fish-O-Mania")
@@ -393,6 +398,7 @@ def main():
 
         # Handle mouse clicks
         if mouse_clicked and not menu.transitioning and not menu.showing_high_scores:
+            pygame.mixer.music.stop()
             action = menu.handle_click(pygame.mouse.get_pos())
             if action in ["classic", "time_attack", "endless"]:
                 menu.start_transition(action)
@@ -400,6 +406,7 @@ def main():
                 menu.showing_high_scores = True
             elif action == "quit":
                 running = False
+        
 
         # Update
         result = menu.update()
@@ -432,7 +439,9 @@ def main():
         menu.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
+        
 
+    # Cleanup
     pygame.quit()
     sys.exit()
 

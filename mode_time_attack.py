@@ -81,11 +81,11 @@ def load_sounds():
         dict: Dictionary of loaded sound objects.
     """
     sounds = {
-        'background': pygame.mixer.Sound("sounds/classic.mp3"),
+        'background_timeattack': pygame.mixer.Sound("sounds/timeattack.mp3"),
         'casting': pygame.mixer.Sound("sounds/casting-whoosh.mp3"),
     }
 
-    sounds['background'].set_volume(0.3)
+    sounds['background_timeattack'].set_volume(0.3)
     sounds['casting'].set_volume(0.4)
 
     return sounds
@@ -215,7 +215,7 @@ def main():
     # Load assets
     sounds = load_sounds()
     graphics = load_graphics()
-    sounds['background'].play(-1)
+    sounds['background_timeattack'].play(-1)
 
     # Initialize game_copy state
     running = True
@@ -391,7 +391,7 @@ def main():
         clock.tick(FPS)
 
     # Cleanup
-    sounds['background'].stop()
+    sounds['background_timeattack'].stop()
     return score
 
 

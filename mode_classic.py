@@ -48,14 +48,14 @@ def load_sounds():
         dict: Dictionary of loaded sound objects.
     """
     sounds = {
-        'background': pygame.mixer.Sound("sounds/classic.mp3"),
+        'background_classic': pygame.mixer.Sound("sounds/classic.mp3"),
         'casting': pygame.mixer.Sound("sounds/casting-whoosh.mp3"),
         'bubble': pygame.mixer.Sound("sounds/bubble.mp3"),
         'game_over': pygame.mixer.Sound("sounds/game_over.mp3")
     }
 
     # Set volumes
-    sounds['background'].set_volume(0.3)
+    sounds['background_classic'].set_volume(0.3)
     sounds['casting'].set_volume(0.4)
     sounds['bubble'].set_volume(0.5)
     sounds['game_over'].set_volume(0.5)
@@ -204,7 +204,7 @@ def main():
     # Load assets
     sounds = load_sounds()
     graphics = load_graphics()
-    sounds['background'].play(-1)  # Loop background music
+    sounds['background_classic'].play(-1)  # Loop background music
 
     # Initialize game_copy state
     running = True
@@ -375,7 +375,7 @@ def main():
         clock.tick(FPS)
 
     # Cleanup
-    sounds['background'].stop()
+    sounds['background_classic'].stop()
     return score
 
 
