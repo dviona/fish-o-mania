@@ -398,9 +398,9 @@ def main():
 
         # Handle mouse clicks
         if mouse_clicked and not menu.transitioning and not menu.showing_high_scores:
-            pygame.mixer.music.stop()
             action = menu.handle_click(pygame.mouse.get_pos())
             if action in ["classic", "time_attack", "endless"]:
+                pygame.mixer.music.stop()
                 menu.start_transition(action)
             elif action == "high_scores":
                 menu.showing_high_scores = True
