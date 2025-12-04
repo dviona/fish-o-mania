@@ -30,6 +30,8 @@ from mechanics.constants import (
     ROD_SPEED
 )
 from fish.fish_manager import FishManager
+from fish.relaxed_fish_manager import RelaxedFishManager
+from fish.fast_fish_manager import FastFishManager
 from background import BackgroundManager
 from mechanics.casting import CastingRod
 from mechanics.scores import update_high_score, get_high_score
@@ -47,33 +49,8 @@ timer_font = pygame.font.Font(None, 72)
 
 # Time attack settings
 GAME_DURATION = 30  # Seconds
-FISH_SPEED_MULTIPLIER = 1.8  # Fish move faster
-INITIAL_FISH_COUNT = 8  # More fish at start
+INITIAL_FISH_COUNT = 10  # More fish at start
 
-
-class FastFishManager(FishManager):
-    """
-    Fish manager variant with faster-moving fish.
-
-    Extends FishManager to increase fish movement speed for
-    the more challenging time attack mode.
-    """
-
-    def spawn_fish(self, fish_class=None):
-        """
-        Spawn a fish with increased movement speed.
-
-        Args:
-            fish_class (str): Specific fish type, or None for random.
-
-        Returns:
-            AnimatedFish: The spawned fish with boosted speed.
-        """
-        fish = super().spawn_fish(fish_class)
-        if fish:
-            fish.speed_x *= FISH_SPEED_MULTIPLIER
-            fish.speed_y *= FISH_SPEED_MULTIPLIER
-        return fish
 
 
 def load_sounds():
@@ -356,7 +333,7 @@ def main():
         # Timer display (top center)
         timer_color = (255, 100, 100) if time_remaining <= 10 else WHITE
         timer_text = timer_font.render(f"{int(time_remaining)}", True, timer_color)
-        timer_rect = timer_text.get_rect(center=(SCREEN_WIDTH // 2, 50))
+        timer_rect = timer_text.get_rect(center=(SCREEN_WIDTH - 120, 50))
         screen.blit(timer_text, timer_rect)
 
         # Score and fish count

@@ -25,6 +25,8 @@ from fish.fish import (
     Octopus
 )
 from fish.fish_manager import FishManager
+from fish.relaxed_fish_manager import RelaxedFishManager
+from fish.fast_fish_manager import FastFishManager
 
 __all__ = [
     'DeathAnimation',

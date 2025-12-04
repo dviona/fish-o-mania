@@ -31,6 +31,7 @@ from mechanics.constants import (
     START_FISHES
 )
 from fish.fish_manager import FishManager
+from fish.relaxed_fish_manager import RelaxedFishManager
 from background import BackgroundManager
 from mechanics.casting import CastingRod
 from mechanics.scores import update_high_score, get_high_score
@@ -44,75 +45,6 @@ screen = pygame.display.set_mode(SCREEN_RESOLUTION)
 clock = pygame.time.Clock()
 font = pygame.font.Font(None, 24)
 big_font = pygame.font.Font(None, 36)
-
-
-class RelaxedFishManager(FishManager):
-    """
-    Fish manager variant without life penalties.
-
-    All fish can be caught without consequence, making for a
-    relaxed, stress-free fishing experience.
-    """
-
-    def remove_fish(self, fish):
-        """
-        Remove a caught fish without any penalties.
-
-        Unlike the standard FishManager, catching danger fish
-        does not cost lives or trigger game_copy over.
-
-        Args:
-            fish: The fish sprite that was caught.
-
-        Returns:
-            dict: Fish information with penalty=False, game_over=False.
-        """
-        info = fish.get_info()
-
-        # Play catch sound for all fish
-        self.catch_sound.play()
-
-        # Add to recent catches display
-        catch_data = {
-            'type': info['type'],
-            'value': info['value'],
-            'rarity': info['rarity'],
-            'current_frame': 0,
-            'frame_counter': 0,
-            'frame_delay': 8
-        }
-        self.recent_catches.append(catch_data)
-        if len(self.recent_catches) > self.max_recent_catches:
-            self.recent_catches.pop(0)
-
-        # Create death animation
-        death_anim = fish.create_death_animation()
-        if death_anim:
-            self.death_animations.add(death_anim)
-
-        fish.kill()
-
-        # Return info - never any penalty or game_copy over
-        return {
-            **info,
-            'penalty': False,
-            'game_over': False
-        }
-
-    def draw(self, surface):
-        """
-        Draw fish without lives display.
-
-        Overrides parent to skip drawing the lives UI since
-        endless mode doesn't use the lives system.
-
-        Args:
-            surface (pygame.Surface): Surface to draw on.
-        """
-        self.all_fish.draw(surface)
-        self.death_animations.draw(surface)
-        # Skip lives display - endless mode doesn't need it
-        self.draw_recent_catches(surface, SCREEN_WIDTH - 220)
 
 
 def format_time(seconds):
