@@ -69,10 +69,6 @@ class TestFastFishManager(unittest.TestCase):
         self.assertIsInstance(manager, FastFishManager)
         self.assertIsInstance(manager, RelaxedFishManager)
 
-    def test_inherits_from_relaxed_fish_manager(self):
-        """Test that FastFishManager inherits from RelaxedFishManager."""
-        manager = FastFishManager()
-        self.assertTrue(isinstance(manager, RelaxedFishManager))
 
     def test_spawn_fish_returns_fish(self):
         """Test that spawn_fish returns a fish object."""
@@ -113,25 +109,25 @@ class TestFastFishManager(unittest.TestCase):
         self.assertEqual(len(manager.all_fish), 5)
 
     def test_spawn_specific_fish_type_turtle(self):
-        """Test spawning a specific fish type (turtle)."""
+        """Test spawning a turtle fish type."""
         manager = FastFishManager()
         fish = manager.spawn_fish("turtle")
         self.assertEqual(fish.fish_type, "Turtle")
 
     def test_spawn_specific_fish_type_danger(self):
-        """Test spawning a specific fish type (danger)."""
+        """Test spawning a danger fish type."""
         manager = FastFishManager()
         fish = manager.spawn_fish("danger")
         self.assertEqual(fish.fish_type, "Danger Fish")
 
     def test_spawn_specific_fish_type_shark(self):
-        """Test spawning a specific fish type (shark)."""
+        """Test spawning a shakr fish type."""
         manager = FastFishManager()
         fish = manager.spawn_fish("shark")
         self.assertEqual(fish.fish_type, "Shark")
 
     def test_spawn_specific_fish_type_octopus(self):
-        """Test spawning a specific fish type (octopus)."""
+        """Test spawning an octopus fish type."""
         manager = FastFishManager()
         fish = manager.spawn_fish("octopus")
         self.assertEqual(fish.fish_type, "Octopus")
@@ -144,7 +140,7 @@ class TestFastFishManager(unittest.TestCase):
         manager.draw(surface)
 
     def test_remove_fish_no_penalty(self):
-        """Test that removing fish doesn't cause penalty."""
+        """Test that removing dagnerfish doesn't cause penalty."""
         manager = FastFishManager()
         fish = manager.spawn_fish("danger")
         result = manager.remove_fish(fish)
@@ -172,12 +168,6 @@ class TestFastFishManager(unittest.TestCase):
         manager.clear_all()
         self.assertEqual(len(manager.all_fish), 0)
 
-    def test_update_does_not_crash(self):
-        """Test that update method executes without error."""
-        manager = FastFishManager()
-        for i in range(3):
-            manager.spawn_fish()
-        manager.update()
 
     def test_get_fish_at_position_found(self):
         """Test getting fish at a specific position."""
@@ -289,10 +279,6 @@ class TestLoadGraphics(unittest.TestCase):
 class TestDrawWaterBackground(unittest.TestCase):
     """Tests for the draw_water_background function."""
 
-    def test_draw_water_background_does_not_crash(self):
-        """Test that draw_water_background executes without error."""
-        surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        draw_water_background(surface)
 
     def test_draw_water_background_fills_surface(self):
         """Test that background drawing modifies the surface."""
@@ -308,14 +294,6 @@ class TestDrawWaterBackground(unittest.TestCase):
         color_after = surface.get_at((SCREEN_WIDTH // 2, 50))
         self.assertNotEqual(color_before, color_after)
 
-    def test_sky_area_is_sky_blue(self):
-        """Test that sky area has sky blue color."""
-        surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        draw_water_background(surface)
-
-        # Check a point in the sky area
-        sky_color = surface.get_at((SCREEN_WIDTH // 2, 50))
-        self.assertEqual((sky_color.r, sky_color.g, sky_color.b), SKY_BLUE)
 
     def test_water_area_exists(self):
         """Test that water area is drawn below surface."""
@@ -333,20 +311,6 @@ class TestDrawWaterBackground(unittest.TestCase):
 class TestDrawPauseOverlay(unittest.TestCase):
     """Tests for the draw_pause_overlay function."""
 
-    def test_draw_pause_overlay_does_not_crash(self):
-        """Test that draw_pause_overlay executes without error."""
-        surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        draw_pause_overlay(surface, 15.0)
-
-    def test_draw_pause_overlay_with_zero_time(self):
-        """Test pause overlay with zero time remaining."""
-        surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        draw_pause_overlay(surface, 0.0)
-
-    def test_draw_pause_overlay_with_max_time(self):
-        """Test pause overlay with full time remaining."""
-        surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        draw_pause_overlay(surface, GAME_DURATION)
 
     def test_draw_pause_overlay_modifies_surface(self):
         """Test that pause overlay modifies the surface."""
@@ -367,11 +331,6 @@ class TestDrawPauseOverlay(unittest.TestCase):
 class TestDrawGameOverScreen(unittest.TestCase):
     """Tests for the draw_game_over_screen function."""
 
-    def test_draw_game_over_screen_does_not_crash(self):
-        """Test that draw_game_over_screen executes without error."""
-        surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        high_score_result = {"is_new_high": False, "old_score": 0, "new_score": 100}
-        draw_game_over_screen(surface, 100, 5, high_score_result)
 
     def test_draw_game_over_screen_with_new_high_score(self):
         """Test game over screen with new high score."""

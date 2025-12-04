@@ -63,6 +63,10 @@ def load_scores():
     if not os.path.exists(SCORES_FILE):
         return get_default_scores()
 
+    # Check if file is empty
+    if os.path.getsize(SCORES_FILE) == 0:
+        return get_default_scores()
+
     # File exists, try to read it
     try:
         with open(SCORES_FILE, 'r') as f:

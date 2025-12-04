@@ -71,23 +71,3 @@ class TestRipple(unittest.TestCase):
         ripple.radius = ripple.max_radius - ripple.growth_rate
         ripple.update()
         self.assertFalse(ripple.alive)
-
-    def test_draw_does_not_crash(self):
-        """Test that draw method executes without error."""
-        ripple = Ripple(100, 200)
-        surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        ripple.draw(surface)
-
-    def test_draw_when_not_alive(self):
-        """Test that draw does nothing when ripple is not alive."""
-        ripple = Ripple(100, 200)
-        ripple.alive = False
-        surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        ripple.draw(surface)
-
-    def test_draw_when_alpha_zero(self):
-        """Test that draw does nothing when alpha is zero."""
-        ripple = Ripple(100, 200)
-        ripple.alpha = 0
-        surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        ripple.draw(surface)

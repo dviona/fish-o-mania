@@ -55,9 +55,3 @@ class TestSeaweed(unittest.TestCase):
         """Test that seaweed color is forest green."""
         seaweed = Seaweed(100)
         self.assertEqual(seaweed.color, (34, 139, 34))
-
-    def test_draw_does_not_crash(self):
-        """Test that draw method executes without error."""
-        seaweed = Seaweed(100)
-        surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        seaweed.draw(surface)

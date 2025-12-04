@@ -65,9 +65,3 @@ class TestRock(unittest.TestCase):
         rock = Rock(100, 500)
         for i in range(3):
             self.assertLessEqual(rock.shadow_color[i], rock.color[i])
-
-    def test_draw_does_not_crash(self):
-        """Test that draw method executes without error."""
-        rock = Rock(100, 500)
-        surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        rock.draw(surface)

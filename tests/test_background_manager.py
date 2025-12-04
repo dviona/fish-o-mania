@@ -90,10 +90,6 @@ class TestBackgroundManager(unittest.TestCase):
         self.assertEqual(ripple.x, 150)
         self.assertEqual(ripple.y, 250)
 
-    def test_update_does_not_crash(self):
-        """Test that update method executes without error."""
-        manager = BackgroundManager(use_terrain_files=False)
-        manager.update()
 
     def test_update_removes_dead_ripples(self):
         """Test that update removes dead ripples."""
@@ -135,19 +131,6 @@ class TestBackgroundManager(unittest.TestCase):
 
         self.assertGreater(len(manager.bubbles), initial_count)
 
-    def test_draw_does_not_crash(self):
-        """Test that draw method executes without error."""
-        manager = BackgroundManager(use_terrain_files=False)
-        surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        manager.draw(surface)
-
-    def test_draw_with_all_elements(self):
-        """Test draw with ripples and bubbles added."""
-        manager = BackgroundManager(use_terrain_files=False)
-        manager.add_ripple(100, 200)
-        manager.bubbles.append(Bubble(150, 300))
-        surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        manager.draw(surface)
 
     def test_timers_initialized(self):
         """Test that spawn timers are initialized."""

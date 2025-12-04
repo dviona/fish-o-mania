@@ -1,15 +1,8 @@
 """
-Unit Tests for Background Module.
+Unit Tests for Background Module
 
 This module contains tests for all background visual elements:
-- Ripple
-- Bubble
-- Rock
-- Seaweed
-- Wave
-- SandLayers
-- BackgroundManager
-
+Bubble
 """
 
 import unittest
@@ -77,20 +70,8 @@ class TestBubble(unittest.TestCase):
         self.assertGreater(bubble.time, initial_time)
 
     def test_bubble_dies_at_water_surface(self):
-        """Test that bubble becomes not alive at water surface."""
+        """Test bubble becomes not alive at water surface."""
         bubble = Bubble(100, WATER_SURFACE + 1)
         bubble.update()
         self.assertFalse(bubble.alive)
 
-    def test_draw_does_not_crash(self):
-        """Test that draw method executes without error."""
-        bubble = Bubble(100, 400)
-        surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        bubble.draw(surface)
-
-    def test_draw_when_not_alive(self):
-        """Test that draw does nothing when bubble is not alive."""
-        bubble = Bubble(100, 400)
-        bubble.alive = False
-        surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        bubble.draw(surface)

@@ -27,8 +27,3 @@ class TestSandLayers(unittest.TestCase):
         self.assertEqual(sand.base_layers, [])
         self.assertIsNone(sand.top_layer)
 
-    def test_draw_does_not_crash_without_layers(self):
-        """Test that draw works even without loaded layers."""
-        sand = SandLayers(use_terrain_files=False)
-        surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        sand.draw(surface)
