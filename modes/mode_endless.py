@@ -1,4 +1,7 @@
 """
+IMPORTANT: Always run the game from the root directory so as not to run
+into directory issues! That is, main_menu.py should be the main file to run!
+
 Endless Mode for Fish-O-Mania.
 
 A relaxing game_copy mode with no lives or timer. Players can fish at their

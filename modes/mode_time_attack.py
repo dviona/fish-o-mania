@@ -1,4 +1,7 @@
 """
+IMPORTANT: Always run the game from the root directory so as not to run
+into directory issues! That is, main_menu.py should be the main file to run!
+
 Time Attack Mode for Fish-O-Mania.
 
 A fast-paced game_copy mode where players have a limited time to catch as

@@ -1,4 +1,6 @@
 """
+IMPORTANT: Always run the game from the root directory so as not to run
+into directory issues! That is, main_menu.py should be the main file to run!
 Classic Mode for Fish-O-Mania.
 
 The standard game_copy mode with a lives system. Players catch fish to earn
