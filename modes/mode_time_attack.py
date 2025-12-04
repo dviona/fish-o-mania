@@ -371,7 +371,7 @@ def main():
         # Timer display (top center)
         timer_color = (255, 100, 100) if time_remaining <= 10 else WHITE
         timer_text = timer_font.render(f"{int(time_remaining)}", True, timer_color)
-        timer_rect = timer_text.get_rect(center=(SCREEN_WIDTH // 2, 50))
+        timer_rect = timer_text.get_rect(center=(SCREEN_WIDTH - 125, 50))
         screen.blit(timer_text, timer_rect)
 
         # Score and fish count
@@ -383,6 +383,15 @@ def main():
 
         # Instructions
         if not game_over and not paused:
+            # Mode indicator
+            mode_text = font.render(
+                "Race against the timer, catch them all!",
+                True,
+                (200, 255, 200)
+            )
+            mode_rect = mode_text.get_rect(center=(SCREEN_WIDTH // 2, 20))
+            screen.blit(mode_text, mode_rect)
+
             instructions = [
                 "SPACE: Cast",
                 "P: Pause",
