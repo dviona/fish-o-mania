@@ -108,7 +108,7 @@ class TestFastFishManager(unittest.TestCase):
     def test_spawn_multiple_fish(self):
         """Test spawning multiple fish."""
         manager = FastFishManager()
-        for _ in range(5):
+        for i in range(5):
             manager.spawn_fish()
         self.assertEqual(len(manager.all_fish), 5)
 
@@ -166,7 +166,7 @@ class TestFastFishManager(unittest.TestCase):
     def test_clear_all(self):
         """Test that clear_all removes all fish."""
         manager = FastFishManager()
-        for _ in range(5):
+        for i in range(5):
             manager.spawn_fish()
 
         manager.clear_all()
@@ -175,7 +175,7 @@ class TestFastFishManager(unittest.TestCase):
     def test_update_does_not_crash(self):
         """Test that update method executes without error."""
         manager = FastFishManager()
-        for _ in range(3):
+        for i in range(3):
             manager.spawn_fish()
         manager.update()
 

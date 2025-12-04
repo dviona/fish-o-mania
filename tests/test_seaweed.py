@@ -32,14 +32,14 @@ class TestSeaweed(unittest.TestCase):
 
     def test_initialization_random_height(self):
         """Test that seaweed has randomized height in valid range."""
-        for _ in range(10):
+        for i in range(10):
             seaweed = Seaweed(0)
             self.assertGreaterEqual(seaweed.height, 80)
             self.assertLessEqual(seaweed.height, 150)
 
     def test_initialization_random_sway_amount(self):
         """Test that seaweed has randomized sway_amount in valid range."""
-        for _ in range(10):
+        for i in range(10):
             seaweed = Seaweed(0)
             self.assertGreaterEqual(seaweed.sway_amount, 10)
             self.assertLessEqual(seaweed.sway_amount, 20)

@@ -30,14 +30,14 @@ class TestRock(unittest.TestCase):
 
     def test_initialization_random_width(self):
         """Test that rock has randomized width in valid range."""
-        for _ in range(10):
+        for i in range(10):
             rock = Rock(0, 0)
             self.assertGreaterEqual(rock.width, 30)
             self.assertLessEqual(rock.width, 80)
 
     def test_initialization_random_height(self):
         """Test that rock has randomized height in valid range."""
-        for _ in range(10):
+        for i in range(10):
             rock = Rock(0, 0)
             self.assertGreaterEqual(rock.height, 20)
             self.assertLessEqual(rock.height, 50)
@@ -50,7 +50,7 @@ class TestRock(unittest.TestCase):
             (112, 128, 144),
         ]
 
-        for _ in range(20):
+        for i in range(20):
             rock = Rock(0, 0)
             self.assertIn(rock.color, valid_colors)
 

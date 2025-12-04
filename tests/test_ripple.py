@@ -32,14 +32,14 @@ class TestRipple(unittest.TestCase):
 
     def test_initialization_random_max_radius(self):
         """Test that ripple has randomized max_radius in valid range."""
-        for _ in range(10):
+        for i in range(10):
             ripple = Ripple(0, 0)
             self.assertGreaterEqual(ripple.max_radius, 30)
             self.assertLessEqual(ripple.max_radius, 80)
 
     def test_initialization_random_growth_rate(self):
         """Test that ripple has randomized growth_rate in valid range."""
-        for _ in range(10):
+        for i in range(10):
             ripple = Ripple(0, 0)
             self.assertGreaterEqual(ripple.growth_rate, 0.5)
             self.assertLessEqual(ripple.growth_rate, 1.0)
