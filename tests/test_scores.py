@@ -3,6 +3,9 @@ Unit Tests for the Scores Module.
 
 Tests the high score system including loading, saving,
 updating, and resetting scores.
+
+We use a test file instead of affecting our original
+game save data
 """
 
 import unittest
