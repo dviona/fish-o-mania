@@ -4,15 +4,13 @@ into directory issues! That is, main_menu.py should be the main file to run!
 
 Endless Mode for Fish-O-Mania.
 
-A relaxing game_copy mode with no lives or timer. Players can fish at their
+A relaxing game mode with no lives or timer. Players can fish at their
 own pace without any penalties. Perfect for casual play and practicing.
-
-Classes:
-    RelaxedFishManager: Fish manager without penalty system.
 
 Functions:
     format_time: Formats seconds into MM:SS string.
-    main: Main game_copy loop for endless mode.
+    draw_game_over_screen: Draw the summary screen when quitting.
+    main: Main game loop for endless mode.
 """
 
 import pygame
@@ -30,7 +28,6 @@ from mechanics.constants import (
     ROD_SPEED,
     START_FISHES
 )
-from fish.fish_manager import FishManager
 from fish.relaxed_fish_manager import RelaxedFishManager
 from background import BackgroundManager
 from mechanics.casting import CastingRod
@@ -155,9 +152,72 @@ def draw_pause_overlay(surface):
     surface.blit(resume_text, resume_rect)
 
 
+def draw_game_over_screen(surface, score, fish_caught_count, time_played, high_score_result):
+    """
+    Draw the summary screen when player quits.
+
+    Args:
+        surface (pygame.Surface): Surface to draw on.
+        score (int): Final score achieved.
+        fish_caught_count (int): Number of fish caught.
+        time_played (float): Time played in seconds.
+        high_score_result (dict): Result from update_high_score.
+    """
+    current_high = get_high_score("endless")
+
+    # Overlay
+    overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    overlay.set_alpha(180)
+    overlay.fill((0, 0, 0))
+    surface.blit(overlay, (0, 0))
+
+    center_x = SCREEN_WIDTH // 2
+    center_y = SCREEN_HEIGHT // 2
+
+    # Title
+    title_text = big_font.render("SESSION COMPLETE", True, (100, 200, 255))
+    title_rect = title_text.get_rect(center=(center_x, center_y - 100))
+    surface.blit(title_text, title_rect)
+
+    # New high score notification
+    if high_score_result["is_new_high"]:
+        new_high_text = big_font.render("NEW HIGH SCORE!", True, (255, 215, 0))
+        new_high_rect = new_high_text.get_rect(center=(center_x, center_y - 60))
+        surface.blit(new_high_text, new_high_rect)
+
+    # Final score
+    score_text = big_font.render(f"Final Score: {score}", True, WHITE)
+    score_rect = score_text.get_rect(center=(center_x, center_y - 20))
+    surface.blit(score_text, score_rect)
+
+    # Fish count
+    count_text = big_font.render(f"Fish Caught: {fish_caught_count}", True, WHITE)
+    count_rect = count_text.get_rect(center=(center_x, center_y + 20))
+    surface.blit(count_text, count_rect)
+
+    # Time played
+    time_text = big_font.render(f"Time: {format_time(time_played)}", True, WHITE)
+    time_rect = time_text.get_rect(center=(center_x, center_y + 60))
+    surface.blit(time_text, time_rect)
+
+    # High score
+    high_text = font.render(f"High Score: {current_high}", True, (200, 200, 200))
+    high_rect = high_text.get_rect(center=(center_x, center_y + 100))
+    surface.blit(high_text, high_rect)
+
+    # Instructions
+    restart_text = font.render("Press ENTER to Play Again", True, (255, 215, 0))
+    restart_rect = restart_text.get_rect(center=(center_x, center_y + 140))
+    surface.blit(restart_text, restart_rect)
+
+    quit_text = font.render("Press ESC to Quit", True, WHITE)
+    quit_rect = quit_text.get_rect(center=(center_x, center_y + 170))
+    surface.blit(quit_text, quit_rect)
+
+
 def main():
     """
-    Main game_copy loop for Endless Mode.
+    Main game loop for Endless Mode.
 
     Returns:
         int: Final score achieved.
@@ -169,9 +229,10 @@ def main():
     graphics = load_graphics()
     sounds['background_endless'].play(-1)
 
-    # Initialize game_copy state
+    # Initialize game state
     running = True
     paused = False
+    show_summary = False
     pygame.display.set_caption("Fish-O-Mania: Endless Mode")
 
     # Initialize managers
@@ -189,14 +250,16 @@ def main():
     fish_caught_count = 0
     boat_x = graphics['boat_x']
     boat_y = graphics['boat_y']
+    high_score_result = None
 
     # Session timer (display only, no limit)
     start_ticks = pygame.time.get_ticks()
+    elapsed = 0
 
     # Fade in effect
     fade_alpha = 255
 
-    # Main game_copy loop
+    # Main game loop
     while running:
         # Event handling
         for event in pygame.event.get():
@@ -205,23 +268,41 @@ def main():
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    # Save score before quitting
-                    elapsed = (pygame.time.get_ticks() - start_ticks) / 1000
-                    update_high_score(
-                        "endless", score, fish_caught_count, elapsed
-                    )
-                    running = False
+                    if show_summary:
+                        # Exit game from summary screen
+                        running = False
+                    else:
+                        # Show summary screen
+                        elapsed = (pygame.time.get_ticks() - start_ticks) / 1000
+                        high_score_result = update_high_score(
+                            "endless", score, fish_caught_count, elapsed
+                        )
+                        show_summary = True
 
                 elif event.key == pygame.K_SPACE:
-                    if not paused:
+                    if not paused and not show_summary:
                         casting_manager.toggle_cast()
                         sounds['casting'].play()
 
                 elif event.key == pygame.K_p:
-                    paused = not paused
+                    if not show_summary:
+                        paused = not paused
 
-        # Update game_copy state (when not paused)
-        if not paused:
+                elif event.key == pygame.K_RETURN:
+                    if show_summary:
+                        # Restart game
+                        fish_manager.clear_all()
+                        score = 0
+                        caught_fish = []
+                        fish_caught_count = 0
+                        for _ in range(START_FISHES):
+                            fish_manager.spawn_fish()
+                        show_summary = False
+                        high_score_result = None
+                        start_ticks = pygame.time.get_ticks()
+
+        # Update game state (when not paused or showing summary)
+        if not paused and not show_summary:
             fish_manager.update()
             background_manager.update()
 
@@ -261,8 +342,8 @@ def main():
             )
             graphics['hook_rect'].y = hook_y
 
-        # Session time
-        elapsed = (pygame.time.get_ticks() - start_ticks) / 1000
+            # Session time
+            elapsed = (pygame.time.get_ticks() - start_ticks) / 1000
 
         # Drawing
         draw_water_background(screen)
@@ -320,20 +401,25 @@ def main():
         screen.blit(mode_text, mode_rect)
 
         # Instructions
-        instructions = [
-            "SPACE: Cast",
-            "P: Pause",
-            "ESC: Save & Quit"
-        ]
-        y_offset = SCREEN_HEIGHT - 80
-        for instruction in instructions:
-            text = font.render(instruction, True, WHITE)
-            screen.blit(text, (10, y_offset))
-            y_offset += 22
+        if not show_summary:
+            instructions = [
+                "SPACE: Cast",
+                "P: Pause",
+                "ESC: End Session"
+            ]
+            y_offset = SCREEN_HEIGHT - 80
+            for instruction in instructions:
+                text = font.render(instruction, True, WHITE)
+                screen.blit(text, (10, y_offset))
+                y_offset += 22
 
         # Pause overlay
         if paused:
             draw_pause_overlay(screen)
+
+        # Summary screen
+        if show_summary:
+            draw_game_over_screen(screen, score, fish_caught_count, elapsed, high_score_result)
 
         # Fade in
         if fade_alpha > 0:

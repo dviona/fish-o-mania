@@ -3,12 +3,12 @@ IMPORTANT: Always run the game from the root directory so as not to run
 into directory issues! That is, main_menu.py should be the main file to run!
 Classic Mode for Fish-O-Mania.
 
-The standard game_copy mode with a lives system. Players catch fish to earn
+The standard game mode with a lives system. Players catch fish to earn
 points while avoiding danger fish that cost lives. Game ends when all
 lives are lost.
 
 Functions:
-    main: Main game_copy loop for classic mode.
+    main: Main game loop for classic mode.
 """
 
 import pygame
@@ -50,7 +50,6 @@ def load_sounds():
         dict: Dictionary of loaded sound objects.
     """
     sounds = {
-
         'background_classic': pygame.mixer.Sound("sounds/classic.mp3"),
         'casting': pygame.mixer.Sound("sounds/casting-whoosh.mp3"),
         'bubble': pygame.mixer.Sound("sounds/bubble.mp3"),
@@ -129,17 +128,40 @@ def draw_water_background(surface):
         pygame.draw.line(surface, color, (0, y), (SCREEN_WIDTH, y))
 
 
-def draw_game_over_screen(surface, score, caught_fish):
+def draw_pause_overlay(surface):
     """
-    Draw the game_copy over overlay with final score and options.
+    Draw the pause screen overlay.
+
+    Args:
+        surface (pygame.Surface): Surface to draw on.
+    """
+    overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    overlay.set_alpha(150)
+    overlay.fill((0, 0, 50))
+    surface.blit(overlay, (0, 0))
+
+    center_x = SCREEN_WIDTH // 2
+    center_y = SCREEN_HEIGHT // 2
+
+    pause_text = big_font.render("PAUSED", True, WHITE)
+    pause_rect = pause_text.get_rect(center=(center_x, center_y - 20))
+    surface.blit(pause_text, pause_rect)
+
+    resume_text = font.render("Press P to Resume", True, (200, 200, 255))
+    resume_rect = resume_text.get_rect(center=(center_x, center_y + 20))
+    surface.blit(resume_text, resume_rect)
+
+
+def draw_game_over_screen(surface, score, fish_caught_count, high_score_result):
+    """
+    Draw the game over overlay with final score and options.
 
     Args:
         surface (pygame.Surface): Surface to draw on.
         score (int): Final score achieved.
-        caught_fish (list): List of caught fish for statistics.
+        fish_caught_count (int): Number of fish caught.
+        high_score_result (dict): Result from update_high_score.
     """
-    # Check for new high score
-    result = update_high_score("classic", score, len(caught_fish))
     current_high = get_high_score("classic")
 
     # Semi-transparent overlay
@@ -154,24 +176,29 @@ def draw_game_over_screen(surface, score, caught_fish):
     # Game over title
     game_over_text = big_font.render("GAME OVER!", True, (255, 0, 0))
     game_over_rect = game_over_text.get_rect(
-        center=(center_x, center_y - 80)
+        center=(center_x, center_y - 100)
     )
     surface.blit(game_over_text, game_over_rect)
 
     # New high score notification
-    if result["is_new_high"]:
+    if high_score_result["is_new_high"]:
         new_high_text = big_font.render("NEW HIGH SCORE!", True, (255, 215, 0))
         new_high_rect = new_high_text.get_rect(
-            center=(center_x, center_y - 40)
+            center=(center_x, center_y - 60)
         )
         surface.blit(new_high_text, new_high_rect)
 
     # Final score
     final_score_text = big_font.render(f"Final Score: {score}", True, WHITE)
     final_score_rect = final_score_text.get_rect(
-        center=(center_x, center_y + 10)
+        center=(center_x, center_y - 20)
     )
     surface.blit(final_score_text, final_score_rect)
+
+    # Fish count
+    count_text = big_font.render(f"Fish Caught: {fish_caught_count}", True, WHITE)
+    count_rect = count_text.get_rect(center=(center_x, center_y + 20))
+    surface.blit(count_text, count_rect)
 
     # High score display
     high_score_text = font.render(
@@ -180,24 +207,24 @@ def draw_game_over_screen(surface, score, caught_fish):
         (200, 200, 200)
     )
     high_score_rect = high_score_text.get_rect(
-        center=(center_x, center_y + 45)
+        center=(center_x, center_y + 60)
     )
     surface.blit(high_score_text, high_score_rect)
 
     # Restart instruction
     restart_text = font.render("Press Enter to Restart", True, (255, 215, 0))
-    restart_rect = restart_text.get_rect(center=(center_x, center_y + 85))
+    restart_rect = restart_text.get_rect(center=(center_x, center_y + 100))
     surface.blit(restart_text, restart_rect)
 
     # Quit instruction
     quit_text = font.render("Press ESC to Quit", True, WHITE)
-    quit_rect = quit_text.get_rect(center=(center_x, center_y + 115))
+    quit_rect = quit_text.get_rect(center=(center_x, center_y + 130))
     surface.blit(quit_text, quit_rect)
 
 
 def main():
     """
-    Main game_copy loop for Classic Mode.
+    Main game loop for Classic Mode.
 
     Returns:
         int: Final score achieved.
@@ -209,9 +236,10 @@ def main():
     graphics = load_graphics()
     sounds['background_classic'].play(-1)  # Loop background music
 
-    # Initialize game_copy state
+    # Initialize game state
     running = True
     game_over = False
+    paused = False
     pygame.display.set_caption("Fish-O-Mania: Classic Mode")
 
     # Initialize managers
@@ -226,13 +254,15 @@ def main():
     # Game variables
     score = 0
     caught_fish = []
+    fish_caught_count = 0
     boat_x = graphics['boat_x']
     boat_y = graphics['boat_y']
+    high_score_result = None
 
     # Fade in effect
     fade_alpha = 255
 
-    # Main game_copy loop
+    # Main game loop
     while running:
         # Event handling
         for event in pygame.event.get():
@@ -244,22 +274,28 @@ def main():
                     running = False
 
                 elif event.key == pygame.K_SPACE:
-                    if not game_over:
+                    if not game_over and not paused:
                         casting_manager.toggle_cast()
                         sounds['casting'].play()
 
+                elif event.key == pygame.K_p:
+                    if not game_over:
+                        paused = not paused
+
                 elif event.key == pygame.K_RETURN:
                     if game_over:
-                        # Restart game_copy
+                        # Restart game
                         fish_manager.clear_all()
                         score = 0
                         caught_fish = []
+                        fish_caught_count = 0
                         for _ in range(START_FISHES):
                             fish_manager.spawn_fish()
                         game_over = False
+                        high_score_result = None
 
-        # Update game_copy state (only when not game_copy over)
-        if not game_over:
+        # Update game state (only when not game over and not paused)
+        if not game_over and not paused:
             fish_manager.update()
             background_manager.update()
 
@@ -290,6 +326,7 @@ def main():
             if caught:
                 if not caught['penalty']:
                     score += caught["value"]
+                    fish_caught_count += 1
                     print(f"Caught: {caught['type']} (+{caught['value']} pts)")
                 else:
                     lives = fish_manager.lives_manager.get_current_lives()
@@ -300,6 +337,7 @@ def main():
                 if caught['game_over']:
                     print("GAME OVER!")
                     game_over = True
+                    high_score_result = update_high_score("classic", score, fish_caught_count)
                     sounds['game_over'].play()
 
             # Update hook rect position
@@ -347,9 +385,10 @@ def main():
         screen.blit(count_text, (10, 50))
 
         # Instructions (only when playing)
-        if not game_over:
+        if not game_over and not paused:
             instructions = [
-                "Press SPACE to cast and catch fish!",
+                "SPACE: Cast",
+                "P: Pause",
                 "ESC: Quit"
             ]
             y_offset = 80
@@ -358,9 +397,13 @@ def main():
                 screen.blit(text, (10, y_offset))
                 y_offset += 25
 
-        # Draw game_copy over screen
+        # Draw pause overlay
+        if paused:
+            draw_pause_overlay(screen)
+
+        # Draw game over screen
         if game_over:
-            draw_game_over_screen(screen, score, caught_fish)
+            draw_game_over_screen(screen, score, fish_caught_count, high_score_result)
 
         # Draw red flash effect
         fish_manager.draw_red_flash(screen)
