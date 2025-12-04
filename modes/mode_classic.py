@@ -48,6 +48,7 @@ def load_sounds():
         dict: Dictionary of loaded sound objects.
     """
     sounds = {
+
         'background_classic': pygame.mixer.Sound("sounds/classic.mp3"),
         'casting': pygame.mixer.Sound("sounds/casting-whoosh.mp3"),
         'bubble': pygame.mixer.Sound("sounds/bubble.mp3"),
