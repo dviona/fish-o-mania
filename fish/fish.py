@@ -96,8 +96,8 @@ class DeathAnimation(pygame.sprite.Sprite):
 
 class AnimatedFish(pygame.sprite.Sprite):
     """
-    Base class for all animated fish.
-    All specific fish types inherit from this.
+    Base class for all animated fish
+    All fish types inherit from this
     """
 
     def __init__(self, sprite_sheet_path, frame_width, frame_height,
@@ -135,25 +135,24 @@ class AnimatedFish(pygame.sprite.Sprite):
         self.rect.center = (x, y)
 
         # Game attributes
-        self.is_catchable = True
         self.value = 10
         self.rarity = "danger"
 
     def load_frames(self):
-        """Extract individual frames from sprite sheet."""
+        """Extract individual frames from sprite sheet ie 6 frames one by one"""
         frames = []
         for i in range(self.num_frames):
-            x = i * self.frame_width
+            x = i * self.frame_width # 0 thru 5
             frame = pygame.Surface((self.frame_width, self.frame_height),
-                                   pygame.SRCALPHA)
+                                   pygame.SRCALPHA) # 0, 48, 96, 144, 192, 240
             frame.blit(self.sprite_sheet, (0, 0),
                        (x, 0, self.frame_width, self.frame_height))
 
-            # Scale up 2x
+            # Scale up 2x 48px = 96px
             scaled_size = (self.frame_width * 2, self.frame_height * 2)
             frame = pygame.transform.scale(frame, scaled_size)
 
-            # Add red line above if danger fish
+            # Add red line above if danger fish to indicate danger
             if self.fish_type == "Danger Fish":
                 # Create new surface with space above
                 new_frame = pygame.Surface((frame.get_width(), frame.get_height() + 6), pygame.SRCALPHA)
@@ -171,8 +170,8 @@ class AnimatedFish(pygame.sprite.Sprite):
         return frames
 
     def update(self):
-        """Update animation and position."""
-        # Animate
+        """Update animation and position of the fish"""
+        # Animate (change frames in sprite)
         self.frame_counter += 1
         if self.frame_counter >= self.frame_delay:
             self.frame_counter = 0
@@ -227,7 +226,7 @@ class Turtle(AnimatedFish):
 
     def __init__(self, x, y, moving_right=True):
         # Set speed direction based on spawn side
-        speed = 0.5 if moving_right else -0.5
+        speed = 0.35 if moving_right else -0.35
 
         super().__init__(
             sprite_sheet_path="graphics/turtle.png",

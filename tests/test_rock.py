@@ -14,8 +14,6 @@ pygame.init()
 
 # Import background classes
 from background.rock import Rock
-from mechanics.constants import SCREEN_WIDTH, SCREEN_HEIGHT
-
 
 # ROCK CLASS TESTS
 
@@ -23,13 +21,13 @@ class TestRock(unittest.TestCase):
     """Tests for the Rock class."""
 
     def test_initialization(self):
-        """Test that rock initializes with correct position."""
+        """Test that rock initializes in the correct position"""
         rock = Rock(100, 500)
         self.assertEqual(rock.x, 100)
         self.assertEqual(rock.y, 500)
 
     def test_initialization_random_width(self):
-        """Test that rock has randomized width in valid range."""
+        """Test that rock has randomized width in valid range"""
         for i in range(10):
             rock = Rock(0, 0)
             self.assertGreaterEqual(rock.width, 30)
@@ -43,7 +41,7 @@ class TestRock(unittest.TestCase):
             self.assertLessEqual(rock.height, 50)
 
     def test_initialization_color_variants(self):
-        """Test that rock color is one of the valid variants."""
+        """Test that rock color is one of the good ones"""
         valid_colors = [
             (105, 105, 105),
             (119, 136, 153),

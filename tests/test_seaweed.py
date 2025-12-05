@@ -14,7 +14,7 @@ pygame.init()
 
 # Import background classes
 from background.seaweed import Seaweed
-from mechanics.constants import SCREEN_WIDTH, SCREEN_HEIGHT
+from mechanics.constants import SCREEN_HEIGHT
 
 
 # SEAWEED CLASS TESTS

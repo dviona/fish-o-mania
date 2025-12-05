@@ -19,10 +19,10 @@ from mechanics.constants import SCREEN_WIDTH, SCREEN_HEIGHT, WATER_SURFACE, WATE
 # Bubble TESTS
 
 class TestBubble(unittest.TestCase):
-    """Tests for the Bubble class."""
+    """Tests for the Bubble class"""
 
     def test_initialization(self):
-        """Test that bubble initializes with correct values."""
+        """Test that bubble initializes with correct values"""
         bubble = Bubble(100, 400)
         self.assertEqual(bubble.x, 100)
         self.assertEqual(bubble.y, 400)
@@ -30,28 +30,28 @@ class TestBubble(unittest.TestCase):
         self.assertEqual(bubble.time, 0)
 
     def test_initialization_random_radius(self):
-        """Test that bubble has randomized radius in valid range."""
+        """Test that bubble has randomized radius in valid range"""
         for _ in range(10):
             bubble = Bubble(0, 0)
             self.assertGreaterEqual(bubble.radius, 3)
             self.assertLessEqual(bubble.radius, 8)
 
     def test_initialization_random_speed(self):
-        """Test that bubble has randomized speed in valid range."""
+        """Test that bubble has randomized speed in valid range"""
         for _ in range(10):
             bubble = Bubble(0, 0)
             self.assertGreaterEqual(bubble.speed, 0.5)
             self.assertLessEqual(bubble.speed, 1.5)
 
     def test_update_moves_bubble_up(self):
-        """Test that update moves the bubble upward."""
+        """Test that update moves the bubble upward"""
         bubble = Bubble(100, 400)
         initial_y = bubble.y
         bubble.update()
         self.assertLess(bubble.y, initial_y)
 
     def test_update_wobbles_horizontally(self):
-        """Test that update causes horizontal wobble."""
+        """Test that update causes horizontal wobble"""
         bubble = Bubble(100, 400)
         x_positions = [bubble.x]
 
@@ -63,15 +63,15 @@ class TestBubble(unittest.TestCase):
         self.assertGreater(len(unique_positions), 1)
 
     def test_update_increments_time(self):
-        """Test that update increments the time counter."""
+        """Test that update increments the time counter"""
         bubble = Bubble(100, 400)
         initial_time = bubble.time
         bubble.update()
         self.assertGreater(bubble.time, initial_time)
 
     def test_bubble_dies_at_water_surface(self):
-        """Test bubble becomes not alive at water surface."""
-        bubble = Bubble(100, WATER_SURFACE + 1)
+        """Test bubble becomes not alive at water surface"""
+        bubble = Bubble(100, WATER_SURFACE)
         bubble.update()
         self.assertFalse(bubble.alive)
 

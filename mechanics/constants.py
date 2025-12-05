@@ -9,17 +9,14 @@ Usage:
     from constants import SCREEN_WIDTH, SCREEN_HEIGHT, FPS
 """
 
-# =============================================================================
-# SCREEN SETTINGS
-# =============================================================================
+# SCREEN SETTINGS CONSTANTS
 
 SCREEN_WIDTH = 1200  # Game window width in pixels
 SCREEN_HEIGHT = 800  # Game window height in pixels
 FPS = 60  # Target frames per second
 
-# =============================================================================
-# COLOR DEFINITIONS (RGB tuples)
-# =============================================================================
+# COLOR DEFINITIONS CNONSTANTS
+
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -29,27 +26,22 @@ DEEP_BLUE = (0, 105, 148)  # Dark water color (near bottom)
 LIGHT_PINK = (255, 182, 193)  # UI accent color
 DEEP_PINK = (255, 182, 211)  # UI accent color
 
-# =============================================================================
-# WATER BOUNDARIES
-# =============================================================================
 
-# Y-coordinate where water surface begins (top of playable water area)
+# WATER BOUNDARIES CONSTANTS
+
+# Y-coordinate where water surface begins
 WATER_SURFACE = 200
 
-# Y-coordinate where water bottom is (bottom of playable water area)
+# Y-coordinate where water bottom is
 WATER_BOTTOM = SCREEN_HEIGHT - 50
 
-# =============================================================================
 # FISH SPAWNING SETTINGS
-# =============================================================================
 
 MAX_FISH = 15  # Maximum number of fish allowed in water at once
 SPAWN_DELAY = 120  # Frames between automatic fish spawns (2 seconds at 60 FPS)
 START_FISHES = 5  # Number of fish spawned at game_copy start
 
-# =============================================================================
 # BOAT AND FISHING ROD SETTINGS
-# =============================================================================
 
 BOAT_SPEED = 8  # Horizontal movement speed of the boat (pixels per frame)
 ROD_MAX_LENGTH = 500  # Maximum depth the fishing line can extend (pixels)

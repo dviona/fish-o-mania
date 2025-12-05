@@ -14,7 +14,7 @@ pygame.init()
 
 # Import background classes
 from background.wave import Wave
-from mechanics.constants import SCREEN_WIDTH, SCREEN_HEIGHT, WATER_SURFACE
+from mechanics.constants import SCREEN_WIDTH, WATER_SURFACE
 
 
 # WAVE CLASS TESTS

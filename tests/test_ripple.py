@@ -13,8 +13,6 @@ pygame.init()
 
 # Import background classes
 from background.ripple import Ripple
-from mechanics.constants import SCREEN_WIDTH, SCREEN_HEIGHT
-
 
 # RIPPLE CLASS TESTS
 
