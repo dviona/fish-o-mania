@@ -231,7 +231,7 @@ def main():
     casting_manager = CastingRod(ROD_MAX_LENGTH, ROD_SPEED)
 
     # Spawn initial fish (more than classic mode)
-    for _ in range(INITIAL_FISH_COUNT):
+    for i in range(INITIAL_FISH_COUNT):
         fish_manager.spawn_fish()
 
     # Game variables
@@ -285,7 +285,7 @@ def main():
                         score = 0
                         caught_fish = []
                         fish_caught_count = 0
-                        for _ in range(INITIAL_FISH_COUNT):
+                        for i in range(INITIAL_FISH_COUNT):
                             fish_manager.spawn_fish()
                         game_over = False
                         high_score_result = None

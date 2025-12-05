@@ -241,7 +241,7 @@ def main():
     casting_manager = CastingRod(ROD_MAX_LENGTH, ROD_SPEED)
 
     # Spawn initial fish
-    for _ in range(START_FISHES):
+    for i in range(START_FISHES):
         fish_manager.spawn_fish()
 
     # Game variables
@@ -295,7 +295,7 @@ def main():
                         score = 0
                         caught_fish = []
                         fish_caught_count = 0
-                        for _ in range(START_FISHES):
+                        for i in range(START_FISHES):
                             fish_manager.spawn_fish()
                         show_summary = False
                         high_score_result = None
