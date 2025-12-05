@@ -29,7 +29,7 @@ class LivesManager:
             # Scale icons to standard size (64x64)
             self.live_icon = pygame.transform.scale(self.live_icon, (self.icon_size, self.icon_size))
             print(f"Loaded live icon: {live_icon_path}")
-        except pygame.error as e:
+        except (pygame.error, FileNotFoundError) as e:
             print(f"Error loading live icon: {e}")
             # Create a placeholder green circle
             self.live_icon = pygame.Surface((self.icon_size, self.icon_size), pygame.SRCALPHA)
@@ -39,7 +39,7 @@ class LivesManager:
             self.dead_icon = pygame.image.load(dead_icon_path).convert_alpha()
             self.dead_icon = pygame.transform.scale(self.dead_icon, (self.icon_size, self.icon_size))
             print(f"Loaded dead icon: {dead_icon_path}")
-        except pygame.error as e:
+        except (pygame.error, FileNotFoundError) as e:
             print(f"Error loading dead icon: {e}")
             # Create a placeholder red circle
             self.dead_icon = pygame.Surface((self.icon_size, self.icon_size), pygame.SRCALPHA)
