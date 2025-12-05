@@ -226,7 +226,7 @@ class Turtle(AnimatedFish):
 
     def __init__(self, x, y, moving_right=True):
         # Set speed direction based on spawn side
-        speed = 0.35 if moving_right else -0.35
+        speed = 0.5 if moving_right else -0.5
 
         super().__init__(
             sprite_sheet_path="graphics/turtle.png",
