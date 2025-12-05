@@ -5,9 +5,12 @@ This File Manages spawning, updating, and tracking all fish.
 import pygame, sys
 import random
 from mechanics.constants import SCREEN_WIDTH, SCREEN_HEIGHT, MAX_FISH, SPAWN_DELAY, WATER_SURFACE, WATER_BOTTOM
-# Import the fish classes from fish.py
-from fish.fish import Turtle, DangerFish, Shark, Octopus
 from mechanics.lives_manager import LivesManager
+# Import the fish classes
+from fish.turtle import Turtle
+from fish.shark import Shark
+from fish.octopus import Octopus
+from fish.danger_fish import DangerFish
 
 
 
