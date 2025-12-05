@@ -2,10 +2,11 @@
 Fish Module for Fish-O-Mania.
 
 Contains all fish-related classes including the base AnimatedFish,
-specific fish types, and fish managers.
+DeathAnimation, specific fish types, and fish managers.
 """
 
-from fish.animated_fish import AnimatedFish, DeathAnimation
+from fish.death_animation import DeathAnimation
+from fish.animated_fish import AnimatedFish
 from fish.turtle import Turtle
 from fish.shark import Shark
 from fish.octopus import Octopus

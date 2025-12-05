@@ -1,18 +1,18 @@
 {
   "classic": {
-    "high_score": 0,
-    "best_fish_count": 0,
-    "date": null
+    "high_score": 700,
+    "best_fish_count": 7,
+    "date": "2025-12-05 08:44"
   },
   "time_attack": {
-    "high_score": 0,
-    "best_fish_count": 0,
-    "date": null
+    "high_score": 1800,
+    "best_fish_count": 21,
+    "date": "2025-12-05 08:39"
   },
   "endless": {
-    "high_score": 375,
-    "best_fish_count": 5,
-    "best_time": 14.439,
-    "date": "2025-12-05 08:36"
+    "high_score": 1375,
+    "best_fish_count": 16,
+    "best_time": 32.09,
+    "date": "2025-12-05 08:40"
   }
 }
