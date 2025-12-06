@@ -12,6 +12,8 @@ Functions:
 """
 
 import pygame
+import random
+from Recording.Recorder import RECORDER
 from mechanics.constants import (
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
