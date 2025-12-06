@@ -2,9 +2,16 @@
 This File Manages spawning, updating, and tracking all fish.
 """
 
-import pygame, sys
+import pygame
 import random
-from mechanics.constants import SCREEN_WIDTH, SCREEN_HEIGHT, MAX_FISH, SPAWN_DELAY, WATER_SURFACE, WATER_BOTTOM
+from mechanics.constants import (
+    SCREEN_WIDTH,
+    SCREEN_HEIGHT,
+    MAX_FISH,
+    SPAWN_DELAY,
+    WATER_SURFACE,
+    WATER_BOTTOM,
+)
 from mechanics.lives_manager import LivesManager
 # Import the fish classes
 from fish.turtle import Turtle
@@ -13,10 +20,9 @@ from fish.octopus import Octopus
 from fish.danger_fish import DangerFish
 
 
-
 class FishManager:
     """
-    Manages all fish in the game_copy.
+    Manages all fish in the game.
     Handles spawning, updating, and organizing fish into groups.
     """
 
@@ -41,7 +47,7 @@ class FishManager:
         self.lives_manager = LivesManager(
             max_lives=3,
             live_icon_path="graphics/fish_orange_outline.png",
-            dead_icon_path="graphics/fish_orange_skeleton_outline.png"
+            dead_icon_path="graphics/fish_orange_skeleton_outline.png",
         )
 
         # Red flash effect for penalty
@@ -66,7 +72,7 @@ class FishManager:
             "Turtle": {"path": "graphics/turtle.png", "frames": 6},
             "Danger Fish": {"path": "graphics/danger_fish.png", "frames": 6},
             "Shark": {"path": "graphics/shark.png", "frames": 6},
-            "Octopus": {"path": "graphics/octopus.png", "frames": 6}
+            "Octopus": {"path": "graphics/octopus.png", "frames": 6},
         }
 
         for fish_type, data in fish_data.items():
@@ -98,8 +104,9 @@ class FishManager:
     def spawn_fish(self, fish_class=None):
         """
         Spawn a new fish.
+
         Args:
-            fish_class: Specific fish type to spawn, or None for random
+            fish_class: Specific fish type to spawn, or None for random.
         """
         if fish_class is None:
             # Generate a random number to determine which fish to spawn
@@ -157,13 +164,13 @@ class FishManager:
 
         # Update recent catches animations
         for catch in self.recent_catches:
-            catch['frame_counter'] += 1
-            if catch['frame_counter'] >= catch['frame_delay']:
-                catch['frame_counter'] = 0
+            catch["frame_counter"] += 1
+            if catch["frame_counter"] >= catch["frame_delay"]:
+                catch["frame_counter"] = 0
                 # Get number of frames for this fish type
-                if catch['type'] in self.fish_animations:
-                    num_frames = len(self.fish_animations[catch['type']])
-                    catch['current_frame'] = (catch['current_frame'] + 1) % num_frames
+                if catch["type"] in self.fish_animations:
+                    num_frames = len(self.fish_animations[catch["type"]])
+                    catch["current_frame"] = (catch["current_frame"] + 1) % num_frames
 
         # Auto-spawn fish
         self.spawn_timer += 1
@@ -203,9 +210,9 @@ class FishManager:
             x_pos = start_x + (i * spacing)
 
             # Draw animated fish sprite
-            if catch['type'] in self.fish_animations:
-                frames = self.fish_animations[catch['type']]
-                current_frame = catch['current_frame']
+            if catch["type"] in self.fish_animations:
+                frames = self.fish_animations[catch["type"]]
+                current_frame = catch["current_frame"]
                 if current_frame < len(frames):
                     sprite = frames[current_frame]
                     surface.blit(sprite, (x_pos, start_y))
@@ -228,6 +235,8 @@ class FishManager:
     def get_fish_at_position(self, pos):
         """
         Get fish at a specific position (for catching).
+        Skips fish that are already hooked, caught, recently released,
+        or have death animation created.
 
         Args:
             pos: (x, y) tuple of position to check
@@ -236,6 +245,19 @@ class FishManager:
             Fish sprite at that position, or None
         """
         for fish in self.all_fish:
+            # Skip fish that are already processed
+            if getattr(fish, 'is_hooked', False):
+                continue
+            if getattr(fish, 'is_caught', False):
+                continue
+            if getattr(fish, 'caught', False):
+                continue
+            if getattr(fish, 'death_animation_created', False):
+                continue
+            # Skip recently released fish
+            if getattr(fish, 'recently_released', False):
+                if not fish.is_release_cooldown_over():
+                    continue
             if fish.rect.collidepoint(pos):
                 return fish
         return None
@@ -243,41 +265,48 @@ class FishManager:
     def remove_fish(self, fish):
         """
         Remove a caught fish and create its death animation.
-        Also handles lives logic for catching wrong fish.
+        For non-danger fish only. Danger fish are handled by casting module.
+
+        Args:
+            fish: The fish sprite that was caught.
 
         Returns:
-            dict: Information about the caught fish and game_copy state
+            dict: Information about the caught fish and game state.
         """
+        # Check if already processed
+        if getattr(fish, 'death_animation_created', False):
+            return {
+                "type": fish.fish_type,
+                "value": 0,
+                "rarity": fish.rarity,
+                "penalty": False,
+                "game_over": self.lives_manager.is_game_over(),
+            }
+
+        # Mark fish as caught
+        fish.is_caught = True
+        fish.caught = True
+
         # Get fish info before removing
         info = fish.get_info()
 
-        # Check if it's a danger fish (wrong fish = lose life)
-        penalty = False
-        if info['type'] == "Danger Fish":
-            self.lives_manager.lose_life()
-            self.penalty_sound.play()
-            penalty = True
-            # Trigger red flash effect
-            self.red_flash_timer = self.red_flash_duration
-            print(f"Wrong fish! Lost a life. Lives remaining: {self.lives_manager.get_current_lives()}")
-        else:
-            print(f"Caught: {info['type']} (+{info['value']} points)")
-            self.catch_sound.play()
+        print(f"Caught: {info['type']} (+{info['value']} points)")
+        self.catch_sound.play()
 
-            # Add to recent catches with animation data (only if not penalty)
-            catch_data = {
-                'type': info['type'],
-                'value': info['value'],
-                'rarity': info['rarity'],
-                'current_frame': 0,
-                'frame_counter': 0,
-                'frame_delay': 8  # Frames to wait before advancing animation
-            }
-            self.recent_catches.append(catch_data)
+        # Add to recent catches with animation data
+        catch_data = {
+            "type": info["type"],
+            "value": info["value"],
+            "rarity": info["rarity"],
+            "current_frame": 0,
+            "frame_counter": 0,
+            "frame_delay": 8,  # Frames to wait before advancing animation
+        }
+        self.recent_catches.append(catch_data)
 
-            # Keep only last 3 catches
-            if len(self.recent_catches) > self.max_recent_catches:
-                self.recent_catches.pop(0)
+        # Keep only last 3 catches
+        if len(self.recent_catches) > self.max_recent_catches:
+            self.recent_catches.pop(0)
 
         # Create death animation before removing fish
         death_anim = fish.create_death_animation()
@@ -287,22 +316,22 @@ class FishManager:
         # Remove fish from all groups
         fish.kill()
 
-        # Return info with penalty flag and game_copy over status
+        # Return info with penalty flag and game over status
         return {
             **info,
-            'penalty': penalty,
-            'game_over': self.lives_manager.is_game_over()
+            "penalty": False,
+            "game_over": self.lives_manager.is_game_over(),
         }
 
     def get_stats(self):
-        """Get statistics about current fish and game_copy state."""
+        """Get statistics about current fish and game state."""
         return {
             "total": len(self.all_fish),
             "danger": len(self.danger_fish),
             "rare": len(self.rare_fish),
             "large": len(self.large_fish),
             "lives": self.lives_manager.get_current_lives(),
-            "game_over": self.lives_manager.is_game_over()
+            "game_over": self.lives_manager.is_game_over(),
         }
 
     def clear_all(self):

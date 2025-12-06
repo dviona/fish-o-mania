@@ -26,6 +26,9 @@ class AnimatedFish(pygame.sprite.Sprite):
         rarity (str): Rarity classification.
     """
 
+    # Cooldown duration for recently released fish (3 seconds)
+    RELEASE_COOLDOWN = 3000
+
     def __init__(self, sprite_sheet_path, frame_width, frame_height,
                  num_frames, x, y, speed_x, fish_type="generic",
                  death_animation_path=None):
@@ -58,6 +61,7 @@ class AnimatedFish(pygame.sprite.Sprite):
 
         # Death animation
         self.death_animation_path = death_animation_path
+        self.death_animation_created = False
 
         # Animation control
         self.current_frame = 0
@@ -77,6 +81,15 @@ class AnimatedFish(pygame.sprite.Sprite):
         self.is_catchable = True
         self.value = 10
         self.rarity = "common"
+
+        # Caught/hooked state
+        self.caught = False
+        self.is_caught = False
+        self.is_hooked = False
+
+        # Recently released state (can't be caught again immediately)
+        self.recently_released = False
+        self.release_time = 0
 
     def _load_frames(self):
         """Extract individual frames from sprite sheet."""
@@ -127,9 +140,33 @@ class AnimatedFish(pygame.sprite.Sprite):
 
         return new_frame
 
+    def is_release_cooldown_over(self):
+        """Check if the release cooldown has expired."""
+        if not self.recently_released:
+            return True
+        return pygame.time.get_ticks() - self.release_time >= self.RELEASE_COOLDOWN
+
+    def start_rising(self):
+        """Mark fish as caught and start rising animation."""
+        self.caught = True
+        self.is_caught = True
+
     def update(self):
         """Update animation and position."""
         self._update_animation()
+
+        # Check if release cooldown is over
+        if self.recently_released and self.is_release_cooldown_over():
+            self.recently_released = False
+
+        # If hooked (danger fish during scream period), stay in place
+        if self.is_hooked:
+            return
+
+        # If caught, fish is removed - death animation handles the visual
+        if self.caught:
+            return
+
         self._update_position()
 
     def _update_animation(self):
@@ -175,12 +212,14 @@ class AnimatedFish(pygame.sprite.Sprite):
 
     def create_death_animation(self):
         """
-        Create and return a death animation sprite.
+        Create and return a death animation sprite. Only creates once.
 
         Returns:
-            DeathAnimation: The death animation sprite, or None if no path.
+            DeathAnimation: The death animation sprite, or None if no path
+                or already created.
         """
-        if self.death_animation_path:
+        if self.death_animation_path and not self.death_animation_created:
+            self.death_animation_created = True
             is_danger = (self.fish_type == "Danger Fish")
             return DeathAnimation(
                 self.rect.centerx,

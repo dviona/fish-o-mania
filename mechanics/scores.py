@@ -113,10 +113,10 @@ def save_scores(scores):
 
 def update_high_score(mode, score, fish_count=0, time_played=0):
     """
-    Update high score for a game mode if the new score is higher
+    Update high score for a game mode if the new score is higher.
 
     Also updates best fish count and best time (for endless mode)
-    if records are beaten
+    if records are beaten.
 
     Args:
         mode (str): Game mode ("classic", "time_attack", or "endless")
