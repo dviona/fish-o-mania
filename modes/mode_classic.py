@@ -506,10 +506,6 @@ def main():
                 # Not screaming - hook goes up
                 casting_manager.is_casting = False
 
-            # Debug statement
-            print(
-                f"spacebar={spacebar_casting}, scream={is_screaming}, peak={hook_peak}, is_casting={casting_manager.is_casting}, rod_len={casting_manager.rod_length}")
-
             # Auto-reset spacebar toggle when hook reaches bottom or top
             if casting_manager.rod_length >= casting_manager.rod_max_length:
                 spacebar_casting = False  # Auto-switch to reel mode
