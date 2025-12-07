@@ -26,6 +26,7 @@ from mechanics.scores import (
     get_all_high_scores,
     reset_scores
 )
+from mechanics.Recorder import RECORDER
 
 __all__ = [
     'CastingRod',
