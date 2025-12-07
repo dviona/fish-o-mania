@@ -152,13 +152,15 @@ def draw_water_background(surface):
 
 def draw_pause_overlay(surface):
     """
-    Draw the pause screen overlay.
+    Draw the pause screen overlay when a danger fish is caught.
 
     Args:
         surface (pygame.Surface): Surface to draw on.
     """
     overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    # set transparency
     overlay.set_alpha(150)
+    # fill the screen with a color
     overlay.fill((0, 0, 50))
     surface.blit(overlay, (0, 0))
 
@@ -370,6 +372,7 @@ def draw_danger_fish_overlay(surface, recorder, scream_progress, angler_pause_st
     else:
         time_color = (255, 255, 255)
 
+    # get the time left
     time_text = font.render(f"Time: {remain_s:.1f}s", True, time_color)
     time_rect = time_text.get_rect(center=(rect_center_x, rect_center_y + 85))
     surface.blit(time_text, time_rect)
