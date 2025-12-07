@@ -30,22 +30,26 @@ class CastingRod:
         rod_speed (int): Extension/retraction speed in pixels per frame.
         rod_length (int): Current extension distance.
         is_casting (bool): True if rod is extending, False if reeling.
+        auto_reel (bool): If True, auto-switch to reel when hitting bottom.
         attached_fish: Reference to currently hooked fish.
         pending_danger_fish: Danger fish waiting for scream resolution.
     """
 
-    def __init__(self, rod_max_length, rod_speed):
+    def __init__(self, rod_max_length, rod_speed, auto_reel=True):
         """
         Initialize the casting rod.
 
         Args:
             rod_max_length (int): Maximum depth the rod can extend.
             rod_speed (int): Speed of casting and reeling.
+            auto_reel (bool): If True, auto-switch to reel when hitting bottom.
+                              Set to False for modes with external control (like scream).
         """
         self.rod_max_length = rod_max_length
         self.rod_speed = rod_speed
         self.rod_length = 0
         self.is_casting = False
+        self.auto_reel = auto_reel
 
         # Danger fish handling
         self.attached_fish = None
@@ -93,7 +97,9 @@ class CastingRod:
             # Extend the rod downward
             if self.rod_length < self.rod_max_length:
                 self.rod_length += self.rod_speed
-
+            elif self.auto_reel:
+                # Auto-switch to reeling when max length reached (if enabled)
+                self.is_casting = False
         else:
             # Reel the rod upward
             if self.rod_length > 0:

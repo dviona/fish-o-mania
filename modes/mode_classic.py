@@ -388,7 +388,7 @@ def main():
     # Initialize managers
     fish_manager = FishManager()
     background_manager = BackgroundManager(use_terrain_files=True)
-    casting_manager = CastingRod(ROD_MAX_LENGTH, ROD_SPEED)
+    casting_manager = CastingRod(ROD_MAX_LENGTH, ROD_SPEED, auto_reel = False)
 
     # Spawn initial fish
     for i in range(START_FISHES):
