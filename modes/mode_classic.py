@@ -176,11 +176,11 @@ def draw_pause_overlay(surface):
 
 def draw_release_message(surface, message):
     """
-    Draw the funny fish release message.
+    Draw the funny fish release message
 
     Args:
-        surface (pygame.Surface): Surface to draw on.
-        message (str): The release message to display.
+        surface (pygame.Surface): Surface to draw on
+        message (str): The release message to display
     """
     overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
     overlay.set_alpha(150)
@@ -198,13 +198,13 @@ def draw_release_message(surface, message):
 
 def draw_game_over_screen(surface, score, fish_caught_count, high_score_result):
     """
-    Draw the game over overlay with final score and options.
+    Draw the game over overlay with final score and options
 
     Args:
-        surface (pygame.Surface): Surface to draw on.
-        score (int): Final score achieved.
-        fish_caught_count (int): Number of fish caught.
-        high_score_result (dict): Result from update_high_score.
+        surface (pygame.Surface): Surface to draw on
+        score (int): Final score achieved
+        fish_caught_count (int): Number of fish caught
+        high_score_result (dict): Result from update_high_score
     """
     current_high = get_high_score("classic")
 
@@ -394,6 +394,7 @@ def main():
     game_over = False
     paused = False
     pygame.display.set_caption("Fish-O-Mania: Classic Mode")
+    spacebar_casting = False # Tracks spacebar casting or scream casting
 
     # Initialize managers
     fish_manager = FishManager()
@@ -449,6 +450,11 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     running = False
 
+                if event.key == pygame.K_SPACE:
+                    if not game_over and not paused and not angler_pause_active and not showing_release_message:
+                        spacebar_casting =  not spacebar_casting # If pressed depress and vice versa
+                        sounds['casting'].play()
+
                 elif event.key == pygame.K_p:
                     if not game_over and not angler_pause_active and not showing_release_message:
                         paused = not paused
@@ -461,6 +467,7 @@ def main():
                         score = 0
                         caught_fish = []
                         fish_caught_count = 0
+                        spacebar_casting = False
                         for i in range(START_FISHES):
                             fish_manager.spawn_fish()
                         game_over = False
@@ -484,14 +491,30 @@ def main():
 
             recorder.read_frames()
 
-            # Control hook with screaming
+            # Check if screaming
             hook_peak = recorder.get_frame_peak()
-            if hook_peak >= HOOK_SCREAM_THRESHOLD:
-                # Screaming - hook goes down
+            is_screaming = hook_peak >= HOOK_SCREAM_THRESHOLD
+
+            # Dual control: Can use either spacebar or screaming to lower the hook
+            # Hook goes down if spacebar pressed to cast OR currently screaming
+            # Hook goes up if spacebar toggled to reel AND not screaming
+
+            if spacebar_casting or is_screaming:
+                # Screaming/spacebar casting - hook goes down
                 casting_manager.is_casting = True
             else:
                 # Not screaming - hook goes up
                 casting_manager.is_casting = False
+
+            # Debug statement
+            print(
+                f"spacebar={spacebar_casting}, scream={is_screaming}, peak={hook_peak}, is_casting={casting_manager.is_casting}, rod_len={casting_manager.rod_length}")
+
+            # Auto-reset spacebar toggle when hook reaches bottom or top
+            if casting_manager.rod_length >= casting_manager.rod_max_length:
+                spacebar_casting = False  # Auto-switch to reel mode
+            #elif casting_manager.rod_length <= 0 and not is_screaming:
+            #    spacebar_casting = False  # Reset when fully reeled
 
             # Boat movement
             keys = pygame.key.get_pressed()
@@ -629,21 +652,14 @@ def main():
         score_text = big_font.render(f"Score: {score}", True, WHITE)
         screen.blit(score_text, (10, 10))
 
-        count_text = font.render(f"Fish in water: {stats['total']}", True, WHITE)
-        screen.blit(count_text, (10, 50))
-
-        lives_text = font.render(
-            f"Lives: {fish_manager.lives_manager.get_current_lives()}", True, WHITE
-        )
-        screen.blit(lives_text, (10, 75))
-
         # Instructions (only when playing)
         if not game_over and not paused and not angler_pause_active and not showing_release_message:
             instructions = [
-                "Scream to lower the hook, stop to reel up!",
-                "Arrow keys: Move boat | P: Pause | ESC: Quit",
+                "SPACE / SCREAM: Cast / Reel",
+                "Arrow keys: Move boat",
+                "P: Pause | ESC: Quit",
             ]
-            y_offset = 100
+            y_offset = 50
             for instruction in instructions:
                 text = font.render(instruction, True, WHITE)
                 screen.blit(text, (10, y_offset))

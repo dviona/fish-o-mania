@@ -93,9 +93,11 @@ class CastingRod:
             # Extend the rod downward
             if self.rod_length < self.rod_max_length:
                 self.rod_length += self.rod_speed
+            ''' Might have to remove this part so that spacebar also works
             else:
                 # Auto-switch to reeling when max length reached
                 self.is_casting = False
+            '''
         else:
             # Reel the rod upward
             if self.rod_length > 0:
