@@ -44,23 +44,9 @@ clock = pygame.time.Clock()
 font = pygame.font.Font(None, 24)
 big_font = pygame.font.Font(None, 36)
 
-# Funny release messages
+# Funny release messages # keep only one
 RELEASE_MESSAGES = [
-    "YEET! The fish escaped!",
-    "Your scream scared the fish away!",
-    "Fish said: 'I'm outta here!'",
-    "The fish fled in terror!",
-    "Wow! That scream could wake the dead!",
-    "Fish: 'Nope, not today!'",
-    "Your voice cracked... but so did the fish's courage!",
-    "The fish swam away screaming too!",
-    "Achievement Unlocked: Banshee Mode!",
-    "That fish will need therapy now!",
-    "Fish released! Your neighbors hate you!",
-    "The fish chose life!",
-    "Sonic attack successful!",
-    "Fish: 'Tell my family I love them!' *swims away*",
-    "You call that a scream? ...Actually yes, yes it was!",
+    "The fish chooses life today."
 ]
 
 
@@ -311,7 +297,7 @@ def draw_danger_fish_overlay(surface, recorder, scream_progress, angler_pause_st
     title_font = pygame.font.Font(None, 34)
     shadow_offset = 2
 
-    title_text = "⚠ DANGER FISH! ⚠"
+    title_text = " DANGER FISH! "
     title_shadow = title_font.render(title_text, True, (60, 0, 0))
     title_render = title_font.render(title_text, True, (255, 220, 100))
     title_rect = title_render.get_rect(center=(rect_center_x, rect_center_y - 95))
@@ -324,11 +310,11 @@ def draw_danger_fish_overlay(surface, recorder, scream_progress, angler_pause_st
     subtitle_rect = subtitle_render.get_rect(center=(rect_center_x, rect_center_y - 65))
     surface.blit(subtitle_render, subtitle_rect)
 
-    # Volume indicator
+    # Volume indicator delete the volume indicator
     peak_color = (100, 255, 100) if is_screaming else (200, 200, 200)
     peak_text = font.render(f"Volume: {current_peak:,}", True, peak_color)
     peak_rect = peak_text.get_rect(center=(rect_center_x, rect_center_y - 35))
-    surface.blit(peak_text, peak_rect)
+    # surface.blit(peak_text, peak_rect)
 
     # Progress bar
     bar_width = 280
@@ -420,14 +406,14 @@ def main():
     angler_pause_active = False
     angler_pause_start_time = 0
     ANGLER_PAUSE_DURATION = 5000
-    SCREAM_PEAK_THRESHOLD = 30000
+    SCREAM_PEAK_THRESHOLD = 5000
 
     # Frame-by-frame scream progress for danger fish (0-100%)
     scream_progress = 0
     SCREAM_INCREMENT = 1  # 1% per frame with scream detected
 
     # Scream threshold for controlling the hook
-    HOOK_SCREAM_THRESHOLD = 25000
+    HOOK_SCREAM_THRESHOLD = 15000
 
     # Release message state
     showing_release_message = False

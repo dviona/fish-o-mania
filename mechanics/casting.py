@@ -93,7 +93,7 @@ class CastingRod:
             # Extend the rod downward
             if self.rod_length < self.rod_max_length:
                 self.rod_length += self.rod_speed
-s
+
         else:
             # Reel the rod upward
             if self.rod_length > 0:

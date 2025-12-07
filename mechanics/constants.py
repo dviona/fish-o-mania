@@ -42,8 +42,4 @@ BOAT_SPEED = 8  # Horizontal movement speed of the boat (pixels per frame)
 ROD_MAX_LENGTH = 500  # Maximum depth the fishing line can extend (pixels)
 ROD_SPEED = 6  # Speed of casting/reeling the fishing line (pixels per frame)
 
-# Legacy lowercase aliases (deprecated, use uppercase versions above)
-# rod_max_length = 500
-# boat_speed = 8
-# rod_length = 0
-# rod_speed = 6
+
