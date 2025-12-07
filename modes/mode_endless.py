@@ -152,7 +152,7 @@ def draw_pause_overlay(surface):
     surface.blit(resume_text, resume_rect)
 
 
-def draw_game_over_screen(surface, score, fish_caught_count, time_played, high_score_result, lives_lost):
+def draw_game_over_screen(surface, score, fish_caught_count, time_played, high_score_result):
     """
     Draw the summary screen when player quits.
 
@@ -162,7 +162,6 @@ def draw_game_over_screen(surface, score, fish_caught_count, time_played, high_s
         fish_caught_count (int): Number of fish caught.
         time_played (float): Time played in seconds.
         high_score_result (dict): Result from update_high_score.
-        lives_lost (int): Number of lives lost to danger fish.
     """
     current_high = get_high_score("endless")
 
@@ -195,11 +194,6 @@ def draw_game_over_screen(surface, score, fish_caught_count, time_played, high_s
     count_text = big_font.render(f"Fish Caught: {fish_caught_count}", True, WHITE)
     count_rect = count_text.get_rect(center=(center_x, center_y))
     surface.blit(count_text, count_rect)
-
-    # Lives lost
-    lives_text = big_font.render(f"Lives Lost: {lives_lost}", True, (255, 100, 100))
-    lives_rect = lives_text.get_rect(center=(center_x, center_y + 40))
-    surface.blit(lives_text, lives_rect)
 
     # Time played
     time_text = big_font.render(f"Time: {format_time(time_played)}", True, WHITE)
@@ -311,7 +305,6 @@ def main():
     score = 0
     caught_fish = []
     fish_caught_count = 0
-    lives_lost = 0  # Track lives lost to danger fish
     boat_x = graphics['boat_x']
     boat_y = graphics['boat_y']
     high_score_result = None
@@ -360,7 +353,6 @@ def main():
                         score = 0
                         caught_fish = []
                         fish_caught_count = 0
-                        lives_lost = 0
                         for i in range(START_FISHES):
                             fish_manager.spawn_fish()
                         show_summary = False
@@ -402,7 +394,6 @@ def main():
                     if danger_result:
                         score += danger_result["value"]
                         fish_caught_count += 1
-                        lives_lost += 1
                         caught_fish.append(danger_result)
                         fish_manager.catch_sound.play()
                 else:
@@ -460,9 +451,6 @@ def main():
         time_text = font.render(f"Time: {format_time(elapsed)}", True, WHITE)
         screen.blit(time_text, (10, 75))
 
-        lives_text = font.render(f"Lives lost: {lives_lost}", True, (255, 150, 150))
-        screen.blit(lives_text, (10, 100))
-
         high_text = font.render(
             f"High Score: {current_high}",
             True,
@@ -498,7 +486,7 @@ def main():
 
         # Summary screen
         if show_summary:
-            draw_game_over_screen(screen, score, fish_caught_count, elapsed, high_score_result, lives_lost)
+            draw_game_over_screen(screen, score, fish_caught_count, elapsed, high_score_result)
 
         # Draw red flash effect
         fish_manager.draw_red_flash(screen)

@@ -144,7 +144,7 @@ def draw_pause_overlay(surface, time_remaining):
     surface.blit(resume_text, resume_rect)
 
 
-def draw_game_over_screen(surface, score, fish_caught_count, high_score_result, lives_lost):
+def draw_game_over_screen(surface, score, fish_caught_count, high_score_result):
     """
     Draw the time's up overlay with final score.
 
@@ -153,7 +153,6 @@ def draw_game_over_screen(surface, score, fish_caught_count, high_score_result, 
         score (int): Final score achieved.
         fish_caught_count (int): Number of fish caught.
         high_score_result (dict): Result from update_high_score.
-        lives_lost (int): Number of lives lost to danger fish.
     """
     current_high = get_high_score("time_attack")
 
@@ -190,11 +189,6 @@ def draw_game_over_screen(surface, score, fish_caught_count, high_score_result, 
     )
     count_rect = count_text.get_rect(center=(center_x, center_y))
     surface.blit(count_text, count_rect)
-
-    # Lives lost
-    lives_text = big_font.render(f"Lives Lost: {lives_lost}", True, (255, 100, 100))
-    lives_rect = lives_text.get_rect(center=(center_x, center_y + 40))
-    surface.blit(lives_text, lives_rect)
 
     # High score
     high_text = font.render(f"High Score: {current_high}", True, (200, 200, 200))
@@ -301,7 +295,6 @@ def main():
     score = 0
     caught_fish = []
     fish_caught_count = 0
-    lives_lost = 0  # Track lives lost to danger fish
     boat_x = graphics['boat_x']
     boat_y = graphics['boat_y']
     high_score_result = None
@@ -350,7 +343,6 @@ def main():
                         score = 0
                         caught_fish = []
                         fish_caught_count = 0
-                        lives_lost = 0
                         for i in range(INITIAL_FISH_COUNT):
                             fish_manager.spawn_fish()
                         game_over = False
@@ -401,7 +393,6 @@ def main():
                     if danger_result:
                         score += danger_result["value"]
                         fish_caught_count += 1
-                        lives_lost += 1
                         caught_fish.append(danger_result)
                         fish_manager.catch_sound.play()
                 else:
@@ -457,9 +448,6 @@ def main():
         count_text = font.render(f"Fish caught: {fish_caught_count}", True, WHITE)
         screen.blit(count_text, (10, 50))
 
-        lives_text = font.render(f"Lives lost: {lives_lost}", True, (255, 150, 150))
-        screen.blit(lives_text, (10, 75))
-
         # Instructions
         if not game_over and not paused:
             # Mode indicator
@@ -488,7 +476,7 @@ def main():
 
         # Game over screen
         if game_over:
-            draw_game_over_screen(screen, score, fish_caught_count, high_score_result, lives_lost)
+            draw_game_over_screen(screen, score, fish_caught_count, high_score_result)
 
         # Draw red flash (still shows but no penalty)
         fish_manager.draw_red_flash(screen)
