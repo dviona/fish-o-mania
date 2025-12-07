@@ -456,7 +456,7 @@ def main():
             True,
             (200, 200, 200)
         )
-        screen.blit(high_text, (10, 125))
+        screen.blit(high_text, (10, 100))
 
         # Mode indicator
         mode_text = font.render(

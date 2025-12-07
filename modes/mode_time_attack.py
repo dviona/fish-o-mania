@@ -464,7 +464,7 @@ def main():
                 "P: Pause",
                 "ESC: Quit"
             ]
-            y_offset = 105
+            y_offset = 80
             for instruction in instructions:
                 text = font.render(instruction, True, WHITE)
                 screen.blit(text, (10, y_offset))
