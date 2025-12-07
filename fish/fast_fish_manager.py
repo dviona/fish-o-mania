@@ -7,7 +7,7 @@ with faster-moving fish. Used by Time Attack mode.
 
 from fish.relaxed_fish_manager import RelaxedFishManager
 
-# Fish move 1.8x faster than normal
+# Fish move 3x faster than normal
 FISH_SPEED_MULTIPLIER = 3.0
 
 

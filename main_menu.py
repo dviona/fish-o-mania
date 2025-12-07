@@ -2,7 +2,7 @@
 IMPORTANT: Always run the game from the root directory so as not to run
 into directory issues! That is, main_menu.py should be the main file to run!
 
-Main Entry Point for Fish-O-Mania.
+Main Entry Point for Fish-O-Mania
 
 This module serves as the main entry point for the game,
 handling the game loop and launching different game modes.
@@ -11,7 +11,7 @@ Run the game with:
     python main.py
 
 Functions:
-    main: Main entry point and game loop.
+    main: Main entry point and game loop
 """
 
 import pygame

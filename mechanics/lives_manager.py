@@ -28,8 +28,7 @@ class LivesManager:
             self.live_icon = pygame.image.load(live_icon_path).convert_alpha()
             # Scale icons to standard size (64x64)
             self.live_icon = pygame.transform.scale(self.live_icon, (self.icon_size, self.icon_size))
-            print(f"Loaded live icon: {live_icon_path}")
-        except pygame.error as e:
+        except (pygame.error, FileNotFoundError) as e:
             print(f"Error loading live icon: {e}")
             # Create a placeholder green circle
             self.live_icon = pygame.Surface((self.icon_size, self.icon_size), pygame.SRCALPHA)
@@ -38,8 +37,7 @@ class LivesManager:
         try:
             self.dead_icon = pygame.image.load(dead_icon_path).convert_alpha()
             self.dead_icon = pygame.transform.scale(self.dead_icon, (self.icon_size, self.icon_size))
-            print(f"Loaded dead icon: {dead_icon_path}")
-        except pygame.error as e:
+        except (pygame.error, FileNotFoundError) as e:
             print(f"Error loading dead icon: {e}")
             # Create a placeholder red circle
             self.dead_icon = pygame.Surface((self.icon_size, self.icon_size), pygame.SRCALPHA)
@@ -50,7 +48,7 @@ class LivesManager:
         Decrease lives by 1.
 
         Returns:
-            bool: True if still alive, False if game_copy over
+            bool: True if still alive, False if game over
         """
         if self.current_lives > 0:
             self.current_lives -= 1
@@ -58,7 +56,6 @@ class LivesManager:
 
             if self.current_lives <= 0:
                 self.game_over = True
-                print("Game Over!")
                 return False
         return True
 
@@ -66,10 +63,9 @@ class LivesManager:
         """Reset lives to maximum."""
         self.current_lives = self.max_lives
         self.game_over = False
-        print("Lives reset!")
 
     def is_game_over(self):
-        """Check if game_copy is over."""
+        """Check if game is over."""
         return self.game_over
 
     def get_current_lives(self):

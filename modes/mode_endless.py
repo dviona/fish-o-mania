@@ -152,7 +152,7 @@ def draw_pause_overlay(surface):
     surface.blit(resume_text, resume_rect)
 
 
-def draw_game_over_screen(surface, score, fish_caught_count, time_played, high_score_result):
+def draw_game_over_screen(surface, score, fish_caught_count, time_played, high_score_result, lives_lost):
     """
     Draw the summary screen when player quits.
 
@@ -162,6 +162,7 @@ def draw_game_over_screen(surface, score, fish_caught_count, time_played, high_s
         fish_caught_count (int): Number of fish caught.
         time_played (float): Time played in seconds.
         high_score_result (dict): Result from update_high_score.
+        lives_lost (int): Number of lives lost to danger fish.
     """
     current_high = get_high_score("endless")
 
@@ -176,43 +177,105 @@ def draw_game_over_screen(surface, score, fish_caught_count, time_played, high_s
 
     # Title
     title_text = big_font.render("SESSION COMPLETE", True, (100, 200, 255))
-    title_rect = title_text.get_rect(center=(center_x, center_y - 100))
+    title_rect = title_text.get_rect(center=(center_x, center_y - 120))
     surface.blit(title_text, title_rect)
 
     # New high score notification
     if high_score_result["is_new_high"]:
         new_high_text = big_font.render("NEW HIGH SCORE!", True, (255, 215, 0))
-        new_high_rect = new_high_text.get_rect(center=(center_x, center_y - 60))
+        new_high_rect = new_high_text.get_rect(center=(center_x, center_y - 80))
         surface.blit(new_high_text, new_high_rect)
 
     # Final score
     score_text = big_font.render(f"Final Score: {score}", True, WHITE)
-    score_rect = score_text.get_rect(center=(center_x, center_y - 20))
+    score_rect = score_text.get_rect(center=(center_x, center_y - 40))
     surface.blit(score_text, score_rect)
 
     # Fish count
     count_text = big_font.render(f"Fish Caught: {fish_caught_count}", True, WHITE)
-    count_rect = count_text.get_rect(center=(center_x, center_y + 20))
+    count_rect = count_text.get_rect(center=(center_x, center_y))
     surface.blit(count_text, count_rect)
+
+    # Lives lost
+    lives_text = big_font.render(f"Lives Lost: {lives_lost}", True, (255, 100, 100))
+    lives_rect = lives_text.get_rect(center=(center_x, center_y + 40))
+    surface.blit(lives_text, lives_rect)
 
     # Time played
     time_text = big_font.render(f"Time: {format_time(time_played)}", True, WHITE)
-    time_rect = time_text.get_rect(center=(center_x, center_y + 60))
+    time_rect = time_text.get_rect(center=(center_x, center_y + 80))
     surface.blit(time_text, time_rect)
 
     # High score
     high_text = font.render(f"High Score: {current_high}", True, (200, 200, 200))
-    high_rect = high_text.get_rect(center=(center_x, center_y + 100))
+    high_rect = high_text.get_rect(center=(center_x, center_y + 120))
     surface.blit(high_text, high_rect)
 
     # Instructions
     restart_text = font.render("Press ENTER to Play Again", True, (255, 215, 0))
-    restart_rect = restart_text.get_rect(center=(center_x, center_y + 140))
+    restart_rect = restart_text.get_rect(center=(center_x, center_y + 160))
     surface.blit(restart_text, restart_rect)
 
     quit_text = font.render("Press ESC to Quit", True, WHITE)
-    quit_rect = quit_text.get_rect(center=(center_x, center_y + 170))
+    quit_rect = quit_text.get_rect(center=(center_x, center_y + 190))
     surface.blit(quit_text, quit_rect)
+
+
+def handle_danger_fish_catch(casting_manager, fish_manager):
+    """
+    Handle catching a danger fish immediately (no scream mechanic).
+    
+    Args:
+        casting_manager: The casting rod manager.
+        fish_manager: The fish manager.
+    
+    Returns:
+        dict: Fish info if a danger fish was caught, None otherwise.
+    """
+    if casting_manager.pending_danger_fish is not None:
+        fish = casting_manager.pending_danger_fish
+        fish_value = getattr(fish, 'value', 25)
+        fish_type = getattr(fish, 'fish_type', 'Danger Fish')
+        fish_rarity = getattr(fish, 'rarity', 'danger')
+
+        # Mark fish as caught
+        fish.is_hooked = False
+        fish.is_caught = True
+        fish.caught = True
+
+        # Create death animation
+        death_anim = fish.create_death_animation()
+        if death_anim:
+            fish_manager.death_animations.add(death_anim)
+
+        # Remove from sprite groups
+        fish.kill()
+
+        # Add to recent catches display
+        catch_data = {
+            "type": fish_type,
+            "value": fish_value,
+            "rarity": fish_rarity,
+            "current_frame": 0,
+            "frame_counter": 0,
+            "frame_delay": 8,
+        }
+        fish_manager.recent_catches.append(catch_data)
+        if len(fish_manager.recent_catches) > fish_manager.max_recent_catches:
+            fish_manager.recent_catches.pop(0)
+
+        # Clear pending state
+        casting_manager.pending_danger_fish = None
+        casting_manager.attached_fish = None
+        casting_manager.start_cooldown()
+
+        return {
+            "type": fish_type,
+            "value": fish_value,
+            "rarity": fish_rarity,
+            "penalty": True
+        }
+    return None
 
 
 def main():
@@ -241,13 +304,14 @@ def main():
     casting_manager = CastingRod(ROD_MAX_LENGTH, ROD_SPEED)
 
     # Spawn initial fish
-    for _ in range(START_FISHES):
+    for i in range(START_FISHES):
         fish_manager.spawn_fish()
 
     # Game variables
     score = 0
     caught_fish = []
     fish_caught_count = 0
+    lives_lost = 0  # Track lives lost to danger fish
     boat_x = graphics['boat_x']
     boat_y = graphics['boat_y']
     high_score_result = None
@@ -292,10 +356,12 @@ def main():
                     if show_summary:
                         # Restart game
                         fish_manager.clear_all()
+                        casting_manager.reset()
                         score = 0
                         caught_fish = []
                         fish_caught_count = 0
-                        for _ in range(START_FISHES):
+                        lives_lost = 0
+                        for i in range(START_FISHES):
                             fish_manager.spawn_fish()
                         show_summary = False
                         high_score_result = None
@@ -330,9 +396,19 @@ def main():
             )
 
             if result:
-                score += result["value"]
-                fish_caught_count += 1
-                caught_fish.append(result)
+                if result.get('penalty'):
+                    # Danger fish caught - handle immediately
+                    danger_result = handle_danger_fish_catch(casting_manager, fish_manager)
+                    if danger_result:
+                        score += danger_result["value"]
+                        fish_caught_count += 1
+                        lives_lost += 1
+                        caught_fish.append(danger_result)
+                        fish_manager.catch_sound.play()
+                else:
+                    score += result["value"]
+                    fish_caught_count += 1
+                    caught_fish.append(result)
 
             # Update hook rect
             hook_x = rod_x
@@ -384,12 +460,15 @@ def main():
         time_text = font.render(f"Time: {format_time(elapsed)}", True, WHITE)
         screen.blit(time_text, (10, 75))
 
+        lives_text = font.render(f"Lives lost: {lives_lost}", True, (255, 150, 150))
+        screen.blit(lives_text, (10, 100))
+
         high_text = font.render(
             f"High Score: {current_high}",
             True,
             (200, 200, 200)
         )
-        screen.blit(high_text, (10, 100))
+        screen.blit(high_text, (10, 125))
 
         # Mode indicator
         mode_text = font.render(
@@ -419,7 +498,10 @@ def main():
 
         # Summary screen
         if show_summary:
-            draw_game_over_screen(screen, score, fish_caught_count, elapsed, high_score_result)
+            draw_game_over_screen(screen, score, fish_caught_count, elapsed, high_score_result, lives_lost)
+
+        # Draw red flash effect
+        fish_manager.draw_red_flash(screen)
 
         # Fade in
         if fade_alpha > 0:

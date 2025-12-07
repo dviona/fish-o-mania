@@ -11,24 +11,24 @@ import math
 
 class Rock:
     """
-    Static rock decoration.
+    Static rock decoration (no movements)
 
-    Draws an elliptical rock with simple shading for depth.
+    Drawoing an elliptical rock with simple shading for depth
 
     Attributes:
-        x (int): X-coordinate of rock.
-        y (int): Y-coordinate of rock.
-        width (int): Rock width in pixels.
-        height (int): Rock height in pixels.
+        x (int): X-coordinate of rock
+        y (int): Y-coordinate of rock
+        width (int): Rock width in pixels
+        height (int): Rock height in pixels
     """
 
     def __init__(self, x, y):
         """
-        Initialize a rock at the specified position.
+        Initialize a rock at the specified position
 
         Args:
-            x (int): X-coordinate for rock.
-            y (int): Y-coordinate for rock.
+            x (int): X-coordinate for rock
+            y (int): Y-coordinate for rock
         """
         self.x = x
         self.y = y
@@ -46,10 +46,10 @@ class Rock:
 
     def draw(self, surface):
         """
-        Draw the rock with shading.
+        Draw the rock with shading
 
         Args:
-            surface (pygame.Surface): Surface to draw on.
+            surface (pygame.Surface): surface to draw on
         """
         # Main rock body
         pygame.draw.ellipse(

@@ -1,0 +1,1213 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>UI System - Menu</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+/* Override strong tags inside headings to maintain consistent weight */
+h1 strong,
+h2 strong,
+h3 strong {
+	font-weight: 600;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 10px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.collection-content td {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.callout img.notion-static-icon {
+	width: 1em;
+	height: 1em;
+}
+
+.callout p {
+	margin: 0;
+}
+
+.callout h1,
+.callout h2,
+.callout h3 {
+	margin: 0 0 0.6rem;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+blockquote.quote-large {
+	font-size: 1.25em;
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.highlight-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.highlight-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.highlight-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.highlight-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.highlight-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.highlight-default_background {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray_background {
+	background: rgba(42, 28, 0, 0.07);
+}
+.highlight-brown_background {
+	background: rgba(139, 46, 0, 0.086);
+}
+.highlight-orange_background {
+	background: rgba(224, 101, 1, 0.129);
+}
+.highlight-yellow_background {
+	background: rgba(211, 168, 0, 0.137);
+}
+.highlight-teal_background {
+	background: rgba(0, 100, 45, 0.09);
+}
+.highlight-blue_background {
+	background: rgba(0, 124, 215, 0.094);
+}
+.highlight-purple_background {
+	background: rgba(102, 0, 178, 0.078);
+}
+.highlight-pink_background {
+	background: rgba(197, 0, 93, 0.086);
+}
+.highlight-red_background {
+	background: rgba(223, 22, 0, 0.094);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.block-color-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.block-color-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.block-color-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.block-color-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.block-color-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(240, 239, 237, 1);
+}
+.block-color-brown_background {
+	background: rgba(245, 237, 233, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 235, 222, 1);
+}
+.block-color-yellow_background {
+	background: rgba(249, 243, 220, 1);
+}
+.block-color-teal_background {
+	background: rgba(232, 241, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(229, 242, 252, 1);
+}
+.block-color-purple_background {
+	background: rgba(243, 235, 249, 1);
+}
+.block-color-pink_background {
+	background: rgba(250, 233, 241, 1);
+}
+.block-color-red_background {
+	background: rgba(252, 233, 231, 1);
+}
+.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
+.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
+.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
+.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
+.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
+.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
+.select-value-color-blue { background-color: rgba(0, 118, 217, 0.203); }
+.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
+.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
+.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="2c0885cb-47a2-8086-9ec2-efcfbbb3b8d2" class="page sans"><header><h1 class="page-title" dir="auto">UI System - Menu</h1><p class="page-description" dir="auto"></p></header><div class="page-body"><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-8030-ba8d-db24aed9a1ab" class=""><strong>UI System Overview</strong></p></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-8037-9324-c587eff33294" class="">The UI system handles the menu and navigation:</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-80c1-aae2-de715ca730e7" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">ui/
+├── __init__.py
+├── button.py         # Interactive menu buttons
+└── menu_screen.py    # Main menu screen
+</code></pre></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-806a-84f9-fb4df1114b9d" class=""><strong>How It Connects</strong></p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-8096-a8ee-faf59e5c7df3" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">main_menu.py (entry point)
+      │
+      ▼
+MenuScreen (from ui/menu_screen.py)
+      │
+      ├── BackgroundManager (animated background)
+      ├── Button[] (5 menu buttons)
+      └── High Scores display
+</code></pre></div><div style="display:contents" dir="auto"><hr id="2c0885cb-47a2-8048-a31a-e0c0d13b1183"/></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-8072-b112-f371cad062ef" class=""><strong>Button Class</strong></p></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-80e2-8c9e-cebc106ea111" class="">The <code>Button</code> class creates interactive menu buttons with hover and selection states.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-8042-a975-de8871becbab" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Button
+    │
+    ├── Properties
+    │   ├── x, y              → Position
+    │   ├── width, height     → Size
+    │   ├── text              → Label (&quot;Classic Mode&quot;, etc.)
+    │   ├── enabled           → Can it be clicked?
+    │   ├── hovered           → Mouse is over it?
+    │   └── selected          → Keyboard selected?
+    │
+    ├── Colors
+    │   ├── normal_color      → Default state
+    │   ├── hover_color       → Mouse hovering
+    │   ├── selected_color    → Keyboard selected
+    │   ├── disabled_color    → Can&#x27;t click
+    │   └── border colors     → Normal + selected (gold)
+    │
+    └── Methods
+        ├── update()          → Check mouse hover
+        ├── draw()            → Render button
+        └── is_clicked()      → Check if clicked
+</code></pre></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-80a6-a664-f7429a82bb4e" class=""><strong>Button States</strong></p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-809a-8a45-fb439d502df3" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">┌─────────────────────────────────────────────────────────┐
+│                                                         │
+│    NORMAL                HOVERED               SELECTED │
+│    ┌──────────┐         ┌──────────┐         ┌──────────┐
+│    │  Button  │         │  Button  │         │  Button  │
+│    └──────────┘         └──────────┘         └──────────┘
+│    Dark blue            Lighter blue         Lightest blue
+│    White border         White border         GOLD border
+│                                                         │
+│                                                         │
+│    DISABLED                                             │
+│    ┌──────────┐                                         │
+│    │  Button  │                                         │
+│    └──────────┘                                         │
+│    Gray                                                 │
+│    &quot;Coming Soon&quot; below                                  │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+</code></pre></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-80cd-89ff-d4c1021222b8" class=""><strong>Button Code Breakdown</strong></p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-80b5-a570-efdbea4cafcc" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">class Button:
+    def __init__(self, x, y, width, height, text, enabled=True):
+        # Position (can animate)
+        self.base_x = x
+        self.base_y = y
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.text = text
+        self.enabled = enabled
+
+        # States
+        self.hovered = False
+        self.selected = False
+
+        # Colors
+        self.normal_color = (0, 105, 148)       # Dark blue
+        self.hover_color = (0, 140, 190)        # Lighter blue
+        self.selected_color = (0, 160, 210)     # Lightest blue
+        self.disabled_color = (80, 80, 100)     # Gray
+        self.border_color = WHITE
+        self.selected_border_color = (255, 215, 0)  # Gold
+</code></pre></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-80c8-a2e7-f7af60c57de6" class=""><strong>update() - Check Mouse Hover</strong></p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-8057-b85c-d72761bf52f1" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">def update(self, mouse_pos):
+    rect = pygame.Rect(self.x, self.y, self.width, self.height)
+    self.hovered = rect.collidepoint(mouse_pos) and self.enabled
+</code></pre></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-80d8-bbc3-cc2aaed4b89c" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Mouse position check:
+
+    ┌──────────────┐
+    │    Button    │  ← Mouse inside AND enabled?
+    └──────────────┘     → hovered = True
+          ↑
+         🖱️
+
+
+    ┌──────────────┐
+    │    Button    │  ← Mouse outside?
+    └──────────────┘     → hovered = False
+
+                   🖱️
+</code></pre></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-80b5-8cc1-f1eea7f7f97b" class=""><strong>draw() - Render the Button</strong></p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-8009-bf4b-ebd9b431faf7" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">def draw(self, surface):
+    # Determine colors based on state
+    if not self.enabled:
+        bg_color = self.disabled_color
+        text_color = (150, 150, 150)
+        border_color = self.border_color
+    elif self.selected or self.hovered:
+        bg_color = self.selected_color if self.selected else self.hover_color
+        text_color = WHITE
+        border_color = self.selected_border_color if self.selected else self.border_color
+    else:
+        bg_color = self.normal_color
+        text_color = WHITE
+        border_color = self.border_color
+
+    # Draw button rectangle
+    rect = pygame.Rect(self.x, self.y, self.width, self.height)
+    pygame.draw.rect(surface, bg_color, rect, border_radius=10)
+
+    # Draw border (thicker when selected)
+    border_width = 4 if self.selected else 3
+    pygame.draw.rect(surface, border_color, rect, border_width, border_radius=10)
+
+    # Draw text centered
+    text_surf = self.font.render(self.text, True, text_color)
+    text_rect = text_surf.get_rect(center=rect.center)
+    surface.blit(text_surf, text_rect)
+
+    # &quot;Coming Soon&quot; for disabled buttons
+    if not self.enabled:
+        # Draw small text below button
+</code></pre></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-8085-a985-ff194fd84b25" class=""><strong>is_clicked() - Check Click</strong></p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-8013-abff-d1aca2a80758" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">def is_clicked(self, mouse_pos, mouse_clicked):
+    rect = pygame.Rect(self.x, self.y, self.width, self.height)
+    return self.enabled and rect.collidepoint(mouse_pos) and mouse_clicked
+</code></pre></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-8056-ab90-d1f971c0ed71" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Click detection:
+
+    Three conditions must ALL be true:
+
+    1. enabled = True        (button is clickable)
+    2. mouse inside rect     (cursor over button)
+    3. mouse_clicked = True  (mouse button pressed)
+
+    All three? → Return True → Button clicked!
+</code></pre></div><div style="display:contents" dir="auto"><hr id="2c0885cb-47a2-806d-beb5-cc36eef4ef71"/></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-80e2-a7c3-c5593c7f4047" class=""><strong>MenuScreen Class</strong></p></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-8040-b381-e4ddac4fe278" class="">The <code>MenuScreen</code> class manages the entire main menu.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-80d2-b7c2-ca028c23fcbb" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">MenuScreen
+    │
+    ├── Visual Elements
+    │   ├── background        → BackgroundManager (animated)
+    │   ├── boat_image        → Decorative boat
+    │   ├── title             → &quot;Fish-O-Mania&quot;
+    │   └── subtitle          → &quot;Cast your line...&quot;
+    │
+    ├── Buttons (5)
+    │   ├── Classic Mode
+    │   ├── Time Attack
+    │   ├── Endless Mode
+    │   ├── High Scores
+    │   └── Quit
+    │
+    ├── Navigation State
+    │   ├── selected_index    → Which button is selected (0-4)
+    │   └── showing_high_scores → Is overlay shown?
+    │
+    └── Transition State
+        ├── transitioning     → Exit animation playing?
+        ├── transition_speed  → Animation speed
+        ├── transition_target → Which mode to launch
+        └── fade_alpha        → Fade to black amount
+</code></pre></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-8020-a63d-c998822e25ea" class=""><strong>Menu Layout</strong></p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-8095-88ac-f5f04d1f33b9" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│                     Fish-O-Mania                            │ ← Title
+│               Cast your line and reel in the fun!           │ ← Subtitle
+│                                                             │
+│                         ⛵                                   │ ← Boat
+│    ～～～～～～～～～～～～～～～～～～～～～～～～～～～～～  │ ← Wave
+│                                                             │
+│                    ┌──────────────────┐                     │
+│                    │   Classic Mode   │ ← selected          │
+│                    └──────────────────┘                     │
+│                    ┌──────────────────┐                     │
+│                    │   Time Attack    │                     │
+│                    └──────────────────┘                     │
+│                    ┌──────────────────┐                     │
+│                    │   Endless Mode   │                     │
+│                    └──────────────────┘                     │
+│                    ┌──────────────────┐                     │
+│                    │   High Scores    │                     │
+│                    └──────────────────┘                     │
+│                    ┌──────────────────┐                     │
+│                    │      Quit        │                     │
+│                    └──────────────────┘                     │
+│                                                             │
+│            UP/DOWN to navigate, ENTER to select             │ ← Instructions
+└─────────────────────────────────────────────────────────────┘
+</code></pre></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-80d4-b749-ef714aaab74a" class=""><strong>Button Creation</strong></p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-805c-b2da-d5aa920b1173" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">def _create_buttons(self):
+    btn_width = 250
+    btn_height = 50
+    btn_x = SCREEN_WIDTH // 2 - btn_width // 2   # Centered
+    start_y = SCREEN_HEIGHT // 2 - 80
+    spacing = 60
+
+    self.buttons = [
+        Button(btn_x, start_y, btn_width, btn_height,
+               &quot;Classic Mode&quot;, True),
+        Button(btn_x, start_y + spacing, btn_width, btn_height,
+               &quot;Time Attack&quot;, True),
+        Button(btn_x, start_y + spacing * 2, btn_width, btn_height,
+               &quot;Endless Mode&quot;, True),
+        Button(btn_x, start_y + spacing * 3, btn_width, btn_height,
+               &quot;High Scores&quot;, True),
+        Button(btn_x, start_y + spacing * 4, btn_width, btn_height,
+               &quot;Quit&quot;, True),
+    ]
+</code></pre></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-80b3-98df-f66b2df393bd" class="">Button positions:</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-80f9-86c9-ccd4857a6530" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">    btn_x = (1200 / 2) - (250 / 2) = 475
+
+    Y positions:
+    ├── Classic:     start_y + 0   = 320
+    ├── Time Attack: start_y + 60  = 380
+    ├── Endless:     start_y + 120 = 440
+    ├── High Scores: start_y + 180 = 500
+    └── Quit:        start_y + 240 = 560
+</code></pre></div><div style="display:contents" dir="auto"><hr id="2c0885cb-47a2-8053-b78d-e4143d1e70c2"/></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-8007-b918-e7bb65d36c38" class=""><strong>Keyboard Navigation</strong></p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-80db-99b4-f5d94f6b6d16" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">def move_selection(self, direction):
+    # Deselect current button
+    self.buttons[self.selected_index].selected = False
+
+    # Find next enabled button
+    attempts = 0
+    while attempts &lt; len(self.buttons):
+        self.selected_index = (self.selected_index + direction) % len(self.buttons)
+        if self.buttons[self.selected_index].enabled:
+            break
+        attempts += 1
+
+    # Select new button
+    self.buttons[self.selected_index].selected = True
+</code></pre></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-80bf-aeba-d8f9f4c16bc1" class="">Navigation flow:</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-8025-a9e2-da57c28144f9" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">    direction = -1 (UP)         direction = 1 (DOWN)
+
+    ┌──────────────┐            ┌──────────────┐
+    │ Classic Mode │ ←──┐       │ Classic Mode │ ────┐
+    └──────────────┘    │       └──────────────┘     │
+    ┌──────────────┐    │       ┌──────────────┐     │
+    │ Time Attack  │    │       │ Time Attack  │ ←───┘
+    └──────────────┘    │       └──────────────┘
+    ┌──────────────┐    │
+    │ Endless Mode │ ───┘       (wraps around at edges)
+    └──────────────┘
+
+
+    Wrapping example (DOWN from Quit):
+
+    selected_index = 4 (Quit)
+    direction = 1 (DOWN)
+    new_index = (4 + 1) % 5 = 0 (Classic Mode)
+</code></pre></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-80cf-8b4e-ce30ea0554dc" class=""><strong>select_current() - Activate Selection</strong></p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-8058-b762-f053b347f9ae" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">def select_current(self):
+    if not self.buttons[self.selected_index].enabled:
+        return None
+
+    actions = [&quot;classic&quot;, &quot;time_attack&quot;, &quot;endless&quot;, &quot;high_scores&quot;, &quot;quit&quot;]
+    return actions[self.selected_index]
+</code></pre></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-8074-8828-eb1d27a09d77" class="">Maps button index to action:</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-807a-b8a1-e2397965bc94" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">    Index 0 → &quot;classic&quot;
+    Index 1 → &quot;time_attack&quot;
+    Index 2 → &quot;endless&quot;
+    Index 3 → &quot;high_scores&quot;
+    Index 4 → &quot;quit&quot;
+</code></pre></div><div style="display:contents" dir="auto"><hr id="2c0885cb-47a2-80c7-8acc-e843da13bab7"/></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-8044-9a68-fc2c5a073d94" class=""><strong>Exit Transition Animation</strong></p></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-8042-8754-d888ebcb323c" class="">When a game mode is selected, an animated transition plays:</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-8023-8b17-e5363afaa241" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">def start_transition(self, target):
+    self.transitioning = True
+    self.transition_target = target
+    self.transition_speed = 2
+
+def _update_transition(self):
+    # Accelerate
+    self.transition_speed += 0.5
+
+    # Move title up
+    self.title_y -= self.transition_speed
+
+    # Move boat right
+    self.boat_x += self.transition_speed
+
+    # Move buttons off screen (alternating directions)
+    for i, btn in enumerate(self.buttons):
+        if i % 2 == 0:
+            btn.x -= self.transition_speed * 1.5  # Left
+        else:
+            btn.x += self.transition_speed * 1.5  # Right
+
+    # Check if all elements are off screen
+    all_offscreen = (
+        self.title_y &lt; -100 and
+        self.boat_x &gt; SCREEN_WIDTH + 50 and
+        all(b.x &lt; -300 or b.x &gt; SCREEN_WIDTH + 50 for b in self.buttons)
+    )
+
+    if all_offscreen:
+        # Fade to black
+        self.fade_alpha += 10
+        if self.fade_alpha &gt;= 255:
+            return self.transition_target  # Launch game mode!
+
+    return None
+</code></pre></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-8020-80bc-c43916f4cf55" class="">Transition animation:</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-807e-9679-ebfc9d8a7a97" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Frame 1 (start):
+┌─────────────────────────────────────────────────────────────┐
+│                     Fish-O-Mania                            │
+│                         ⛵                                   │
+│                    ┌──────────────────┐                     │
+│                    │   Classic Mode   │                     │
+│                    └──────────────────┘                     │
+│                    ┌──────────────────┐                     │
+│                    │   Time Attack    │                     │
+│                    └──────────────────┘                     │
+└─────────────────────────────────────────────────────────────┘
+
+Frame 20 (animating):
+┌─────────────────────────────────────────────────────────────┐
+│            Fish-O-Mania  ↑                                  │
+│                                        ⛵ →                  │
+│      ← ┌──────────────────┐                                 │
+│        │   Classic Mode   │                                 │
+│        └──────────────────┘                                 │
+│                              ┌──────────────────┐ →         │
+│                              │   Time Attack    │           │
+│                              └──────────────────┘           │
+└─────────────────────────────────────────────────────────────┘
+
+Frame 40 (almost done):
+┌─────────────────────────────────────────────────────────────┐
+│  ↑ (title gone)                                             │
+│                                                    ⛵ (gone) │
+│← (buttons gone)                                         → │
+│                                                             │
+│                     (fade to black)                         │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+
+Frame 50 (complete):
+┌─────────────────────────────────────────────────────────────┐
+│█████████████████████████████████████████████████████████████│
+│█████████████████████████████████████████████████████████████│
+│███████████████████ FADE COMPLETE ███████████████████████████│
+│█████████████████████████████████████████████████████████████│
+│█████████████████████████████████████████████████████████████│
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+                      Launch game mode!
+</code></pre></div><div style="display:contents" dir="auto"><hr id="2c0885cb-47a2-8089-9e14-c628184a30bf"/></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-8040-9f30-ecdeecddb2a4" class=""><strong>High Scores Overlay</strong></p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-802f-b6e4-f4585b05cf30" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">def draw_high_scores(self, surface):
+    scores = get_all_high_scores()
+
+    # Semi-transparent overlay
+    overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    overlay.set_alpha(200)
+    overlay.fill((0, 30, 60))
+    surface.blit(overlay, (0, 0))
+
+    # Title
+    title = self.title_font.render(&quot;High Scores&quot;, True, (255, 215, 0))
+
+    # Display each mode&#x27;s scores
+    modes = [
+        (&quot;Classic Mode&quot;, &quot;classic&quot;),
+        (&quot;Time Attack&quot;, &quot;time_attack&quot;),
+        (&quot;Endless Mode&quot;, &quot;endless&quot;)
+    ]
+
+    for mode_name, mode_key in modes:
+        # Mode name
+        # Score: X | Fish: Y
+        # Date achieved
+</code></pre></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-808e-8268-c3d29e1644e4" class="">High scores display:</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-80aa-8460-d059397f2103" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">┌─────────────────────────────────────────────────────────────┐
+│░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░│
+│░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░│
+│░░░░░░░░░░░░░░░░░  HIGH SCORES  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░│
+│░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░│
+│░░░░░░░░░░░░░░░░░  Classic Mode  ░░░░░░░░░░░░░░░░░░░░░░░░░░░│
+│░░░░░░░░░░░░░░  Score: 725 | Fish: 10  ░░░░░░░░░░░░░░░░░░░░░│
+│░░░░░░░░░░░░░░░░░  Set: 2025-12-02  ░░░░░░░░░░░░░░░░░░░░░░░░│
+│░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░│
+│░░░░░░░░░░░░░░░░░  Time Attack  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░│
+│░░░░░░░░░░░░░░  Score: 1900 | Fish: 21  ░░░░░░░░░░░░░░░░░░░░│
+│░░░░░░░░░░░░░░░░░  Set: 2025-12-02  ░░░░░░░░░░░░░░░░░░░░░░░░│
+│░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░│
+│░░░░░░░░░░░░░░░░░  Endless Mode  ░░░░░░░░░░░░░░░░░░░░░░░░░░░│
+│░░░░░░░░░░  Score: 3900 | Fish: 47 | Time: 01:32  ░░░░░░░░░░│
+│░░░░░░░░░░░░░░░░░  Set: 2025-12-02  ░░░░░░░░░░░░░░░░░░░░░░░░│
+│░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░│
+│░░░░░░░░░░░░  Press ESC or ENTER to return  ░░░░░░░░░░░░░░░░│
+└─────────────────────────────────────────────────────────────┘
+</code></pre></div><div style="display:contents" dir="auto"><hr id="2c0885cb-47a2-809e-8701-c8977c216b41"/></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-803a-b473-e759b1ddd17b" class=""><strong>How main_menu.py Uses MenuScreen</strong></p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-80b4-80a1-e29fc302c5f1" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all"># main_menu.py
+
+from ui import MenuScreen
+
+def main():
+    menu = MenuScreen()
+    running = True
+
+    while running:
+        mouse_clicked = False
+
+        # Event handling
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    mouse_clicked = True
+
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    if menu.showing_high_scores:
+                        menu.showing_high_scores = False
+                    else:
+                        running = False
+
+                elif not menu.transitioning:
+                    if menu.showing_high_scores:
+                        if event.key in [pygame.K_RETURN, pygame.K_ESCAPE]:
+                            menu.showing_high_scores = False
+                    else:
+                        # Keyboard navigation
+                        if event.key == pygame.K_UP:
+                            menu.move_selection(-1)
+                        elif event.key == pygame.K_DOWN:
+                            menu.move_selection(1)
+                        elif event.key == pygame.K_RETURN:
+                            action = menu.select_current()
+                            # Handle action...
+
+        # Handle mouse clicks
+        if mouse_clicked and not menu.transitioning:
+            action = menu.handle_click(pygame.mouse.get_pos())
+            # Handle action...
+
+        # Update menu
+        result = menu.update()
+
+        # Launch game mode if transition complete
+        if result == &quot;classic&quot;:
+            from modes.mode_classic import main as classic_main
+            classic_main()
+            menu = MenuScreen()  # Recreate menu when returning
+
+        # Draw
+        menu.draw(screen)
+        pygame.display.flip()
+</code></pre></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-80cd-9ccc-e7b791f07e1e" class=""><strong>Complete Event Flow</strong></p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2c0885cb-47a2-8057-b0db-cb8154f03a22" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">┌─────────────────────────────────────────────────────────────┐
+│                      main_menu.py                           │
+│                                                             │
+│  Event Loop                                                 │
+│      │                                                      │
+│      ├── QUIT → running = False                             │
+│      │                                                      │
+│      ├── MOUSE CLICK                                        │
+│      │       │                                              │
+│      │       └── menu.handle_click(pos)                     │
+│      │               │                                      │
+│      │               └── Returns action or None             │
+│      │                                                      │
+│      ├── KEY DOWN                                           │
+│      │       │                                              │
+│      │       ├── ESC → Close high scores or quit            │
+│      │       │                                              │
+│      │       ├── UP → menu.move_selection(-1)               │
+│      │       │                                              │
+│      │       ├── DOWN → menu.move_selection(1)              │
+│      │       │                                              │
+│      │       └── ENTER → menu.select_current()              │
+│      │                       │                              │
+│      │                       └── Returns action             │
+│      │                                                      │
+│      │                                                      │
+│  Handle Action                                              │
+│      │                                                      │
+│      ├── &quot;classic&quot; → menu.start_transition(&quot;classic&quot;)       │
+│      ├── &quot;time_attack&quot; → menu.start_transition(...)         │
+│      ├── &quot;endless&quot; → menu.start_transition(...)             │
+│      ├── &quot;high_scores&quot; → menu.showing_high_scores = True    │
+│      └── &quot;quit&quot; → running = False                           │
+│                                                             │
+│                                                             │
+│  Update                                                     │
+│      │                                                      │
+│      └── result = menu.update()                             │
+│              │                                              │
+│              └── If transitioning complete:                 │
+│                      Returns &quot;classic&quot;/&quot;time_attack&quot;/etc    │
+│                              │                              │
+│                              ▼                              │
+│                      Launch game mode                       │
+│                      (import and call main())               │
+│                              │                              │
+│                              ▼                              │
+│                      When game ends:                        │
+│                      menu = MenuScreen() (recreate)         │
+│                                                             │
+│                                                             │
+│  Draw                                                       │
+│      │                                                      │
+│      └── menu.draw(screen)                                  │
+│              │                                              │
+│              ├── Draw background                            │
+│              ├── Draw boat                                  │
+│              ├── Draw title                                 │
+│              ├── Draw buttons                               │
+│              ├── Draw fade overlay (if transitioning)       │
+│              └── Draw high scores (if showing)              │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+</code></pre></div><div style="display:contents" dir="auto"><hr id="2c0885cb-47a2-80fd-bd42-d6a5e3dcaab9"/></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-8084-8df4-eda31ecbd904" class=""><strong>Summary</strong></p></div><div style="display:contents" dir="ltr"><table id="2c0885cb-47a2-80fe-8e41-eae021310dfa" class="simple-table"><thead class="simple-table-header"><div style="display:contents" dir="ltr"><tr id="2c0885cb-47a2-80b9-b070-d384a8b0be7d"><th id="fyUz" class="simple-table-header-color simple-table-header">Component</th><th id="|VGy" class="simple-table-header-color simple-table-header" style="width:465px">Purpose</th></tr></div></thead><tbody><div style="display:contents" dir="ltr"><tr id="2c0885cb-47a2-8003-bfa1-f13bc08a414e"><td id="fyUz" class=""><code>Button</code></td><td id="|VGy" class="" style="width:465px">Interactive button with hover/select states</td></tr></div><div style="display:contents" dir="ltr"><tr id="2c0885cb-47a2-80a7-ab6e-d95f939ffab5"><td id="fyUz" class=""><code>MenuScreen</code></td><td id="|VGy" class="" style="width:465px">Coordinates entire menu screen</td></tr></div><div style="display:contents" dir="ltr"><tr id="2c0885cb-47a2-80f0-b718-d46afcf4be45"><td id="fyUz" class=""><code>main_menu.py</code></td><td id="|VGy" class="" style="width:465px">Entry point, handles events, launches modes</td></tr></div></tbody></table></div><div style="display:contents" dir="ltr"><table id="2c0885cb-47a2-8052-8e6d-da18bc6b86a5" class="simple-table"><thead class="simple-table-header"><div style="display:contents" dir="ltr"><tr id="2c0885cb-47a2-8065-aab3-c0f39ff9385f"><th id="pLzc" class="simple-table-header-color simple-table-header">Feature</th><th id="anF?" class="simple-table-header-color simple-table-header" style="width:433px">How It Works</th></tr></div></thead><tbody><div style="display:contents" dir="ltr"><tr id="2c0885cb-47a2-8001-846c-eed74a3a0795"><td id="pLzc" class="">Mouse navigation</td><td id="anF?" class="" style="width:433px"><code>button.update()</code> checks hover, <code>is_clicked()</code> checks clicks</td></tr></div><div style="display:contents" dir="ltr"><tr id="2c0885cb-47a2-80df-aa79-cddbf85fb22e"><td id="pLzc" class="">Keyboard navigation</td><td id="anF?" class="" style="width:433px"><code>move_selection()</code> changes <code>selected_index</code></td></tr></div><div style="display:contents" dir="ltr"><tr id="2c0885cb-47a2-803c-b711-c160ec4fa2b0"><td id="pLzc" class="">Exit animation</td><td id="anF?" class="" style="width:433px"><code>start_transition()</code> animates elements off screen</td></tr></div><div style="display:contents" dir="ltr"><tr id="2c0885cb-47a2-80c4-9dd2-e73d7966aeda"><td id="pLzc" class="">High scores</td><td id="anF?" class="" style="width:433px">Overlay drawn on top of menu</td></tr></div><div style="display:contents" dir="ltr"><tr id="2c0885cb-47a2-800e-a167-e589ef1861e8"><td id="pLzc" class="">Game launch</td><td id="anF?" class="" style="width:433px">After transition, imports and calls mode&#x27;s <code>main()</code></td></tr></div></tbody></table></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-804c-9a6d-e1caa900f8a0" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2c0885cb-47a2-809f-b3a7-cf51ad442475" class="">
+</p></div></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

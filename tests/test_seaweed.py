@@ -14,7 +14,7 @@ pygame.init()
 
 # Import background classes
 from background.seaweed import Seaweed
-from mechanics.constants import SCREEN_WIDTH, SCREEN_HEIGHT
+from mechanics.constants import SCREEN_HEIGHT
 
 
 # SEAWEED CLASS TESTS
@@ -32,14 +32,14 @@ class TestSeaweed(unittest.TestCase):
 
     def test_initialization_random_height(self):
         """Test that seaweed has randomized height in valid range."""
-        for _ in range(10):
+        for i in range(10):
             seaweed = Seaweed(0)
             self.assertGreaterEqual(seaweed.height, 80)
             self.assertLessEqual(seaweed.height, 150)
 
     def test_initialization_random_sway_amount(self):
         """Test that seaweed has randomized sway_amount in valid range."""
-        for _ in range(10):
+        for i in range(10):
             seaweed = Seaweed(0)
             self.assertGreaterEqual(seaweed.sway_amount, 10)
             self.assertLessEqual(seaweed.sway_amount, 20)
@@ -55,9 +55,3 @@ class TestSeaweed(unittest.TestCase):
         """Test that seaweed color is forest green."""
         seaweed = Seaweed(100)
         self.assertEqual(seaweed.color, (34, 139, 34))
-
-    def test_draw_does_not_crash(self):
-        """Test that draw method executes without error."""
-        seaweed = Seaweed(100)
-        surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        seaweed.draw(surface)

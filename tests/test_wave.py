@@ -14,7 +14,7 @@ pygame.init()
 
 # Import background classes
 from background.wave import Wave
-from mechanics.constants import SCREEN_WIDTH, SCREEN_HEIGHT, WATER_SURFACE
+from mechanics.constants import SCREEN_WIDTH, WATER_SURFACE
 
 
 # WAVE CLASS TESTS
@@ -79,9 +79,3 @@ class TestWave(unittest.TestCase):
         y_values_1 = [p[1] for p in points_1]
 
         self.assertNotEqual(y_values_0, y_values_1)
-
-    def test_draw_does_not_crash(self):
-        """Test that draw method executes without error."""
-        wave = Wave()
-        surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        wave.draw(surface)

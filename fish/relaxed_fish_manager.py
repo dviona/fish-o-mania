@@ -31,6 +31,20 @@ class RelaxedFishManager(FishManager):
         Returns:
             dict: Fish information with penalty=False, game_over=False.
         """
+        # Check if already processed
+        if getattr(fish, 'death_animation_created', False):
+            return {
+                "type": fish.fish_type,
+                "value": 0,
+                "rarity": fish.rarity,
+                "penalty": False,
+                "game_over": False,
+            }
+
+        # Mark fish as caught
+        fish.is_caught = True
+        fish.caught = True
+
         info = fish.get_info()
 
         # Play catch sound for all fish
@@ -38,12 +52,12 @@ class RelaxedFishManager(FishManager):
 
         # Add to recent catches display
         catch_data = {
-            'type': info['type'],
-            'value': info['value'],
-            'rarity': info['rarity'],
-            'current_frame': 0,
-            'frame_counter': 0,
-            'frame_delay': 8
+            "type": info["type"],
+            "value": info["value"],
+            "rarity": info["rarity"],
+            "current_frame": 0,
+            "frame_counter": 0,
+            "frame_delay": 8,
         }
         self.recent_catches.append(catch_data)
         if len(self.recent_catches) > self.max_recent_catches:
@@ -59,8 +73,8 @@ class RelaxedFishManager(FishManager):
         # Return info - never any penalty or game over
         return {
             **info,
-            'penalty': False,
-            'game_over': False
+            "penalty": False,
+            "game_over": False,
         }
 
     def draw(self, surface):

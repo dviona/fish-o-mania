@@ -63,6 +63,10 @@ def load_scores():
     if not os.path.exists(SCORES_FILE):
         return get_default_scores()
 
+    # Check if file is empty
+    if os.path.getsize(SCORES_FILE) == 0:
+        return get_default_scores()
+
     # File exists, try to read it
     try:
         with open(SCORES_FILE, 'r') as f:
@@ -109,10 +113,10 @@ def save_scores(scores):
 
 def update_high_score(mode, score, fish_count=0, time_played=0):
     """
-    Update high score for a game mode if the new score is higher
+    Update high score for a game mode if the new score is higher.
 
     Also updates best fish count and best time (for endless mode)
-    if records are beaten
+    if records are beaten.
 
     Args:
         mode (str): Game mode ("classic", "time_attack", or "endless")

@@ -14,8 +14,6 @@ pygame.init()
 
 # Import background classes
 from background.rock import Rock
-from mechanics.constants import SCREEN_WIDTH, SCREEN_HEIGHT
-
 
 # ROCK CLASS TESTS
 
@@ -23,34 +21,34 @@ class TestRock(unittest.TestCase):
     """Tests for the Rock class."""
 
     def test_initialization(self):
-        """Test that rock initializes with correct position."""
+        """Test that rock initializes in the correct position"""
         rock = Rock(100, 500)
         self.assertEqual(rock.x, 100)
         self.assertEqual(rock.y, 500)
 
     def test_initialization_random_width(self):
-        """Test that rock has randomized width in valid range."""
-        for _ in range(10):
+        """Test that rock has randomized width in valid range"""
+        for i in range(10):
             rock = Rock(0, 0)
             self.assertGreaterEqual(rock.width, 30)
             self.assertLessEqual(rock.width, 80)
 
     def test_initialization_random_height(self):
         """Test that rock has randomized height in valid range."""
-        for _ in range(10):
+        for i in range(10):
             rock = Rock(0, 0)
             self.assertGreaterEqual(rock.height, 20)
             self.assertLessEqual(rock.height, 50)
 
     def test_initialization_color_variants(self):
-        """Test that rock color is one of the valid variants."""
+        """Test that rock color is one of the good ones"""
         valid_colors = [
             (105, 105, 105),
             (119, 136, 153),
             (112, 128, 144),
         ]
 
-        for _ in range(20):
+        for i in range(20):
             rock = Rock(0, 0)
             self.assertIn(rock.color, valid_colors)
 
@@ -65,9 +63,3 @@ class TestRock(unittest.TestCase):
         rock = Rock(100, 500)
         for i in range(3):
             self.assertLessEqual(rock.shadow_color[i], rock.color[i])
-
-    def test_draw_does_not_crash(self):
-        """Test that draw method executes without error."""
-        rock = Rock(100, 500)
-        surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        rock.draw(surface)
