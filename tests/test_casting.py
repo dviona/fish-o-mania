@@ -3,6 +3,7 @@
 Test for casting functionalities.
 
 """
+
 import unittest
 import pygame
 
@@ -38,7 +39,7 @@ class TestCastingRod(unittest.TestCase):
 
         rod.toggle_cast()  # Start reeling
         rod.update()
-        self.assertEqual(rod.length, 10)  # Length should decrease  
+        self.assertEqual(rod.length, 10)  # Length should decrease
 
     def test_reset(self):
         """Test resetting the rod to initial state."""
@@ -47,4 +48,4 @@ class TestCastingRod(unittest.TestCase):
         rod.update()
         rod.reset()
         self.assertEqual(rod.length, 10)
-        self.assertFalse(rod.is_casting)  
+        self.assertFalse(rod.is_casting)
