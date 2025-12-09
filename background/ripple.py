@@ -51,10 +51,10 @@ class Ripple:
 
     def draw(self, surface):
         """
-        Draw the ripple on the given surface.
+        Draw the ripple on the given surface
 
         Args:
-            surface (pygame.Surface): Surface to draw on.
+            surface (pygame.Surface): Surface to draw on
         """
         if not self.alive or self.alpha <= 0:
             return
