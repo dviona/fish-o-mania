@@ -175,7 +175,7 @@ class AnimatedFish(pygame.sprite.Sprite):
 
     def _update_animation(self):
         """frame_counter: counts how many game iterations has passed since the last frame change
-        frame_delay: Only when the counter reaches that delay does the code advance current_frame and update self.image """
+        frame_delay: only when the counter reaches that delay does the code advance current_frame and update self.image """
         self.frame_counter += 1
         if self.frame_counter >= self.frame_delay:
             self.frame_counter = 0
@@ -184,7 +184,6 @@ class AnimatedFish(pygame.sprite.Sprite):
 
     def _update_position(self):
         """Update fish position and handle boundaries"""
-        # Move
         self.rect.x += self.speed_x
         self.rect.y += self.speed_y
 
