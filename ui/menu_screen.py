@@ -1,7 +1,7 @@
 """
-Menu Screen Module for Fish-O-Mania.
-
-This module contains the MenuScreen class for the game's main menu screen.
+Menu Screen module: contains the MenuScreen class for the game's main menu screen.
+Handles keyboard and mouse navigation, high scores display,
+and animated exit transitions to game modes.
 """
 
 import pygame
@@ -21,10 +21,7 @@ from ui.button import Button
 
 class MenuScreen:
     """
-    Menu screen with navigation and animated transitions.
-
-    Handles keyboard and mouse navigation, high scores display,
-    and animated exit transitions to game modes.
+    Main menu
 
     Attributes:
         background (BackgroundManager): Animated background.
@@ -35,8 +32,9 @@ class MenuScreen:
     """
 
     def __init__(self):
-        """Initialize the main menu."""
+        # Initialize menu screen
         self.background = BackgroundManager(use_terrain_files=True)
+
         # Load Sounds
         pygame.mixer.music.load("sounds/ambience_menu.mp3")
         pygame.mixer.music.set_volume(0.3)
@@ -71,7 +69,7 @@ class MenuScreen:
         self.fade_alpha = 0
 
     def _load_boat_image(self):
-        """Load the boat image or create a placeholder."""
+        # Load boat image or create placeholder
         try:
             self.boat_image = pygame.image.load(
                 "graphics/boat.png"
@@ -89,7 +87,7 @@ class MenuScreen:
             )
 
     def _create_buttons(self):
-        """Create the menu buttons."""
+        # Create menu buttons
         btn_width = 250
         btn_height = 50
         btn_x = SCREEN_WIDTH // 2 - btn_width // 2

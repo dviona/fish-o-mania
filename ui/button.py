@@ -1,43 +1,24 @@
 """
-Button Module for Fish-O-Mania.
+Button module: contains the Button class for interactive menu buttons.
 
-This module contains the Button class for interactive menu buttons.
 """
-
 import pygame
 from mechanics.constants import WHITE
 
-
 class Button:
-    """
-    Interactive menu button with hover and selection effects.
 
-    Supports both mouse hover and keyboard navigation highlighting.
-
-    Attributes:
-        x (int): Current X-coordinate (may animate).
-        y (int): Current Y-coordinate (may animate).
-        base_x (int): Original X-coordinate for reset.
-        base_y (int): Original Y-coordinate for reset.
-        width (int): Button width in pixels.
-        height (int): Button height in pixels.
-        text (str): Button label text.
-        enabled (bool): Whether button is interactive.
-        hovered (bool): Mouse hover state.
-        selected (bool): Keyboard selection state.
-    """
-
+    # Supports both mouse hover and keyboard navigation highlighting.
     def __init__(self, x, y, width, height, text, enabled=True):
         """
         Initialize a menu button.
-
         Args:
-            x (int): X-coordinate for button.
-            y (int): Y-coordinate for button.
-            width (int): Button width.
-            height (int): Button height.
-            text (str): Button label.
-            enabled (bool): Whether button is clickable.
+            x (int) --> X-coordinate for button.
+            y (int) --> Y-coordinate for button.
+            width (int) --> Button width.
+            height (int) --> Button height.
+            text (str) --> Button label.
+            enabled (bool) --> Whether button is clickable.
+
         """
         self.base_x = x
         self.base_y = y
@@ -60,22 +41,22 @@ class Button:
 
         self.font = pygame.font.Font(None, 36)
 
+
     def update(self, mouse_pos):
         """
         Update hover state based on mouse position.
-
-        Args:
-            mouse_pos (tuple): Current mouse (x, y) position.
+        Args: mouse_pos (tuple) --> Current mouse (x, y) position
+        
         """
         rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.hovered = rect.collidepoint(mouse_pos) and self.enabled
 
+
     def draw(self, surface):
         """
         Draw the button on the given surface.
+        Args: surface (pygame.Surface) --> Surface to draw on
 
-        Args:
-            surface (pygame.Surface): Surface to draw on.
         """
         # Determine colors based on state
         if not self.enabled:
@@ -120,14 +101,11 @@ class Button:
 
     def is_clicked(self, mouse_pos, mouse_clicked):
         """
-        Check if the button was clicked.
-
+        Check if button is enabled and mouse is over it
         Args:
             mouse_pos (tuple): Current mouse position.
             mouse_clicked (bool): Whether mouse button was pressed.
 
-        Returns:
-            bool: True if button was clicked while enabled.
         """
         rect = pygame.Rect(self.x, self.y, self.width, self.height)
         return self.enabled and rect.collidepoint(mouse_pos) and mouse_clicked
