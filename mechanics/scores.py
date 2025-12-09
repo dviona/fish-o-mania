@@ -113,10 +113,10 @@ def save_scores(scores):
 
 def update_high_score(mode, score, fish_count=0, time_played=0):
     """
-    Update high score for a game mode if the new score is higher.
+    Update high score for a game mode if the new score is higher
 
     Also updates best fish count and best time (for endless mode)
-    if records are beaten.
+    if records are beaten
 
     Args:
         mode (str): Game mode ("classic", "time_attack", or "endless")
@@ -125,7 +125,7 @@ def update_high_score(mode, score, fish_count=0, time_played=0):
         time_played (float): Time played in seconds (endless mode only)
 
     Returns:
-        dict: Contains "is_new_high", "old_score", and "new_score".
+        dict: Contains "is_new_high", "old_score", and "new_score"
     """
     scores = load_scores()
 
@@ -139,7 +139,8 @@ def update_high_score(mode, score, fish_count=0, time_played=0):
     # Update high score if beaten
     if is_new_high:
         scores[mode]["high_score"] = score
-        scores[mode]["date"] = datetime.now().strftime("%Y-%m-%d %H:%M")
+        scores[mode]["date"] = (
+            datetime.now().strftime("%Y-%m-%d %H:%M"))
 
     # Update best fish count if beaten
     current_best_fish = scores[mode].get("best_fish_count", 0)
@@ -163,13 +164,13 @@ def update_high_score(mode, score, fish_count=0, time_played=0):
 
 def get_high_score(mode):
     """
-    Get the high score for a specific game mode.
+    Get the high score for a specific game mode
 
     Args:
-        mode (str): Game mode to query.
+        mode (str): Game mode to query
 
     Returns:
-        int: High score for the mode, or 0 if mode not found.
+        int: High score for the mode, or 0 if mode not found
     """
     scores = load_scores()
     if mode in scores:
@@ -179,14 +180,14 @@ def get_high_score(mode):
 
 def get_all_high_scores():
     """
-    Get all high scores for all game modes.
+    Get all high scores for all game modes
 
     Returns:
-        dict: Complete score data for all modes.
+        dict: Complete score data for all modes
     """
     return load_scores()
 
 
 def reset_scores():
-    """Reset all scores to their default zero values."""
+    """Reset all scores to their default zero values"""
     save_scores(get_default_scores())
