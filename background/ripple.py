@@ -1,7 +1,7 @@
 """
-Ripple Module for Fish-O-Mania.
+Ripple Module
 
-This module contains the Ripple class for animated water surface effects.
+This module contains the Ripple class for animated water surface effects
 """
 
 import pygame
@@ -10,27 +10,27 @@ import random
 
 class Ripple:
     """
-    Animated water ripple effect.
+    Animated water ripple effect
 
     Creates an expanding circular ripple that fades out over time,
-    simulating disturbance on the water surface.
+    simulating disturbance on the water surface
 
     Attributes:
-        x (float): X-coordinate of ripple center.
-        y (float): Y-coordinate of ripple center.
-        radius (float): Current radius of the ripple.
-        max_radius (int): Maximum radius before disappearing.
-        alpha (int): Current transparency (255 = opaque, 0 = invisible).
-        alive (bool): Whether the ripple should continue animating.
+        x (float): X-coordinate of ripple center
+        y (float): Y-coordinate of ripple center
+        radius (float): Current radius of the ripple
+        max_radius (int): Maximum radius before disappearing
+        alpha (int): Current transparency (255 = opaque, 0 = invisible)
+        alive (bool): Whether the ripple should continue animating
     """
 
     def __init__(self, x, y):
         """
-        Initialize a ripple at the specified position.
+        Initialize a ripple at the specified position
 
         Args:
-            x (float): X-coordinate for ripple center.
-            y (float): Y-coordinate for ripple center.
+            x (float): X-coordinate for ripple center
+            y (float): Y-coordinate for ripple center
         """
         self.x = x
         self.y = y

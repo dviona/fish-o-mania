@@ -76,7 +76,7 @@ def load_graphics():
     boat_image = pygame.image.load("graphics/boat.png")
     boat_image = pygame.transform.scale(boat_image, (310, 260))
     boat_x = SCREEN_WIDTH // 2 - boat_image.get_width() // 2 - 300
-    boat_y = WATER_SURFACE - boat_image.get_height() // 2 - 52
+    boat_y = WATER_SURFACE - boat_image.get_height() // 2 - 20
 
     # Load fishing hook
     hook_image = pygame.image.load("graphics/fishing_hook.png")
@@ -284,7 +284,7 @@ def main():
 
     # Initialize managers
     fish_manager = FastFishManager()
-    background_manager = BackgroundManager(use_terrain_files=True)
+    background_manager = BackgroundManager()
     casting_manager = CastingRod(ROD_MAX_LENGTH, ROD_SPEED)
 
     # Spawn initial fish (more than classic mode)
@@ -376,8 +376,8 @@ def main():
             )
 
             # Hook position
-            rod_x = boat_x + graphics['boat_image'].get_width() - 83
-            rod_top_y = boat_y + 175
+            rod_x = boat_x + graphics['boat_image'].get_width() - 65
+            rod_top_y = boat_y + 160
 
             # Casting
             result = casting_manager.update(
@@ -416,8 +416,8 @@ def main():
         screen.blit(graphics['boat_image'], (boat_x, boat_y))
 
         # Fishing line
-        rod_x = boat_x + graphics['boat_image'].get_width() - 83
-        rod_top_y = boat_y + 175
+        rod_x = boat_x + graphics['boat_image'].get_width() - 65
+        rod_top_y = boat_y + 160
         hook_x = rod_x
         hook_y = rod_top_y + casting_manager.rod_length
 

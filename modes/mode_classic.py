@@ -84,7 +84,7 @@ def load_graphics():
     boat_image = pygame.image.load("graphics/boat.png")
     boat_image = pygame.transform.scale(boat_image, (310, 260))
     boat_x = SCREEN_WIDTH // 2 - boat_image.get_width() // 2 - 300
-    boat_y = WATER_SURFACE - boat_image.get_height() // 2 - 52
+    boat_y = WATER_SURFACE - boat_image.get_height() // 2 - 20
 
     # Load fishing hook
     hook_image = pygame.image.load("graphics/fishing_hook.png")
@@ -387,7 +387,7 @@ def main():
 
     # Initialize managers
     fish_manager = FishManager()
-    background_manager = BackgroundManager(use_terrain_files=True)
+    background_manager = BackgroundManager()
     casting_manager = CastingRod(ROD_MAX_LENGTH, ROD_SPEED, auto_reel = False)
 
     # Spawn initial fish
@@ -413,7 +413,7 @@ def main():
     SCREAM_INCREMENT = 1  # 1% per frame with scream detected
 
     # Scream threshold for controlling the hook
-    HOOK_SCREAM_THRESHOLD = 15000
+    HOOK_SCREAM_THRESHOLD = 5000
 
     # Release message state
     showing_release_message = False
@@ -515,8 +515,8 @@ def main():
             )
 
             # Calculate hook position
-            rod_x = boat_x + graphics['boat_image'].get_width() - 83
-            rod_top_y = boat_y + 175
+            rod_x = boat_x + graphics['boat_image'].get_width() - 65
+            rod_top_y = boat_y + 160
 
             # Update casting and check for catches
             caught = casting_manager.update(
@@ -612,8 +612,8 @@ def main():
         screen.blit(graphics['boat_image'], (boat_x, boat_y))
 
         # Draw fishing line
-        rod_x = boat_x + graphics['boat_image'].get_width() - 83
-        rod_top_y = boat_y + 175
+        rod_x = boat_x + graphics['boat_image'].get_width() - 65
+        rod_top_y = boat_y + 160
         hook_x = rod_x
         hook_y = rod_top_y + casting_manager.rod_length
 
