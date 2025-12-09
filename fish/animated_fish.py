@@ -26,7 +26,8 @@ class AnimatedFish(pygame.sprite.Sprite):
         rarity (str): Rarity classification
     """
 
-    # Cooldown duration for recently released fish (3 seconds)
+    # Cooldown duration for recently released dangerous fish (3 seconds)
+    # so that the hook does not collide continuously with anglo fish
     RELEASE_COOLDOWN = 3000
 
     def __init__(self, sprite_sheet_path, frame_width, frame_height,
