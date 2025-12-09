@@ -189,7 +189,7 @@ class AnimatedFish(pygame.sprite.Sprite):
 
         # Wrap around screen horizontally
         # if the fish is moving right and goes off the right edge,
-        # teleport the fish to the left side and it will continue to move right
+        # teleport the fish to the left side, and it will continue to move right
         if self.speed_x > 0 and self.rect.left > SCREEN_WIDTH:
             self.rect.right = 0
 
@@ -216,10 +216,10 @@ class AnimatedFish(pygame.sprite.Sprite):
 
     def create_death_animation(self):
         """
-        Create and return a death animation sprite. Only creates once
+        Create and return a death animation sprite. Only creates once.
 
         Returns:
-            DeathAnimation: The death animation sprite, or None if no path
+            DeathAnimation: the death animation sprite, or None if no path
                 or already created
         """
         if self.death_animation_path and not self.death_animation_created:
