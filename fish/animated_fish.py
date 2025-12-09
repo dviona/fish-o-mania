@@ -27,7 +27,7 @@ class AnimatedFish(pygame.sprite.Sprite):
 
     # Cooldown duration for recently released dangerous fish (3 seconds)
     # so that the hook does not collide continuously with anglo fish
-    RELEASE_COOLDOWN = 3000
+    release_cooldown = 3000
 
     def __init__(self, sprite_sheet_path, frame_width, frame_height,
                  num_frames, x, y, speed_x, fish_type="generic",
@@ -148,7 +148,7 @@ class AnimatedFish(pygame.sprite.Sprite):
         """Check if the release cooldown has expired"""
         if not self.recently_released:
             return True
-        return pygame.time.get_ticks() - self.release_time >= self.RELEASE_COOLDOWN
+        return pygame.time.get_ticks() - self.release_time >= self.release_cooldown
 
     def start_rising(self):
         """Mark fish as caught and start rising animation"""
