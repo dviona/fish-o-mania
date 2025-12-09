@@ -135,16 +135,20 @@ def draw_pause_overlay(surface, time_remaining):
     pause_rect = pause_text.get_rect(center=(center_x, center_y - 40))
     surface.blit(pause_text, pause_rect)
 
-    time_text = font.render(f"Time Remaining: {int(time_remaining)}s", True, (255, 215, 0))
+    time_text = font.render(
+        f"Time Remaining: {int(time_remaining)}s",
+        True, (255, 215, 0))
     time_rect = time_text.get_rect(center=(center_x, center_y))
     surface.blit(time_text, time_rect)
 
-    resume_text = font.render("Press P to Resume", True, (200, 200, 255))
+    resume_text = font.render("Press P to Resume",
+                              True, (200, 200, 255))
     resume_rect = resume_text.get_rect(center=(center_x, center_y + 40))
     surface.blit(resume_text, resume_rect)
 
 
-def draw_game_over_screen(surface, score, fish_caught_count, high_score_result):
+def draw_game_over_screen(surface, score,
+                          fish_caught_count, high_score_result):
     """
     Draw the time's up overlay with final score.
 
@@ -166,14 +170,17 @@ def draw_game_over_screen(surface, score, fish_caught_count, high_score_result):
     center_y = SCREEN_HEIGHT // 2
 
     # Title
-    title_text = big_font.render("TIME'S UP!", True, (255, 215, 0))
+    title_text = big_font.render("TIME'S UP!",
+                                 True, (255, 215, 0))
     title_rect = title_text.get_rect(center=(center_x, center_y - 120))
     surface.blit(title_text, title_rect)
 
     # New high score notification
     if high_score_result["is_new_high"]:
-        new_high_text = big_font.render("NEW HIGH SCORE!", True, (255, 215, 0))
-        new_high_rect = new_high_text.get_rect(center=(center_x, center_y - 80))
+        new_high_text = big_font.render("NEW HIGH SCORE!",
+                                        True, (255, 215, 0))
+        new_high_rect = new_high_text.get_rect(
+            center=(center_x, center_y - 80))
         surface.blit(new_high_text, new_high_rect)
 
     # Final score
@@ -191,12 +198,14 @@ def draw_game_over_screen(surface, score, fish_caught_count, high_score_result):
     surface.blit(count_text, count_rect)
 
     # High score
-    high_text = font.render(f"High Score: {current_high}", True, (200, 200, 200))
+    high_text = font.render(f"High Score: {current_high}",
+                            True, (200, 200, 200))
     high_rect = high_text.get_rect(center=(center_x, center_y + 80))
     surface.blit(high_text, high_rect)
 
     # Instructions
-    restart_text = font.render("Press ENTER to Play Again", True, (255, 215, 0))
+    restart_text = font.render(
+        "Press ENTER to Play Again", True, (255, 215, 0))
     restart_rect = restart_text.get_rect(center=(center_x, center_y + 120))
     surface.blit(restart_text, restart_rect)
 
@@ -208,11 +217,11 @@ def draw_game_over_screen(surface, score, fish_caught_count, high_score_result):
 def handle_danger_fish_catch(casting_manager, fish_manager):
     """
     Handle catching a danger fish immediately (no scream mechanic).
-    
+
     Args:
         casting_manager: The casting rod manager.
         fish_manager: The fish manager.
-    
+
     Returns:
         dict: Fish info if a danger fish was caught, None otherwise.
     """
@@ -328,7 +337,8 @@ def main():
                     if not game_over:
                         if paused:
                             # Resuming - add paused duration to total
-                            paused_time += pygame.time.get_ticks() - pause_start
+                            paused_time += (
+                                    pygame.time.get_ticks() - pause_start)
                             paused = False
                         else:
                             # Pausing - record when pause started
@@ -353,12 +363,14 @@ def main():
         # Update game state
         if not game_over and not paused:
             # Update timer (accounting for paused time)
-            elapsed = (pygame.time.get_ticks() - start_ticks - paused_time) / 1000
+            elapsed = (pygame.time.get_ticks() -
+                       start_ticks - paused_time) / 1000
             time_remaining = max(0, GAME_DURATION - elapsed)
 
             if time_remaining <= 0:
                 game_over = True
-                high_score_result = update_high_score("time_attack", score, fish_caught_count)
+                high_score_result = update_high_score("time_attack",
+                                                      score, fish_caught_count)
 
             fish_manager.update()
             background_manager.update()
@@ -389,7 +401,8 @@ def main():
             if result:
                 if result.get('penalty'):
                     # Danger fish caught - handle immediately
-                    danger_result = handle_danger_fish_catch(casting_manager, fish_manager)
+                    danger_result = handle_danger_fish_catch(
+                        casting_manager, fish_manager)
                     if danger_result:
                         score += danger_result["value"]
                         fish_caught_count += 1
@@ -437,7 +450,8 @@ def main():
 
         # Timer display (top center)
         timer_color = (255, 100, 100) if time_remaining <= 10 else WHITE
-        timer_text = timer_font.render(f"{int(time_remaining)}", True, timer_color)
+        timer_text = timer_font.render(
+            f"{int(time_remaining)}", True, timer_color)
         timer_rect = timer_text.get_rect(center=(SCREEN_WIDTH - 125, 50))
         screen.blit(timer_text, timer_rect)
 
@@ -445,7 +459,8 @@ def main():
         score_text = big_font.render(f"Score: {score}", True, WHITE)
         screen.blit(score_text, (10, 10))
 
-        count_text = font.render(f"Fish caught: {fish_caught_count}", True, WHITE)
+        count_text = font.render(
+            f"Fish caught: {fish_caught_count}", True, WHITE)
         screen.blit(count_text, (10, 50))
 
         # Instructions
@@ -456,7 +471,8 @@ def main():
                 True,
                 (200, 255, 200)
             )
-            mode_rect = mode_text.get_rect(center=(SCREEN_WIDTH // 2, 20))
+            mode_rect = mode_text.get_rect(
+                center=(SCREEN_WIDTH // 2, 20))
             screen.blit(mode_text, mode_rect)
 
             instructions = [
@@ -476,7 +492,8 @@ def main():
 
         # Game over screen
         if game_over:
-            draw_game_over_screen(screen, score, fish_caught_count, high_score_result)
+            draw_game_over_screen(screen, score,
+                                  fish_caught_count, high_score_result)
 
         # Draw red flash (still shows but no penalty)
         fish_manager.draw_red_flash(screen)

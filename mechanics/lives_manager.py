@@ -8,7 +8,8 @@ import pygame
 class LivesManager:
     """Manages player lives and displays them."""
 
-    def __init__(self, max_lives=3, live_icon_path="graphics/fish_orange_outline.png",
+    def __init__(self, max_lives=3,
+                 live_icon_path="graphics/fish_orange_outline.png",
                  dead_icon_path="graphics/fish_orange_skeleton_outline.png"):
         """
         Initialize the lives_manager.
@@ -27,21 +28,30 @@ class LivesManager:
         try:
             self.live_icon = pygame.image.load(live_icon_path).convert_alpha()
             # Scale icons to standard size (64x64)
-            self.live_icon = pygame.transform.scale(self.live_icon, (self.icon_size, self.icon_size))
+            self.live_icon = (
+                pygame.transform.scale(self.live_icon,
+                                       (self.icon_size, self.icon_size)))
         except (pygame.error, FileNotFoundError) as e:
             print(f"Error loading live icon: {e}")
             # Create a placeholder green circle
-            self.live_icon = pygame.Surface((self.icon_size, self.icon_size), pygame.SRCALPHA)
-            pygame.draw.circle(self.live_icon, (0, 255, 0), (self.icon_size//2, self.icon_size//2), 28)
+            self.live_icon = pygame.Surface(
+                (self.icon_size, self.icon_size), pygame.SRCALPHA)
+            pygame.draw.circle(self.live_icon,
+                               (0, 255, 0),
+                               (self.icon_size//2, self.icon_size//2), 28)
 
         try:
             self.dead_icon = pygame.image.load(dead_icon_path).convert_alpha()
-            self.dead_icon = pygame.transform.scale(self.dead_icon, (self.icon_size, self.icon_size))
+            self.dead_icon = (
+                pygame.transform.scale(self.dead_icon,
+                                       (self.icon_size, self.icon_size)))
         except (pygame.error, FileNotFoundError) as e:
             print(f"Error loading dead icon: {e}")
             # Create a placeholder red circle
-            self.dead_icon = pygame.Surface((self.icon_size, self.icon_size), pygame.SRCALPHA)
-            pygame.draw.circle(self.dead_icon, (255, 0, 0), (self.icon_size//2, self.icon_size//2), 28)
+            self.dead_icon = pygame.Surface(
+                (self.icon_size, self.icon_size), pygame.SRCALPHA)
+            pygame.draw.circle(self.dead_icon, (255, 0, 0),
+                               (self.icon_size//2, self.icon_size//2), 28)
 
     def lose_life(self):
         """

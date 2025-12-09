@@ -1,7 +1,7 @@
 """
 Constants Module for Fish-O-Mania.
 
-This module contains all game configuration constants including screen settings,
+This module contains all game config constants incl screen settings,
 colors, water boundaries, and gameplay parameters. Centralizing these values
 allows for easy tuning and maintains consistency across all game modules.
 
@@ -41,5 +41,3 @@ START_FISHES = 5  # Number of fish spawned at game start
 BOAT_SPEED = 8  # Horizontal movement speed of the boat (pixels per frame)
 ROD_MAX_LENGTH = 500  # Maximum depth the fishing line can extend (pixels)
 ROD_SPEED = 6  # Speed of casting/reeling the fishing line (pixels per frame)
-
-
