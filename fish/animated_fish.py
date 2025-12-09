@@ -188,10 +188,10 @@ class AnimatedFish(pygame.sprite.Sprite):
         self.rect.y += self.speed_y
 
         # Wrap around screen horizontally
+        # if the fish is moving right and goes off the right edge,
+        # teleport the fish to the left side and it will continue to move right
         if self.speed_x > 0 and self.rect.left > SCREEN_WIDTH:
             self.rect.right = 0
-        elif self.speed_x < 0 and self.rect.right < 0:
-            self.rect.left = SCREEN_WIDTH
 
         # Bounce off water boundaries vertically
         if self.rect.top < WATER_SURFACE:
