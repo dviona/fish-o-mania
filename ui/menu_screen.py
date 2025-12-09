@@ -1,5 +1,5 @@
 """
-Menu Screen module: contains the MenuScreen class for the game's main menu screen.
+Menu Screen module: contains the MenuScreen class for the game's main menu
 Handles keyboard and mouse navigation, high scores display,
 and animated exit transitions to game modes.
 """

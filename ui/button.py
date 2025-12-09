@@ -5,6 +5,7 @@ Button module: contains the Button class for interactive menu buttons.
 import pygame
 from mechanics.constants import WHITE
 
+
 class Button:
 
     # Supports both mouse hover and keyboard navigation highlighting.
@@ -41,16 +42,14 @@ class Button:
 
         self.font = pygame.font.Font(None, 36)
 
-
     def update(self, mouse_pos):
         """
         Update hover state based on mouse position.
         Args: mouse_pos (tuple) --> Current mouse (x, y) position
-        
+
         """
         rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.hovered = rect.collidepoint(mouse_pos) and self.enabled
-
 
     def draw(self, surface):
         """
@@ -64,7 +63,8 @@ class Button:
             text_color = (150, 150, 150)
             border_color = self.border_color
         elif self.selected or self.hovered:
-            bg_color = self.selected_color if self.selected else self.hover_color
+            bg_color = (
+                self.selected_color) if self.selected else self.hover_color
             text_color = WHITE
             border_color = (
                 self.selected_border_color if self.selected
