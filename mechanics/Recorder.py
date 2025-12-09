@@ -4,7 +4,6 @@ import time
 
 class RECORDER:
     # fpb equals frames_per_buffer,
-    # most common setup
     # FPB = 735, FORMAT = pyaudio.paInt16, CHANNELS = 1, RATE = 16000
     def __init__(self, channels=1, rate=44100, frames_per_buffer=735):
         self.p = pyaudio.PyAudio()

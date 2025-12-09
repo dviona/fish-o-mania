@@ -1,8 +1,7 @@
 """
-Animated Fish Base Class for Fish-O-Mania
+Animated Fish Base Class
 
-This module contains the base AnimatedFish class that all fish types
-inherit from
+This module contains the base AnimatedFish class that all fish types inherit from
 """
 
 import pygame
@@ -37,16 +36,19 @@ class AnimatedFish(pygame.sprite.Sprite):
         Initialize the animated fish.
 
         Args:
-            sprite_sheet_path (str): Path to sprite sheet image
-            frame_width (int): Width of each animation frame
-            frame_height (int): Height of each animation frame
-            num_frames (int): Number of frames in animation
-            x (int): Starting X-coordinate
-            y (int): Starting Y-coordinate
-            speed_x (float): Horizontal movement speed
-            fish_type (str): Name of the fish type
+            sprite_sheet_path: path to sprite sheet image
+            frame_width: width of each animation frame
+            frame_height: height of each animation frame
+            num_frames: number of frames in animation
+            x: starting X-coordinate
+            y: starting Y-coordinate
+            speed_x: horizontal movement speed
+            fish_type : name of the fish type
             death_animation_path (str): Path to death animation sprite sheet
         """
+        # super().__init__() is a Python call that runs the parent class’s constructor (__init__ method)
+        # inside a child class, so the parent part of the object gets properly initialized.
+        # Any method could be called by super().method(args)
         super().__init__()
 
         # Fish properties
@@ -57,9 +59,6 @@ class AnimatedFish(pygame.sprite.Sprite):
         self.speed_x = speed_x
         self.speed_y = random.uniform(-0.5, 0.5)
 
-        # Direction flag
-        self.flip_horizontal = (speed_x < 0)
-
         # Death animation
         self.death_animation_path = death_animation_path
         self.death_animation_created = False
@@ -67,9 +66,12 @@ class AnimatedFish(pygame.sprite.Sprite):
         # Animation control
         self.current_frame = 0
         self.frame_counter = 0
+        # frame_delay is number of iterations of game before load_frames moves from one frame to the next one
+        # we set frames of delay randomly so that the different types moves at different speed
         self.frame_delay = random.randint(5, 10)
 
         # Load sprite sheet
+        # convert alpha
         self.sprite_sheet = pygame.image.load(sprite_sheet_path).convert_alpha()
         self.frames = self._load_frames()
 
@@ -86,9 +88,10 @@ class AnimatedFish(pygame.sprite.Sprite):
         # Caught/hooked state
         self.caught = False
         self.is_caught = False
+        # is_hooked is for generating the pause for anglo fish
         self.is_hooked = False
 
-        # Recently released state (can't be caught again immediately)
+        # Recently released state,
         self.recently_released = False
         self.release_time = 0
 
@@ -171,7 +174,8 @@ class AnimatedFish(pygame.sprite.Sprite):
         self._update_position()
 
     def _update_animation(self):
-        """Cycle through animation frames"""
+        """frame_counter: counts how many game iterations has passed since the last frame change
+        frame_delay: Only when the counter reaches that delay does the code advance current_frame and update self.image """
         self.frame_counter += 1
         if self.frame_counter >= self.frame_delay:
             self.frame_counter = 0
