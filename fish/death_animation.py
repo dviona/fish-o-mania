@@ -39,7 +39,8 @@ class DeathAnimation(pygame.sprite.Sprite):
 
         # Load sprite sheet
         try:
-            self.sprite_sheet = pygame.image.load(sprite_sheet_path).convert_alpha()
+            self.sprite_sheet = (
+                pygame.image.load(sprite_sheet_path).convert_alpha())
             self.frames = self._load_frames()
             self.image = self.frames[self.current_frame]
             self.rect = self.image.get_rect()

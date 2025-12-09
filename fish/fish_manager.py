@@ -55,7 +55,8 @@ class FishManager:
         self.red_flash_duration = 30  # Frames (0.5 seconds at 60 FPS)
 
         # Recent catches (store animated sprites)
-        self.recent_catches = []  # List of {type, value, frames, current_frame, frame_counter}
+        # List of {type, value, frames, current_frame, frame_counter}
+        self.recent_catches = []
         self.max_recent_catches = 3
 
         # Load fish sprite animations for display
@@ -96,7 +97,8 @@ class FishManager:
                 print(f"Error loading animation for {fish_type}: {e}")
                 # Create placeholder
                 placeholder = pygame.Surface((64, 64), pygame.SRCALPHA)
-                pygame.draw.circle(placeholder, (100, 100, 100), (32, 32), 28)
+                pygame.draw.circle(placeholder, (100, 100, 100),
+                                   (32, 32), 28)
                 animations[fish_type] = [placeholder]
 
         return animations
@@ -128,7 +130,8 @@ class FishManager:
         x = random.randint(50, SCREEN_WIDTH - 50)
         y = random.randint(WATER_SURFACE + 20, WATER_BOTTOM - 20)
 
-        # Create the appropriate fish type (Turtle, Danger Fish, Shark, or Octopus)
+        # Create the appropriate fish type
+        # (Turtle, Danger Fish, Shark, or Octopus)
         try:
             if fish_class == "turtle":
                 fish = Turtle(x, y)
@@ -170,7 +173,8 @@ class FishManager:
                 # Get number of frames for this fish type
                 if catch["type"] in self.fish_animations:
                     num_frames = len(self.fish_animations[catch["type"]])
-                    catch["current_frame"] = (catch["current_frame"] + 1) % num_frames
+                    catch["current_frame"] = (
+                            (catch["current_frame"] + 1) % num_frames)
 
         # Auto-spawn fish
         self.spawn_timer += 1
@@ -180,12 +184,14 @@ class FishManager:
                 self.spawn_fish()
 
     def draw(self, surface):
-        """Draw all fish, death animations, lives display, and recent catches to the screen."""
+        """Draw all fish, death animations, lives display,
+                and recent catches to the screen."""
         self.all_fish.draw(surface)
         self.death_animations.draw(surface)
 
         # Draw lives display in top-right corner
-        # Calculate position: screen_width - (3 lives * 70 spacing) - 10 padding
+        # Calculate position:
+        # screen_width - (3 lives * 70 spacing) - 10 padding
         lives_x = SCREEN_WIDTH - (self.lives_manager.max_lives * 70) - 10
         self.lives_manager.draw(surface, x=lives_x, y=10)
 
@@ -193,7 +199,8 @@ class FishManager:
         self.draw_recent_catches(surface, lives_x)
 
     def draw_recent_catches(self, surface, start_x):
-        """Draw recent catches as animated sprites with values below lives display."""
+        """Draw recent catches as animated sprites
+                    with values below lives display"""
         if not self.recent_catches:
             return
 
@@ -218,7 +225,8 @@ class FishManager:
                     surface.blit(sprite, (x_pos, start_y))
 
             # Draw value below sprite (centered under the icon)
-            value_text = font.render(f"+{catch['value']}", True, (255, 215, 0))
+            value_text = font.render(f"+{catch['value']}",
+                                     True, (255, 215, 0))
             value_rect = value_text.get_rect(center=(x_pos + 32, start_y + 72))
             surface.blit(value_text, value_rect)
 
