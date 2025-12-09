@@ -294,7 +294,7 @@ def main():
 
     # Initialize managers
     fish_manager = RelaxedFishManager()
-    background_manager = BackgroundManager(use_terrain_files=True)
+    background_manager = BackgroundManager()
     casting_manager = CastingRod(ROD_MAX_LENGTH, ROD_SPEED)
 
     # Spawn initial fish

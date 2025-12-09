@@ -1,8 +1,7 @@
 """
-Background Manager Module for Fish-O-Mania.
+Background Manager Module for Fish-O-Mania
 
-This module contains the BackgroundManager class that coordinates
-all background visual elements.
+This module contains the BackgroundManager class for background elements
 """
 
 import random
@@ -17,27 +16,26 @@ from background.sand_layers import SandLayers
 
 class BackgroundManager:
     """
-    Manages all background visual elements.
+    Manages all background elements
 
     Coordinates updating and drawing of all background elements
-    in the proper z-order.
 
     Attributes:
-        ripples (list): Active ripple animations.
-        seaweeds (list): Seaweed decorations.
-        rocks (list): Rock decorations.
-        bubbles (list): Active bubble animations.
-        wave (Wave): Water surface wave.
-        sand (SandLayers): Sand terrain.
+        ripples (list): Active ripple animations
+        seaweeds (list): Seaweed decorations
+        rocks (list): Rock decorations
+        bubbles (list): Active bubble animations
+        wave (Wave): Water surface wave
+        sand (SandLayers): Sand terrain
     """
 
-    def __init__(self, sand_layer_files=None, use_terrain_files=False):
+    def __init__(self, sand_layer_files=None, use_terrain_files=True):
         """
-        Initialize the background manager.
+        Initialize the background manager
 
         Args:
-            sand_layer_files (list): Custom sand layer image paths.
-            use_terrain_files (bool): If True, load default terrain files.
+            sand_layer_files (list): sand layer image paths
+            use_terrain_files (bool): If True, load default terrain files
         """
         self.ripples = []
         self.seaweeds = []
@@ -55,14 +53,14 @@ class BackgroundManager:
         self.bubble_timer = 0
 
     def _generate_seaweed(self):
-        """Generate seaweed plants at random positions."""
+        """Generate seaweed plants at random positions"""
         num_seaweed = random.randint(8, 12)
         for _ in range(num_seaweed):
             x = random.randint(0, SCREEN_WIDTH)
             self.seaweeds.append(Seaweed(x))
 
     def _generate_rocks(self):
-        """Generate rocks at random positions near the bottom."""
+        """Generate rocks at random positions near the bottom"""
         num_rocks = random.randint(5, 10)
         for _ in range(num_rocks):
             x = random.randint(0, SCREEN_WIDTH - 80)
@@ -71,16 +69,16 @@ class BackgroundManager:
 
     def add_ripple(self, x, y):
         """
-        Add a ripple at a specific position.
+        Add a ripple at a specific position
 
         Args:
-            x (float): X-coordinate for ripple.
-            y (float): Y-coordinate for ripple.
+            x (float): X-coordinate for ripple
+            y (float): Y-coordinate for ripple
         """
         self.ripples.append(Ripple(x, y))
 
     def update(self):
-        """Update all background elements."""
+        """Update all background elements"""
         # Update wave animation
         self.wave.update()
 
@@ -115,10 +113,10 @@ class BackgroundManager:
 
     def draw(self, surface):
         """
-        Draw all background elements in proper z-order.
+        Draw all background elements in proper z-order
 
         Args:
-            surface (pygame.Surface): Surface to draw on.
+            surface (pygame.Surface): Surface to draw on
         """
         # Bottom layer: sand
         self.sand.draw(surface)

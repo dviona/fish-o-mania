@@ -1,14 +1,15 @@
 """
 Danger Fish Class for Fish-O-Mania.
 
-The fish to avoid! Catching this costs a life.
+Angler/Danger fish - Catching this costs a life in classic mode
+In other modes, we can catch this as a normal fish
 """
 
 from fish.animated_fish import AnimatedFish
 
 
 class DangerFish(AnimatedFish):
-    """Danger fish - lose a life if caught."""
+    """Danger fish(Angler Fish) - lose a life if caught in classic mode"""
 
     def __init__(self, x, y, moving_right=True):
         speed = 0.7 if moving_right else -0.7

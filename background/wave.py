@@ -1,7 +1,7 @@
 """
-Wave Module for Fish-O-Mania.
+Wave Module
 
-This module contains the Wave class for animated water surface effects.
+This module contains the Wave class for animated water waves
 """
 
 import pygame
@@ -11,19 +11,19 @@ from mechanics.constants import SCREEN_WIDTH, WATER_SURFACE, WHITE
 
 class Wave:
     """
-    Animated water surface wave.
+    Animated water surface wave simulation
 
-    Uses multiple overlapping sine waves to create a natural-looking
-    animated water surface.
+    Uses multiple overlapping sine waves to create an animated
+    water surface
 
     Attributes:
-        time (float): Animation time counter.
-        y_position (int): Y-coordinate of the wave line.
-        layers (list): Configuration for multiple wave layers.
+        time (float): Animation time counter
+        y_position (int): y-coordinate of the wave line
+        layers (list): Configuration for multiple wave layers
     """
 
     def __init__(self):
-        """Initialize the wave with multiple layers."""
+        """Initialize the wave with multiple layers"""
         self.time = 0
         self.wave_speed = 0.05
         self.y_position = WATER_SURFACE
@@ -51,18 +51,18 @@ class Wave:
         ]
 
     def update(self):
-        """Update wave animation."""
+        """Update wave animation"""
         self.time += self.wave_speed
 
     def get_wave_points(self, layer_index=0):
         """
-        Generate points for a wave curve.
+        Generate points for a wave curve
 
         Args:
-            layer_index (int): Which wave layer to generate.
+            layer_index (int): Which wave layer to generate
 
         Returns:
-            list: List of (x, y) tuples forming the wave.
+            list: List of (x, y) tuples forming the wave
         """
         layer = self.layers[layer_index]
         points = []
@@ -80,17 +80,17 @@ class Wave:
 
     def draw(self, surface):
         """
-        Draw the animated waves.
+        Draw the animated waves
 
         Args:
-            surface (pygame.Surface): Surface to draw on.
+            surface (pygame.Surface): Surface to draw on
         """
         # Draw primary wave
         main_points = self.get_wave_points(0)
         if len(main_points) > 1:
             pygame.draw.lines(surface, WHITE, False, main_points, 3)
 
-        # Draw secondary wave for depth
+        # Draw secondary wave for depth effect
         if len(self.layers) > 1:
             secondary_points = self.get_wave_points(1)
             if len(secondary_points) > 1:

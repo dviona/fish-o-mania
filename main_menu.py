@@ -5,7 +5,7 @@ into directory issues! That is, main_menu.py should be the main file to run!
 Main Entry Point for Fish-O-Mania
 
 This module serves as the main entry point for the game,
-handling the game loop and launching different game modes.
+handling the game loop and launching different game modes
 
 Run the game with:
     python main.py
@@ -29,7 +29,7 @@ clock = pygame.time.Clock()
 
 
 def main():
-    """Main entry point and game loop."""
+    """Main entry point and game loop"""
     menu = MenuScreen()
     running = True
 

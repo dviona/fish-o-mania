@@ -13,13 +13,14 @@ class Rock:
     """
     Static rock decoration (no movements)
 
-    Drawoing an elliptical rock with simple shading for depth
+    Drawing an elliptical rock with simple shading for depth
 
     Attributes:
         x (int): X-coordinate of rock
         y (int): Y-coordinate of rock
         width (int): Rock width in pixels
         height (int): Rock height in pixels
+
     """
 
     def __init__(self, x, y):
