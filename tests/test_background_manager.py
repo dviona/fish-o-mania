@@ -1,5 +1,5 @@
 """
-Unit Tests for Background Module.
+Unit Tests for Background Module
 
 This module contains tests for all background visual elements:
 - BackgroundManager

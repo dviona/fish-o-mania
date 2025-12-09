@@ -1,8 +1,8 @@
 """
-Fast Fish Manager Module for Fish-O-Mania.
+Fast Fish Manager Module for Fish-O-Mania
 
 This module contains the FastFishManager class, a variant of RelaxedFishManager
-with faster-moving fish. Used by Time Attack mode.
+with faster-moving fish. Used by Time Attack mode
 """
 
 from fish.relaxed_fish_manager import RelaxedFishManager
@@ -13,21 +13,21 @@ FISH_SPEED_MULTIPLIER = 3.0
 
 class FastFishManager(RelaxedFishManager):
     """
-    Fish manager variant with faster-moving fish.
+    Fish manager variant with faster-moving fish
 
     Extends RelaxedFishManager to get no-lives behavior,
-    then increases fish movement speed for time attack mode.
+    then increases fish movement speed for time attack mode
     """
 
     def spawn_fish(self, fish_class=None):
         """
-        Spawn a fish with increased movement speed.
+        Spawn a fish with increased movement speed
 
         Args:
-            fish_class (str): Specific fish type, or None for random.
+            fish_class (str): Specific fish type, or None for random
 
         Returns:
-            AnimatedFish: The spawned fish with boosted speed.
+            AnimatedFish: The spawned fish with boosted speed
         """
         fish = super().spawn_fish(fish_class)
         if fish:

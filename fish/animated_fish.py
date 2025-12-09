@@ -1,8 +1,8 @@
 """
-Animated Fish Base Class for Fish-O-Mania.
+Animated Fish Base Class for Fish-O-Mania
 
 This module contains the base AnimatedFish class that all fish types
-inherit from.
+inherit from
 """
 
 import pygame
@@ -13,17 +13,17 @@ from fish.death_animation import DeathAnimation
 
 class AnimatedFish(pygame.sprite.Sprite):
     """
-    Base class for all animated fish.
+    Base class for all animated fish
 
     Handles sprite sheet loading, animation, movement, and
-    screen boundary behavior. All specific fish types inherit from this.
+    screen boundary behavior. All specific fish types inherit from this
 
     Attributes:
-        fish_type (str): Name of the fish type.
-        speed_x (float): Horizontal movement speed.
-        speed_y (float): Vertical movement speed.
-        value (int): Points awarded when caught.
-        rarity (str): Rarity classification.
+        fish_type (str): Name of the fish type
+        speed_x (float): Horizontal movement speed
+        speed_y (float): Vertical movement speed
+        value (int): Points awarded when caught
+        rarity (str): Rarity classification
     """
 
     # Cooldown duration for recently released fish (3 seconds)
@@ -36,15 +36,15 @@ class AnimatedFish(pygame.sprite.Sprite):
         Initialize the animated fish.
 
         Args:
-            sprite_sheet_path (str): Path to sprite sheet image.
-            frame_width (int): Width of each animation frame.
-            frame_height (int): Height of each animation frame.
-            num_frames (int): Number of frames in animation.
-            x (int): Starting X-coordinate.
-            y (int): Starting Y-coordinate.
-            speed_x (float): Horizontal movement speed.
-            fish_type (str): Name of the fish type.
-            death_animation_path (str): Path to death animation sprite sheet.
+            sprite_sheet_path (str): Path to sprite sheet image
+            frame_width (int): Width of each animation frame
+            frame_height (int): Height of each animation frame
+            num_frames (int): Number of frames in animation
+            x (int): Starting X-coordinate
+            y (int): Starting Y-coordinate
+            speed_x (float): Horizontal movement speed
+            fish_type (str): Name of the fish type
+            death_animation_path (str): Path to death animation sprite sheet
         """
         super().__init__()
 
@@ -92,7 +92,7 @@ class AnimatedFish(pygame.sprite.Sprite):
         self.release_time = 0
 
     def _load_frames(self):
-        """Extract individual frames from sprite sheet."""
+        """Extract individual frames from sprite sheet"""
         frames = []
         for i in range(self.num_frames):
             x = i * self.frame_width
@@ -119,7 +119,7 @@ class AnimatedFish(pygame.sprite.Sprite):
         return frames
 
     def _add_danger_indicator(self, frame):
-        """Add red warning line above the fish frame."""
+        """Add red warning line above the fish frame to differentiate"""
         new_frame = pygame.Surface(
             (frame.get_width(), frame.get_height() + 6),
             pygame.SRCALPHA
@@ -141,18 +141,18 @@ class AnimatedFish(pygame.sprite.Sprite):
         return new_frame
 
     def is_release_cooldown_over(self):
-        """Check if the release cooldown has expired."""
+        """Check if the release cooldown has expired"""
         if not self.recently_released:
             return True
         return pygame.time.get_ticks() - self.release_time >= self.RELEASE_COOLDOWN
 
     def start_rising(self):
-        """Mark fish as caught and start rising animation."""
+        """Mark fish as caught and start rising animation"""
         self.caught = True
         self.is_caught = True
 
     def update(self):
-        """Update animation and position."""
+        """Update animation and position"""
         self._update_animation()
 
         # Check if release cooldown is over
@@ -170,7 +170,7 @@ class AnimatedFish(pygame.sprite.Sprite):
         self._update_position()
 
     def _update_animation(self):
-        """Cycle through animation frames."""
+        """Cycle through animation frames"""
         self.frame_counter += 1
         if self.frame_counter >= self.frame_delay:
             self.frame_counter = 0
@@ -178,7 +178,7 @@ class AnimatedFish(pygame.sprite.Sprite):
             self.image = self.frames[self.current_frame]
 
     def _update_position(self):
-        """Update fish position and handle boundaries."""
+        """Update fish position and handle boundaries"""
         # Move
         self.rect.x += self.speed_x
         self.rect.y += self.speed_y
@@ -199,10 +199,10 @@ class AnimatedFish(pygame.sprite.Sprite):
 
     def get_info(self):
         """
-        Return fish information.
+        Return fish information
 
         Returns:
-            dict: Contains type, value, and rarity.
+            dict: Contains type, value, and rarity
         """
         return {
             "type": self.fish_type,
@@ -212,11 +212,11 @@ class AnimatedFish(pygame.sprite.Sprite):
 
     def create_death_animation(self):
         """
-        Create and return a death animation sprite. Only creates once.
+        Create and return a death animation sprite. Only creates once
 
         Returns:
             DeathAnimation: The death animation sprite, or None if no path
-                or already created.
+                or already created
         """
         if self.death_animation_path and not self.death_animation_created:
             self.death_animation_created = True
