@@ -1,5 +1,6 @@
-# Tavish, Debbie
 """
+Tavish, Debbie
+
 Shark Fish Class for Fish-O-Mania.
 
 Fast-moving fish, harder to catch but worth good points.
