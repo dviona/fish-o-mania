@@ -2,7 +2,7 @@
 """
 Animated Fish Base Class
 
-This module contains the base AnimatedFish class that all fish types inherit from
+This module contains the AnimatedFish class that all fish inherit from
 """
 
 import pygame
@@ -47,8 +47,10 @@ class AnimatedFish(pygame.sprite.Sprite):
             fish_type : name of the fish type
             death_animation_path (str): Path to death animation sprite sheet
         """
-        # super().__init__() is a Python call that runs the parent class’s constructor (__init__ method)
-        # inside a child class, so the parent part of the object gets properly initialized.
+        # super().__init__() is a Python call that runs
+        # the parent class’s constructor (__init__ method)
+        # inside a child class, so the parent part of the
+        # object gets properly initialized.
         # Any method could be called by super().method(args)
         super().__init__()
 
@@ -67,13 +69,16 @@ class AnimatedFish(pygame.sprite.Sprite):
         # Animation control
         self.current_frame = 0
         self.frame_counter = 0
-        # frame_delay is number of iterations of game before load_frames moves from one frame to the next one
-        # we set frames of delay randomly so that the different types moves at different speed
+        # frame_delay is number of iterations of game before load_frames
+        # moves from one frame to the next one
+        # we set frames of delay randomly so that the different types
+        # moves at different speed
         self.frame_delay = random.randint(5, 10)
 
         # Load sprite sheet
         # convert alpha
-        self.sprite_sheet = pygame.image.load(sprite_sheet_path).convert_alpha()
+        self.sprite_sheet = (
+            pygame.image.load(sprite_sheet_path).convert_alpha())
         self.frames = self._load_frames()
 
         # Set initial image and position
@@ -149,7 +154,8 @@ class AnimatedFish(pygame.sprite.Sprite):
         """Check if the release cooldown has expired"""
         if not self.recently_released:
             return True
-        return pygame.time.get_ticks() - self.release_time >= self.release_cooldown
+        return (pygame.time.get_ticks() -
+                self.release_time >= self.release_cooldown)
 
     def start_rising(self):
         """Mark fish as caught and start rising animation"""
@@ -182,7 +188,8 @@ class AnimatedFish(pygame.sprite.Sprite):
         self.frame_counter += 1
         if self.frame_counter >= self.frame_delay:
             self.frame_counter = 0
-            self.current_frame = (self.current_frame + 1) % self.num_frames
+            self.current_frame = ((self.current_frame + 1)
+                                  % self.num_frames)
             self.image = self.frames[self.current_frame]
 
     def _update_position(self):
@@ -192,7 +199,8 @@ class AnimatedFish(pygame.sprite.Sprite):
 
         # Wrap around screen horizontally
         # if the fish is moving right and goes off the right edge,
-        # teleport the fish to the left side, and it will continue to move right
+        # teleport the fish to the left side,
+        # and it will continue to move right
         if self.speed_x > 0 and self.rect.left > SCREEN_WIDTH:
             self.rect.right = 0
 
