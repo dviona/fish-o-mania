@@ -1,5 +1,5 @@
-#Debbie Tavish Zac
 """
+Debbie Tavish Zac
 Unit Tests for Background Module
 
 This module contains tests for all background visual elements:
