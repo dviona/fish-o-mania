@@ -1,5 +1,6 @@
-# Tavish, Debbie, Zac, Aradhya
 """
+Tavish, Debbie, Zac, Aradhya
+
 High Score System
 
 This module handles saving and loading high scores to/from a JSON file.
