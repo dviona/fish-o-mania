@@ -3,19 +3,21 @@ Debbie Tavish Zac and Aradhya
 
 Unit tests for FastFishManager class.
 """
-
-import unittest
-import pygame
-import sys
 import os
+os.environ['SDL_VIDEODRIVER'] = 'dummy'
+os.environ['SDL_AUDIODRIVER'] = 'dummy'
 
+import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Initialize pygame once at module level
+import pygame
+
+# Initialize pygame BEFORE imports that need it
 pygame.init()
 pygame.mixer.init()
-pygame.display.set_mode((800, 600), pygame.HIDDEN)
+pygame.display.set_mode((800, 600))
 
+import unittest
 from fish.fast_fish_manager import FastFishManager, FISH_SPEED_MULTIPLIER
 from fish.relaxed_fish_manager import RelaxedFishManager
 

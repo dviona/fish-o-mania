@@ -4,14 +4,21 @@ Debbie Tavish Zac and Aradhya
 Testing for DangerFish Class
 
 """
+import os
+os.environ['SDL_VIDEODRIVER'] = 'dummy'
+os.environ['SDL_AUDIODRIVER'] = 'dummy'
 
 import pygame
+
+# Initialize pygame BEFORE imports that need it
+pygame.init()
+pygame.mixer.init()
+pygame.display.set_mode((800, 600))
+
 import unittest
 from fish.danger_fish import DangerFish
 from fish.animated_fish import AnimatedFish
 
-pygame.init()
-pygame.display.set_mode((800, 600), pygame.HIDDEN)
 
 class TestDangerFish(unittest.TestCase):
 

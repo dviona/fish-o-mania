@@ -3,18 +3,25 @@ Tavish, Debbie, Zac, Aradhya
 
 Testing for Endless Mode
 """
-import unittest
+import os
+os.environ['SDL_VIDEODRIVER'] = 'dummy'
+os.environ['SDL_AUDIODRIVER'] = 'dummy'
+
 import pygame
 
+# Initialize pygame BEFORE imports that need it
+pygame.init()
+pygame.mixer.init()
+pygame.font.init()
+pygame.display.set_mode((800, 600))
+
+import unittest
 from modes.mode_endless import (
     format_time,
     draw_pause_overlay,
     draw_water_background,
     draw_game_over_screen,
 )
-
-pygame.init()
-pygame.display.set_mode((1, 1), pygame.HIDDEN)
 
 
 class TestEndlessMode(unittest.TestCase):
@@ -66,5 +73,5 @@ class TestEndlessMode(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main(exit = False)
-    pygame.quit
+    unittest.main(exit=False)
+    pygame.quit()
