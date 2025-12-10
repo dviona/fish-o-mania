@@ -71,7 +71,7 @@ class CastingRod:
     def start_cooldown(self):
         """Start the catch cooldown period."""
         self.catch_cooldown_end_time = pygame.time.get_ticks() + \
-                                       self.catch_cooldown_duration
+            self.catch_cooldown_duration
 
     def toggle_cast(self):
         """Toggle between casting and reeling states."""
