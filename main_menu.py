@@ -1,5 +1,6 @@
-# Tavish, Debbie, Zac, Aradhya
 """
+Tavish, Debbie, Zac, Aradhya
+
 IMPORTANT: Always run the game from the root directory so as not to run
 into directory issues! That is, main_menu.py should be the main file to run!
 
