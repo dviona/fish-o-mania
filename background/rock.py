@@ -1,5 +1,6 @@
-# Tavish, Debbie, Zac, Aradhya
 """
+Tavish, Debbie, Zac, Aradhya
+
 Rock Module for Fish-O-Mania.
 
 This module contains the Rock class for static underwater decorations.
