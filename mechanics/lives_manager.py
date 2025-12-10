@@ -1,3 +1,4 @@
+# Tavish, Debbie
 """
 This file manages the player's lives system.
 """

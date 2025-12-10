@@ -1,3 +1,4 @@
+# Zac, Tavish
 """
 Death Animation Class for Fish-O-Mania
 
