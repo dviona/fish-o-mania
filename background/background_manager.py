@@ -1,5 +1,6 @@
-# Tavish, Debbie, Zac
 """
+Tavish, Debbie, Zac
+
 Background Manager Module for Fish-O-Mania
 
 This module contains the BackgroundManager class for background elements
