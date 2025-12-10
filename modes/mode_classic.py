@@ -1,4 +1,4 @@
- """
+"""
 Tavish, Debbie, Zac, Aradhya
 
 IMPORTANT: Always run the game from the root directory so as not to run
