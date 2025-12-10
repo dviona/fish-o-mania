@@ -1,5 +1,6 @@
-# Tavish, Debbie, Zac, Aradhya
 """
+Tavish, Debbie, Zac, Aradhya
+
 Wave Module
 
 This module contains the Wave class for animated water waves
