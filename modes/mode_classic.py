@@ -170,21 +170,28 @@ def draw_release_message(surface, message):
         surface (pygame.Surface): Surface to draw on
         message (str): The release message to display
     """
-    overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    overlay = pygame.Surface(
+                    (SCREEN_WIDTH, SCREEN_HEIGHT))
     overlay.set_alpha(150)
     overlay.fill((0, 100, 0))
     surface.blit(overlay, (0, 0))
 
-    msg_text = big_font.render(message, True, (0, 255, 0))
-    msg_rect = msg_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 20))
+    msg_text = big_font.render(
+        message, True, (0, 255, 0))
+    msg_rect = msg_text.get_rect(
+        center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 20)
+    )
     surface.blit(msg_text, msg_rect)
-
-    sub_text = font.render("No life lost! Keep fishing!", True, WHITE)
-    sub_rect = sub_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 20))
+    sub_text = font.render(
+        "No life lost! Keep fishing!", True, WHITE)
+    sub_rect = sub_text.get_rect(
+        center=(
+            SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 20))
     surface.blit(sub_text, sub_rect)
 
 
-def draw_game_over_screen(surface, score, fish_caught_count, high_score_result):
+def draw_game_over_screen(
+        surface, score, fish_caught_count, high_score_result):
     """
     Draw the game over overlay with final score and options
 
@@ -197,7 +204,8 @@ def draw_game_over_screen(surface, score, fish_caught_count, high_score_result):
     current_high = get_high_score("classic")
 
     # Semi-transparent overlay
-    overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    overlay = pygame.Surface((
+        SCREEN_WIDTH, SCREEN_HEIGHT))
     overlay.set_alpha(180)
     overlay.fill((0, 0, 0))
     surface.blit(overlay, (0, 0))
@@ -206,7 +214,8 @@ def draw_game_over_screen(surface, score, fish_caught_count, high_score_result):
     center_y = SCREEN_HEIGHT // 2
 
     # Game over title
-    game_over_text = big_font.render("GAME OVER!", True, (255, 0, 0))
+    game_over_text = big_font.render(
+        "GAME OVER!", True, (255, 0, 0))
     game_over_rect = game_over_text.get_rect(
         center=(center_x, center_y - 100)
     )
@@ -214,22 +223,26 @@ def draw_game_over_screen(surface, score, fish_caught_count, high_score_result):
 
     # New high score notification
     if high_score_result and high_score_result["is_new_high"]:
-        new_high_text = big_font.render("NEW HIGH SCORE!", True, (255, 215, 0))
+        new_high_text = big_font.render(
+            "NEW HIGH SCORE!", True, (255, 215, 0))
         new_high_rect = new_high_text.get_rect(
             center=(center_x, center_y - 60)
         )
         surface.blit(new_high_text, new_high_rect)
 
     # Final score
-    final_score_text = big_font.render(f"Final Score: {score}", True, WHITE)
+    final_score_text = big_font.render(
+        f"Final Score: {score}", True, WHITE)
     final_score_rect = final_score_text.get_rect(
         center=(center_x, center_y - 20)
     )
     surface.blit(final_score_text, final_score_rect)
 
     # Fish count
-    count_text = big_font.render(f"Fish Caught: {fish_caught_count}", True, WHITE)
-    count_rect = count_text.get_rect(center=(center_x, center_y + 20))
+    count_text = big_font.render(
+        f"Fish Caught: {fish_caught_count}", True, WHITE)
+    count_rect = count_text.get_rect(
+        center=(center_x, center_y + 20))
     surface.blit(count_text, count_rect)
 
     # High score display
@@ -244,17 +257,27 @@ def draw_game_over_screen(surface, score, fish_caught_count, high_score_result):
     surface.blit(high_score_text, high_score_rect)
 
     # Restart instruction
-    restart_text = font.render("Press Enter to Restart", True, (255, 215, 0))
-    restart_rect = restart_text.get_rect(center=(center_x, center_y + 100))
+    restart_text = font.render(
+        "Press Enter to Restart", True, (255, 215, 0))
+    restart_rect = restart_text.get_rect(
+        center=(center_x, center_y + 100))
     surface.blit(restart_text, restart_rect)
 
     # Quit instruction
-    quit_text = font.render("Press ESC to Quit", True, WHITE)
-    quit_rect = quit_text.get_rect(center=(center_x, center_y + 130))
+    quit_text = font.render(
+        "Press ESC to Quit", True, WHITE)
+    quit_rect = quit_text.get_rect(
+        center=(center_x, center_y + 130))
     surface.blit(quit_text, quit_rect)
 
 
-def draw_danger_fish_overlay(surface, recorder, scream_progress, angler_pause_start_time, ANGLER_PAUSE_DURATION, SCREAM_PEAK_THRESHOLD):
+def draw_danger_fish_overlay(
+        surface,
+        recorder,
+        scream_progress,
+        angler_pause_start_time,
+        ANGLER_PAUSE_DURATION,
+        SCREAM_PEAK_THRESHOLD):
     """
     Draw the danger fish scream overlay with progress bar.
 
@@ -282,16 +305,24 @@ def draw_danger_fish_overlay(surface, recorder, scream_progress, angler_pause_st
 
     # Main rectangle background
     main_rect = pygame.Rect(rect_x, rect_y, rect_width, rect_height)
-    pygame.draw.rect(surface, (100, 15, 15), main_rect, border_radius=corner_radius)
+    pygame.draw.rect(
+        surface, (100, 15, 15), main_rect, border_radius=corner_radius)
 
     # Inner highlight area
-    inner_rect = pygame.Rect(rect_x + 10, rect_y + 8, rect_width - 20, rect_height - 30)
-    pygame.draw.rect(surface, (140, 30, 30), inner_rect, border_radius=corner_radius - 5)
+    inner_rect = pygame.Rect(
+        rect_x + 10, rect_y + 8, rect_width - 20, rect_height - 30)
+    pygame.draw.rect(
+        surface, (140, 30, 30), inner_rect, border_radius=corner_radius - 5)
 
     # Draw borders
-    pygame.draw.rect(surface, (255, 100, 100), main_rect, 3, border_radius=corner_radius)
-    inner_border_rect = pygame.Rect(rect_x + 6, rect_y + 6, rect_width - 12, rect_height - 12)
-    pygame.draw.rect(surface, (180, 50, 50), inner_border_rect, 2, border_radius=corner_radius - 3)
+    pygame.draw.rect(
+        surface, (255, 100, 100),
+        main_rect, 3, border_radius=corner_radius)
+    inner_border_rect = pygame.Rect(
+        rect_x + 6, rect_y + 6, rect_width - 12, rect_height - 12)
+    pygame.draw.rect(
+        surface, (180, 50, 50),
+        inner_border_rect, 2, border_radius=corner_radius - 3)
 
     # Title with shadow effect
     title_font = pygame.font.Font(None, 34)
@@ -300,20 +331,25 @@ def draw_danger_fish_overlay(surface, recorder, scream_progress, angler_pause_st
     title_text = " DANGER FISH! "
     title_shadow = title_font.render(title_text, True, (60, 0, 0))
     title_render = title_font.render(title_text, True, (255, 220, 100))
-    title_rect = title_render.get_rect(center=(rect_center_x, rect_center_y - 95))
-    surface.blit(title_shadow, (title_rect.x + shadow_offset, title_rect.y + shadow_offset))
+    title_rect = title_render.get_rect(
+        center=(rect_center_x, rect_center_y - 95))
+    surface.blit(title_shadow, (
+        title_rect.x + shadow_offset, title_rect.y + shadow_offset))
     surface.blit(title_render, title_rect)
 
     # Subtitle
     subtitle_text = "SCREAM TO ESCAPE!"
     subtitle_render = font.render(subtitle_text, True, (255, 180, 180))
-    subtitle_rect = subtitle_render.get_rect(center=(rect_center_x, rect_center_y - 65))
+    subtitle_rect = subtitle_render.get_rect(
+        center=(rect_center_x, rect_center_y - 65))
     surface.blit(subtitle_render, subtitle_rect)
 
     # Volume indicator delete the volume indicator
     peak_color = (100, 255, 100) if is_screaming else (200, 200, 200)
-    peak_text = font.render(f"Volume: {current_peak:,}", True, peak_color)
-    peak_rect = peak_text.get_rect(center=(rect_center_x, rect_center_y - 35))
+    peak_text = font.render(
+        f"Volume: {current_peak:,}", True, peak_color)
+    peak_rect = peak_text.get_rect(
+        center=(rect_center_x, rect_center_y - 35))
     # surface.blit(peak_text, peak_rect)
 
     # Progress bar
@@ -322,7 +358,8 @@ def draw_danger_fish_overlay(surface, recorder, scream_progress, angler_pause_st
     bar_x = rect_center_x - bar_width // 2
     bar_y = rect_center_y - 5
 
-    pygame.draw.rect(surface, (60, 60, 60), (bar_x, bar_y, bar_width, bar_height), border_radius=11)
+    pygame.draw.rect(
+        surface, (60, 60, 60), (bar_x, bar_y, bar_width, bar_height), border_radius=11)
 
     if progress > 0:
         fill_width = int(bar_width * progress)
@@ -331,24 +368,33 @@ def draw_danger_fish_overlay(surface, recorder, scream_progress, angler_pause_st
                 bar_color = (255, int(255 * progress * 2), 0)
             else:
                 bar_color = (int(255 * (1 - (progress - 0.5) * 2)), 255, 0)
-            pygame.draw.rect(surface, bar_color, (bar_x, bar_y, fill_width, bar_height), border_radius=11)
+            pygame.draw.rect(
+                surface, bar_color,
+                (bar_x, bar_y, fill_width, bar_height), border_radius=11)
 
-    pygame.draw.rect(surface, (200, 200, 200), (bar_x, bar_y, bar_width, bar_height), 2, border_radius=11)
+    pygame.draw.rect(
+        surface, (200, 200, 200),
+        (bar_x, bar_y, bar_width, bar_height), 2, border_radius=11)
 
     # Progress percentage
     progress_color = (100, 255, 100) if progress > 0.7 else (255, 255, 255)
-    progress_text = font.render(f"{int(scream_progress)}%", True, progress_color)
-    progress_rect = progress_text.get_rect(center=(rect_center_x, bar_y + bar_height + 18))
+    progress_text = font.render(
+        f"{int(scream_progress)}%", True, progress_color)
+    progress_rect = progress_text.get_rect(
+        center=(rect_center_x, bar_y + bar_height + 18))
     surface.blit(progress_text, progress_rect)
 
     # Hint text
     if not is_screaming:
-        hint_text = font.render("Scream louder!", True, (255, 200, 150))
-        hint_rect = hint_text.get_rect(center=(rect_center_x, rect_center_y + 55))
+        hint_text = font.render(
+           "Scream louder!", True, (255, 200, 150))
+        hint_rect = hint_text.get_rect(
+            center=(rect_center_x, rect_center_y + 55))
         surface.blit(hint_text, hint_rect)
 
     # Time remaining
-    remain_ms = max(0, ANGLER_PAUSE_DURATION - (pygame.time.get_ticks() - angler_pause_start_time))
+    remain_ms = max(0,
+                    ANGLER_PAUSE_DURATION - (pygame.time.get_ticks() - angler_pause_start_time))
     remain_s = remain_ms / 1000
 
     if remain_s <= 2:
@@ -360,7 +406,8 @@ def draw_danger_fish_overlay(surface, recorder, scream_progress, angler_pause_st
 
     # get the time left
     time_text = font.render(f"Time: {remain_s:.1f}s", True, time_color)
-    time_rect = time_text.get_rect(center=(rect_center_x, rect_center_y + 85))
+    time_rect = time_text.get_rect(
+        center=(rect_center_x, rect_center_y + 85))
     surface.blit(time_text, time_rect)
 
 
@@ -388,7 +435,8 @@ def main():
     # Initialize managers
     fish_manager = FishManager()
     background_manager = BackgroundManager()
-    casting_manager = CastingRod(ROD_MAX_LENGTH, ROD_SPEED, auto_reel = False)
+    casting_manager = CastingRod(
+        ROD_MAX_LENGTH, ROD_SPEED, auto_reel = False)
 
     # Spawn initial fish
     for i in range(START_FISHES):
@@ -440,12 +488,20 @@ def main():
                     running = False
 
                 if event.key == pygame.K_SPACE:
-                    if not game_over and not paused and not angler_pause_active and not showing_release_message:
+                    if (not game_over
+                        and not paused
+                        and not angler_pause_active
+                        and not showing_release_message
+                    ):
                         spacebar_casting =  not spacebar_casting # If pressed depress and vice versa
                         sounds['casting'].play()
 
                 elif event.key == pygame.K_p:
-                    if not game_over and not angler_pause_active and not showing_release_message:
+                    if (
+                        not game_over
+                        and not angler_pause_active
+                        and not showing_release_message
+                    ):
                         paused = not paused
 
                 elif event.key == pygame.K_RETURN:
@@ -474,7 +530,12 @@ def main():
                 showing_release_message = False
 
         # Update game state (only when not game over, not paused, and not in special states)
-        if not game_over and not paused and not angler_pause_active and not showing_release_message:
+        if (
+            not game_over
+            and not paused
+            and not angler_pause_active
+            and not showing_release_message
+        ):
             fish_manager.update()
             background_manager.update()
 
@@ -497,9 +558,8 @@ def main():
 
             # Auto-reset spacebar toggle when hook reaches bottom or top
             if casting_manager.rod_length >= casting_manager.rod_max_length:
-                spacebar_casting = False  # Auto-switch to reel mode
-            #elif casting_manager.rod_length <= 0 and not is_screaming:
-            #    spacebar_casting = False  # Reset when fully reeled
+                spacebar_casting = False
+            # Auto-switch to reel mode
 
             # Boat movement
             keys = pygame.key.get_pressed()
@@ -527,7 +587,8 @@ def main():
 
             if caught:
                 if caught['penalty']:
-                    print("Danger fish hooked! Scream to fill the bar and escape!")
+                    print("Danger fish hooked! "
+                          "Scream to fill the bar and escape!")
                     angler_pause_active = True
                     angler_pause_start_time = pygame.time.get_ticks()
                     scream_progress = 0
@@ -541,7 +602,8 @@ def main():
                 if caught.get('game_over') and not caught['penalty']:
                     print("GAME OVER!")
                     game_over = True
-                    high_score_result = update_high_score("classic", score, fish_caught_count)
+                    high_score_result = update_high_score("classic",
+                                                          score, fish_caught_count)
                     sounds['game_over'].play()
 
             # Update hook rect position
@@ -562,7 +624,8 @@ def main():
                 scream_progress += SCREAM_INCREMENT
 
                 if scream_progress >= 100:
-                    print(f"Scream success! Progress reached 100% - Fish escaped!")
+                    print(f"Scream success! "
+                          f"Progress reached 100% - Fish escaped!")
                     angler_pause_active = False
                     casting_manager.release_danger_fish()
                     recorder.frames = []
@@ -572,7 +635,10 @@ def main():
                     release_message_start_time = pygame.time.get_ticks()
                     current_release_message = random.choice(RELEASE_MESSAGES)
 
-            if angler_pause_active and now - angler_pause_start_time >= ANGLER_PAUSE_DURATION:
+            if (
+                angler_pause_active
+                and now - angler_pause_start_time >= ANGLER_PAUSE_DURATION
+            ):
                 print("Time's up! Fish caught but life lost!")
                 angler_pause_active = False
                 scream_progress = 0
@@ -582,24 +648,27 @@ def main():
                 if catch_result:
                     score += catch_result["value"]
                     fish_caught_count += 1
-                    print(f"Caught: {catch_result['type']} (+{catch_result['value']} pts)")
+                    print(f"Caught: {catch_result['type']} "
+                          f"(+{catch_result['value']} pts)")
 
-                    lives_before = fish_manager.lives_manager.get_current_lives()
+                    lives_mgr = fish_manager.lives_manager
+                    lives_before = lives_mgr.get_current_lives()
                     fish_manager.lives_manager.lose_life()
-                    lives_after = fish_manager.lives_manager.get_current_lives()
-                    print(f"Lives: {lives_before} -> {lives_after}")
+                    lives_left = fish_manager.lives_manager.get_current_lives()
+                    print(f"Lives: {lives_before} -> {lives_left}")
 
                     caught_fish.append({
                         "type": catch_result["type"],
                         "value": catch_result["value"],
                         "rarity": catch_result["rarity"],
                         "penalty": True,
-                        "game_over": lives_after <= 0,
+                        "game_over": lives_left <= 0,
                     })
 
-                    if lives_after <= 0:
+                    if lives_left <= 0:
                         game_over = True
-                        high_score_result = update_high_score("classic", score, fish_caught_count)
+                        high_score_result = update_high_score(
+                            "classic", score, fish_caught_count)
                         sounds['game_over'].play()
 
                 recorder.frames = []
@@ -638,7 +707,12 @@ def main():
         screen.blit(score_text, (10, 10))
 
         # Instructions (only when playing)
-        if not game_over and not paused and not angler_pause_active and not showing_release_message:
+        if (
+            not game_over
+            and not paused
+            and not angler_pause_active
+            and not showing_release_message
+        ):
             instructions = [
                 "SPACE / SCREAM: Cast / Reel",
                 "Arrow keys: Move boat",
@@ -658,7 +732,8 @@ def main():
         if angler_pause_active and not game_over:
             draw_danger_fish_overlay(
                 screen, recorder, scream_progress,
-                angler_pause_start_time, ANGLER_PAUSE_DURATION, SCREAM_PEAK_THRESHOLD
+                angler_pause_start_time,
+                ANGLER_PAUSE_DURATION, SCREAM_PEAK_THRESHOLD
             )
 
         # Show release message overlay
@@ -667,14 +742,16 @@ def main():
 
         # Draw game over screen
         if game_over:
-            draw_game_over_screen(screen, score, fish_caught_count, high_score_result)
+            draw_game_over_screen(
+                screen, score, fish_caught_count, high_score_result)
 
         # Draw red flash effect
         fish_manager.draw_red_flash(screen)
 
         # Fade in effect
         if fade_alpha > 0:
-            fade_surf = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+            fade_surf = pygame.Surface(
+                (SCREEN_WIDTH, SCREEN_HEIGHT))
             fade_surf.fill((0, 0, 0))
             fade_surf.set_alpha(fade_alpha)
             screen.blit(fade_surf, (0, 0))

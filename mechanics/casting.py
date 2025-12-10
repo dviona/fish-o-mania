@@ -1,12 +1,12 @@
 """
-Casting Module for Fish-O-Mania.
+Casting Module.
 
 This module handles the fishing rod casting and reeling mechanics,
 including the state machine for cast/reel cycles and fish collision
 detection during reeling.
 
 Classes:
-    CastingRod: Manages the fishing rod state and behavior.
+    CastingRod: Manages the fishing rod state and behavior of collision.
 """
 
 import pygame
@@ -21,18 +21,18 @@ class CastingRod:
     2. CASTING: Rod extending downward
     3. REELING: Rod retracting upward, checking for fish
 
-    Additionally handles danger fish mechanics:
+    Besides, it handles danger fish mechanics:
     - When a danger fish is hooked, it enters a pending state
-    - Player must scream to release it, or it gets caught with penalty
+    - Player must scream to release it, or it gets caught with life deduction
 
     Attributes:
-        rod_max_length (int): Maximum extension distance in pixels.
-        rod_speed (int): Extension/retraction speed in pixels per frame.
-        rod_length (int): Current extension distance.
-        is_casting (bool): True if rod is extending, False if reeling.
-        auto_reel (bool): If True, auto-switch to reel when hitting bottom.
-        attached_fish: Reference to currently hooked fish.
-        pending_danger_fish: Danger fish waiting for scream resolution.
+        rod_max_length: maximum extension distance in pixels.
+        rod_speed: extension/retraction speed in pixels per frame.
+        rod_length: current extension distance.
+        is_casting : true if rod is extending, False if reeling.
+        auto_reel: if True, auto-switch to reel when hitting bottom.
+        attached_fish: reference to currently hooked fish.
+        pending_danger_fish: danger fish waiting for scream resolution.
     """
 
     def __init__(self, rod_max_length, rod_speed, auto_reel=True):
@@ -40,9 +40,9 @@ class CastingRod:
         Initialize the casting rod.
 
         Args:
-            rod_max_length (int): Maximum depth the rod can extend.
-            rod_speed (int): Speed of casting and reeling.
-            auto_reel (bool): If True, auto-switch to reel when hitting bottom.
+            rod_max_length: Maximum depth the rod can extend.
+            rod_speed: Speed of casting and reeling.
+            auto_reel: If True, auto-switch to reel when hitting bottom.
                               Set to False for modes with external control (like scream).
         """
         self.rod_max_length = rod_max_length
@@ -57,7 +57,7 @@ class CastingRod:
 
         # Catch cooldown (prevents immediate re-catch after release)
         self.catch_cooldown_end_time = 0
-        self.CATCH_COOLDOWN_DURATION = 2000  # 2 seconds cooldown
+        self.catch_cooldown_duration = 2000  # 2 seconds cooldown
 
     def is_on_cooldown(self):
         """
@@ -70,7 +70,7 @@ class CastingRod:
 
     def start_cooldown(self):
         """Start the catch cooldown period."""
-        self.catch_cooldown_end_time = pygame.time.get_ticks() + self.CATCH_COOLDOWN_DURATION
+        self.catch_cooldown_end_time = pygame.time.get_ticks() + self.catch_cooldown_duration
 
     def toggle_cast(self):
         """Toggle between casting and reeling states."""

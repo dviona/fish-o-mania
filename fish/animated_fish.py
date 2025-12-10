@@ -9,9 +9,6 @@ import random
 from mechanics.constants import SCREEN_WIDTH, WATER_SURFACE, WATER_BOTTOM
 from fish.death_animation import DeathAnimation
 
-# Cooldown duration for recently released dangerous fish (3 seconds)
-# so that the hook does not collide continuously with anglo fish
-release_cooldown = 3000
 
 class AnimatedFish(pygame.sprite.Sprite):
     """
@@ -28,6 +25,9 @@ class AnimatedFish(pygame.sprite.Sprite):
         rarity (str): Rarity classification
     """
 
+    # Cooldown duration for recently released dangerous fish (3 seconds)
+    # so that the hook does not collide continuously with anglo fish
+    release_cooldown = 3000
 
     def __init__(self, sprite_sheet_path, frame_width, frame_height,
                  num_frames, x, y, speed_x, fish_type="generic",
@@ -174,8 +174,10 @@ class AnimatedFish(pygame.sprite.Sprite):
         self._update_position()
 
     def _update_animation(self):
-        """frame_counter: counts how many game iterations has passed since the last frame change
-        frame_delay: only when the counter reaches that delay does the code advance current_frame and update self.image """
+        """frame_counter: counts how many game iterations
+        has passed since the last frame change
+        frame_delay: only when the counter reaches that delay does
+        the code advance current_frame and update self.image """
         self.frame_counter += 1
         if self.frame_counter >= self.frame_delay:
             self.frame_counter = 0
@@ -235,4 +237,3 @@ class AnimatedFish(pygame.sprite.Sprite):
                 is_danger_fish=is_danger
             )
         return None
-
