@@ -44,7 +44,7 @@ class CastingRod:
             rod_max_length: Maximum depth the rod can extend.
             rod_speed: Speed of casting and reeling.
             auto_reel: If True, auto-switch to reel when hitting bottom.
-                              Set to False for modes with external control (like scream).
+                    Set to False for modes with external control (like scream).
         """
         self.rod_max_length = rod_max_length
         self.rod_speed = rod_speed
@@ -71,7 +71,8 @@ class CastingRod:
 
     def start_cooldown(self):
         """Start the catch cooldown period."""
-        self.catch_cooldown_end_time = pygame.time.get_ticks() + self.catch_cooldown_duration
+        self.catch_cooldown_end_time = pygame.time.get_ticks() + \
+            self.catch_cooldown_duration
 
     def toggle_cast(self):
         """Toggle between casting and reeling states."""
@@ -110,7 +111,7 @@ class CastingRod:
                     fish = fish_manager.get_fish_at_position(hook_position)
 
                     if fish:
-                        is_danger = getattr(fish, 'fish_type', '') == 'Danger Fish'
+                        is_danger = fish.fish_type == 'Danger Fish'
 
                         if is_danger:
                             # Hook the danger fish - enters pending state
@@ -119,16 +120,22 @@ class CastingRod:
                             self.pending_danger_fish = fish
                             self.attached_fish = fish
                             fish_manager.penalty_sound.play()
-                            fish_manager.red_flash_timer = fish_manager.red_flash_duration
-
-                            return {
+                            # using abbreviation for shortening the line,
+                            fmrfd = fish_manager.red_flash_duration
+                            fish_manager.red_flash_timer = fmrfd
+                            # using abbreviation for shortening the line
+                            l_mg = fish_manager.lives_manager.is_game_over()
+                            dic_adhoc = {
                                 "type": fish.fish_type,
                                 "value": fish.value,
                                 "rarity": fish.rarity,
                                 "penalty": True,
-                                "game_over": fish_manager.lives_manager.is_game_over(),
-                                "fish_ref": fish
+                                "game_over": l_mg,
+                                "fish_ref": fish,
                             }
+
+                            return dic_adhoc
+
                         else:
                             # Normal fish - catch immediately
                             result = fish_manager.remove_fish(fish)
@@ -149,7 +156,8 @@ class CastingRod:
             fish_manager (FishManager): Manager to handle fish removal.
 
         Returns:
-            dict: Fish info with type, value, rarity, or None if no pending fish.
+            dict: Fish info with type, value, rarity,
+            or None if no pending fish.
         """
         if self.pending_danger_fish is not None:
             fish = self.pending_danger_fish
@@ -180,7 +188,8 @@ class CastingRod:
                 "frame_delay": 8,
             }
             fish_manager.recent_catches.append(catch_data)
-            if len(fish_manager.recent_catches) > fish_manager.max_recent_catches:
+            fish_mgr_r_c_num = len(fish_manager.recent_catches)
+            if fish_mgr_r_c_num > fish_manager.max_recent_catches:
                 fish_manager.recent_catches.pop(0)
 
             # Clear pending state
@@ -200,15 +209,16 @@ class CastingRod:
     def release_danger_fish(self):
         """
         Release the danger fish (called when scream succeeds).
-
         Fish swims away, no points awarded, no life lost.
-        Marks the fish as recently released so it can't be immediately re-caught.
+        Marks the fish as recently released
+        so it can't be immediately re-caught.
         """
         if self.pending_danger_fish is not None:
             # Clear hooked flag
             self.pending_danger_fish.is_hooked = False
 
-            # Mark fish as recently released - it can't be caught again for a while
+            # Mark fish as recently released -
+            # it can't be caught again for a while
             self.pending_danger_fish.recently_released = True
             self.pending_danger_fish.release_time = pygame.time.get_ticks()
 

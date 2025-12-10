@@ -3,6 +3,7 @@ import pyaudio
 import numpy as np
 import time
 
+
 class RECORDER:
     # fpb equals frames_per_buffer,
     # FPB = 735, FORMAT = pyaudio.paInt16, CHANNELS = 1, RATE = 16000
@@ -27,7 +28,8 @@ class RECORDER:
             # get the active state of the stream
         if not self.stream.is_active():
             self.stream.start_stream()
-        data = self.stream.read(self.frames_per_buffer, exception_on_overflow= False)
+        data = self.stream.read(self.frames_per_buffer,
+                                exception_on_overflow=False)
         self.frames.append(data)
         self.last_frame = data
 
@@ -50,7 +52,8 @@ class RECORDER:
 
     def read_frames(self):
         if self.stream is not None and self.stream.is_active():
-            data = self.stream.read(self.frames_per_buffer, exception_on_overflow = False)
+            data = self.stream.read(self.frames_per_buffer,
+                                    exception_on_overflow=False)
             self.frames.append(data)
             self.last_frame = data  # Store as most recent frame
             return data
@@ -64,7 +67,8 @@ class RECORDER:
         sample_bytes = self.get_samples()
         if not sample_bytes:
             return 0
-        audio_data = np.frombuffer(sample_bytes, dtype = np.int16)
+        audio_data = np.frombuffer(sample_bytes,
+                                   dtype=np.int16)
         peak = np.max(np.abs(audio_data))
         return peak
 
@@ -77,15 +81,3 @@ class RECORDER:
             return 0
         peak = np.max(np.abs(audio_data))
         return int(peak)
-        
-"""
-recorder = RECORDER()
-start_time= time.time()
-recorder.start_recording()
-while time.time() - start_time<2.0:
-    recorder.read_frames()
-recorder.close()
-sample = recorder.get_samples()
-peak = recorder.get_peak()
-print(peak)
-"""
