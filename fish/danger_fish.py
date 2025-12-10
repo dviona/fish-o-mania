@@ -1,5 +1,6 @@
-# Zac, Tavish
 """
+Zac, Tavish
+ 
 Danger Fish Class for Fish-O-Mania.
 
 Angler/Danger fish - Catching this costs a life in classic mode
