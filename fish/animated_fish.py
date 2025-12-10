@@ -1,5 +1,6 @@
-# Tavish, Zac, Debbie
-"""
+ """
+Tavish, Zac, Debbie
+
 Animated Fish Base Class
 
 This module contains the AnimatedFish class that all fish inherit from
