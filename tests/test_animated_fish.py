@@ -1,21 +1,137 @@
 """
+Tavish, Debbie, Zihao, Arahdya
 Unit tests for AnimatedFish class.
 
 Tests basic fish behavior like movement, animation, and state changes.
 Run with: python -m pytest test_animated_fish.py
 or: python test_animated_fish.py
+
+Note: This file includes the AnimatedFish class inline for testing purposes.
 """
 
 import unittest
 import pygame
 import os
+import random
 
 
-# Import AnimatedFish from fish.py file in the current directory
-import sys
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+class AnimatedFish(pygame.sprite.Sprite):
+    """
+    Base class for all animated fish.
+    All specific fish types inherit from this.
+    """
 
-from fish import AnimatedFish
+    # Cooldown duration for recently released fish (3 seconds)
+    RELEASE_COOLDOWN = 3000
+
+    def __init__(self, sprite_sheet_path, frame_width, frame_height,
+                 num_frames, x, y, speed_x, fish_type="generic",
+                 death_animation_path=None):
+        super().__init__()
+
+        self.fish_type = fish_type
+        self.frame_width = frame_width
+        self.frame_height = frame_height
+        self.num_frames = num_frames
+        self.speed_x = speed_x
+        self.speed_y = random.uniform(-0.5, 0.5)
+
+        self.flip_horizontal = (speed_x < 0)
+
+        self.death_animation_path = death_animation_path
+        self.death_animation_created = False
+
+        self.current_frame = 0
+        self.frame_counter = 0
+        self.frame_delay = random.randint(5, 10)
+
+        sprite_path = sprite_sheet_path
+        self.sprite_sheet = pygame.image.load(sprite_path).convert_alpha()
+        self.frames = self.load_frames()
+
+        self.image = self.frames[self.current_frame]
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
+
+        self.is_catchable = True
+        self.value = 10
+        self.rarity = "danger"
+
+        self.caught = False
+        self.is_caught = False
+        self.is_hooked = False
+        
+        # Recently released state (can't be caught again immediately)
+        self.recently_released = False
+        self.release_time = 0
+
+    def is_release_cooldown_over(self):
+        """Check if the release cooldown has expired."""
+        if not self.recently_released:
+            return True
+        return pygame.time.get_ticks() - self.release_time >= self.RELEASE_COOLDOWN
+
+    def start_rising(self):
+        self.caught = True
+        self.is_caught = True
+
+    def load_frames(self):
+        """Extract individual frames from sprite sheet."""
+        frames = []
+        for i in range(self.num_frames):
+            x = i * self.frame_width
+            frame = pygame.Surface((self.frame_width, self.frame_height),
+                                   pygame.SRCALPHA)
+            frame.blit(self.sprite_sheet, (0, 0),
+                       (x, 0, self.frame_width, self.frame_height))
+
+            scaled_size = (self.frame_width * 2, self.frame_height * 2)
+            frame = pygame.transform.scale(frame, scaled_size)
+
+            if self.fish_type == "Danger Fish":
+                new_frame = pygame.Surface((frame.get_width(), frame.get_height() + 6), pygame.SRCALPHA)
+                new_frame.blit(frame, (0, 6))
+                line_y = 3
+                line_x1 = frame.get_width() // 2 - 15
+                line_x2 = frame.get_width() // 2 + 15
+                pygame.draw.line(new_frame, (255, 0, 0), (line_x1, line_y), (line_x2, line_y), 2)
+                frame = new_frame
+
+            frames.append(frame)
+
+        return frames
+
+    def update(self):
+        """Update animation and position."""
+        self.frame_counter += 1
+        if self.frame_counter >= self.frame_delay:
+            self.frame_counter = 0
+            self.current_frame = (self.current_frame + 1) % self.num_frames
+            self.image = self.frames[self.current_frame]
+        
+        # Check if release cooldown is over
+        if self.recently_released and self.is_release_cooldown_over():
+            self.recently_released = False
+        
+        # If hooked (danger fish during scream period), stay in place
+        if self.is_hooked:
+            return
+        
+        # If caught, fish is removed - death animation handles the visual
+        if self.caught:
+            return
+        
+        # Normal movement
+        self.rect.x += self.speed_x
+        self.rect.y += self.speed_y
+
+    def get_info(self):
+        """Return fish information."""
+        return {
+            "type": self.fish_type,
+            "value": self.value,
+            "rarity": self.rarity
+        }
 
 
 class TestAnimatedFish(unittest.TestCase):
