@@ -1,5 +1,6 @@
-# Tavish, Debbie
 """
+Tavish, Debbie
+
 Fast Fish Manager Module for Fish-O-Mania
 
 This module contains the FastFishManager class, a variant of RelaxedFishManager
