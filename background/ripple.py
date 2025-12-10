@@ -1,5 +1,6 @@
-# Tavish, Debbie, Zac, Aradhya
 """
+Tavish, Debbie, Zac, Aradhya
+
 Ripple Module
 
 This module contains the Ripple class for animated water surface effects
