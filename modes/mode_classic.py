@@ -171,7 +171,7 @@ def draw_release_message(surface, message):
         message (str): The release message to display
     """
     overlay = pygame.Surface(
-                    (SCREEN_WIDTH, SCREEN_HEIGHT))
+        (SCREEN_WIDTH, SCREEN_HEIGHT))
     overlay.set_alpha(150)
     overlay.fill((0, 100, 0))
     surface.blit(overlay, (0, 0))
@@ -359,7 +359,8 @@ def draw_danger_fish_overlay(
     bar_y = rect_center_y - 5
 
     pygame.draw.rect(
-        surface, (60, 60, 60), (bar_x, bar_y, bar_width, bar_height), border_radius=11)
+        surface, (60, 60, 60),
+        (bar_x, bar_y, bar_width, bar_height), border_radius=11)
 
     if progress > 0:
         fill_width = int(bar_width * progress)
@@ -387,14 +388,15 @@ def draw_danger_fish_overlay(
     # Hint text
     if not is_screaming:
         hint_text = font.render(
-           "Scream louder!", True, (255, 200, 150))
+            "Scream louder!", True, (255, 200, 150))
         hint_rect = hint_text.get_rect(
             center=(rect_center_x, rect_center_y + 55))
         surface.blit(hint_text, hint_rect)
 
     # Time remaining
-    remain_ms = max(0,
-                    ANGLER_PAUSE_DURATION - (pygame.time.get_ticks() - angler_pause_start_time))
+    pause_elapsed = pygame.time.get_ticks() - angler_pause_start_time
+    time_left = ANGLER_PAUSE_DURATION - pause_elapsed
+    remain_ms = max(0, time_left)
     remain_s = remain_ms / 1000
 
     if remain_s <= 2:
@@ -430,13 +432,14 @@ def main():
     game_over = False
     paused = False
     pygame.display.set_caption("Fish-O-Mania: Classic Mode")
-    spacebar_casting = False # Tracks spacebar casting or scream casting
+    # Tracks spacebar casting or scream casting
+    spacebar_casting = False
 
     # Initialize managers
     fish_manager = FishManager()
     background_manager = BackgroundManager()
-    casting_manager = CastingRod(
-        ROD_MAX_LENGTH, ROD_SPEED, auto_reel = False)
+    casting_manager = CastingRod(ROD_MAX_LENGTH,
+                                 ROD_SPEED, auto_reel=False)
 
     # Spawn initial fish
     for i in range(START_FISHES):
@@ -489,18 +492,18 @@ def main():
 
                 if event.key == pygame.K_SPACE:
                     if (not game_over
-                        and not paused
-                        and not angler_pause_active
-                        and not showing_release_message
-                    ):
-                        spacebar_casting =  not spacebar_casting # If pressed depress and vice versa
+                            and not paused
+                            and not angler_pause_active
+                            and not showing_release_message):
+                        # If pressed depress and vice versa
+                        spacebar_casting = not spacebar_casting
                         sounds['casting'].play()
 
                 elif event.key == pygame.K_p:
                     if (
-                        not game_over
-                        and not angler_pause_active
-                        and not showing_release_message
+                            not game_over
+                            and not angler_pause_active
+                            and not showing_release_message
                     ):
                         paused = not paused
 
@@ -529,12 +532,13 @@ def main():
             if now - release_message_start_time >= RELEASE_MESSAGE_DURATION:
                 showing_release_message = False
 
-        # Update game state (only when not game over, not paused, and not in special states)
+        # Update game state (only when not game over,
+        # not paused, and not in special states)
         if (
-            not game_over
-            and not paused
-            and not angler_pause_active
-            and not showing_release_message
+                not game_over
+                and not paused
+                and not angler_pause_active
+                and not showing_release_message
         ):
             fish_manager.update()
             background_manager.update()
@@ -545,9 +549,9 @@ def main():
             hook_peak = recorder.get_frame_peak()
             is_screaming = hook_peak >= HOOK_SCREAM_THRESHOLD
 
-            # Dual control: Can use either spacebar or screaming to lower the hook
-            # Hook goes down if spacebar pressed to cast OR currently screaming
-            # Hook goes up if spacebar toggled to reel AND not screaming
+            """ use either spacebar or screaming to lower the hook
+            Hook goes down if spacebar pressed to cast or currently screaming
+            Hook goes up if spacebar toggled to reel and not screaming"""
 
             if spacebar_casting or is_screaming:
                 # Screaming/spacebar casting - hook goes down
@@ -602,15 +606,15 @@ def main():
                 if caught.get('game_over') and not caught['penalty']:
                     print("GAME OVER!")
                     game_over = True
-                    high_score_result = update_high_score("classic",
-                                                          score, fish_caught_count)
+                    high_score_result = update_high_score(
+                        "classic", score, fish_caught_count)
                     sounds['game_over'].play()
 
             # Update hook rect position
             hook_x = rod_x
             hook_y = rod_top_y + casting_manager.rod_length
             graphics['hook_rect'].x = (
-                hook_x - graphics['hook_image'].get_width() // 2
+                    hook_x - graphics['hook_image'].get_width() // 2
             )
             graphics['hook_rect'].y = hook_y
 
@@ -636,8 +640,8 @@ def main():
                     current_release_message = random.choice(RELEASE_MESSAGES)
 
             if (
-                angler_pause_active
-                and now - angler_pause_start_time >= ANGLER_PAUSE_DURATION
+                    angler_pause_active
+                    and now - angler_pause_start_time >= ANGLER_PAUSE_DURATION
             ):
                 print("Time's up! Fish caught but life lost!")
                 angler_pause_active = False
@@ -708,10 +712,10 @@ def main():
 
         # Instructions (only when playing)
         if (
-            not game_over
-            and not paused
-            and not angler_pause_active
-            and not showing_release_message
+                not game_over
+                and not paused
+                and not angler_pause_active
+                and not showing_release_message
         ):
             instructions = [
                 "SPACE / SCREAM: Cast / Reel",
