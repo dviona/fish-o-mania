@@ -1,5 +1,6 @@
-# Tavish, Debbie
 """
+Tavish, Debbie
+
 Relaxed Fish Manager Module for Fish-O-Mania.
 
 This module contains the RelaxedFishManager class, a variant of FishManager
