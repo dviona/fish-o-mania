@@ -1,5 +1,6 @@
-# Tavish, Debbie, Zac, Aradhya
 """
+Tavish, Debbie, Zac, Aradhya
+
 Sand Layers Module for Fish-O-Mania
 
 This module contains the SandLayers class for terrain rendering
