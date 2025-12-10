@@ -1,5 +1,6 @@
-# Tavish, Debbie, Zac, Aradhya
 """
+Tavish, Debbie, Zac, Aradhya
+
 Seaweed Module for Fish-O-Mania
 
 This module contains the Seaweed class for animated seaweed
