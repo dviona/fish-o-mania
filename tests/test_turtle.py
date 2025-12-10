@@ -1,23 +1,19 @@
 """
-Debbie Tavish Zac and Aradhya
-
 Unit tests for Turtle class
 """
-import os
-os.environ['SDL_VIDEODRIVER'] = 'dummy'
-os.environ['SDL_AUDIODRIVER'] = 'dummy'
-
-import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-import pygame
-
-# Initialize pygame BEFORE imports that need it
-pygame.init()
-pygame.mixer.init()
-pygame.display.set_mode((800, 600))
 
 import unittest
+import pygame
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Initialize pygame once at module level
+pygame.init()
+pygame.mixer.init()
+pygame.display.set_mode((800, 600), pygame.HIDDEN)
+
 from fish.turtle import Turtle
 
 

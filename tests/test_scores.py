@@ -1,6 +1,4 @@
 """
-Debbie Tavish Zac and Aradhya
-
 Unit Tests for the Scores Module.
 
 Tests the high score system including loading, saving,

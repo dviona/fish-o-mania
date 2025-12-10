@@ -1,24 +1,16 @@
 """
-Debbie Tavish Zac and Aradhya
-
 Unit Tests for Time Attack Mode.
 
 This module contains tests for the Time Attack game mode,
 including the FastFishManager and game functions.
 """
-import os
-os.environ['SDL_VIDEODRIVER'] = 'dummy'
-os.environ['SDL_AUDIODRIVER'] = 'dummy'
-
-import pygame
-
-# Initialize pygame BEFORE imports that need it
-pygame.init()
-pygame.mixer.init()
-pygame.font.init()
-pygame.display.set_mode((800, 600))
 
 import unittest
+import pygame
+
+# Initialize pygame for tests
+pygame.init()
+pygame.mixer.init()
 
 # Import modules to test
 from modes.mode_time_attack import (
@@ -73,6 +65,7 @@ class TestFastFishManager(unittest.TestCase):
         manager = FastFishManager()
         self.assertIsInstance(manager, FastFishManager)
         self.assertIsInstance(manager, RelaxedFishManager)
+
 
     def test_spawn_fish_returns_fish(self):
         """Test that spawn_fish returns a fish object"""
@@ -172,6 +165,7 @@ class TestFastFishManager(unittest.TestCase):
         manager.clear_all()
         self.assertEqual(len(manager.all_fish), 0)
 
+
     def test_get_fish_at_position_found(self):
         """Test getting fish at a specific position"""
         manager = FastFishManager()
@@ -215,7 +209,9 @@ class TestLoadSounds(unittest.TestCase):
             self.assertIsInstance(sound, pygame.mixer.Sound)
 
 
+
 # LOAD GRAPHICS TESTS
+
 
 class TestLoadGraphics(unittest.TestCase):
     """Tests for the load_graphics function"""
@@ -273,10 +269,13 @@ class TestLoadGraphics(unittest.TestCase):
         self.assertLess(graphics['boat_y'], WATER_SURFACE)
 
 
+
 # DRAW WATER BACKGROUND TESTS
+
 
 class TestDrawWaterBackground(unittest.TestCase):
     """Tests for the draw_water_background function."""
+
 
     def test_draw_water_background_fills_surface(self):
         """Test that background drawing modifies the surface"""
@@ -292,6 +291,7 @@ class TestDrawWaterBackground(unittest.TestCase):
         color_after = surface.get_at((SCREEN_WIDTH // 2, 50))
         self.assertNotEqual(color_before, color_after)
 
+
     def test_water_area_exists(self):
         """Test that water area is drawn below surface"""
         surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -302,10 +302,12 @@ class TestDrawWaterBackground(unittest.TestCase):
         self.assertNotEqual((water_color.r, water_color.g, water_color.b), SKY_BLUE)
 
 
+
 # DRAW PAUSE OVERLAY TESTS
 
 class TestDrawPauseOverlay(unittest.TestCase):
     """Tests for the draw_pause_overlay function"""
+
 
     def test_draw_pause_overlay_modifies_surface(self):
         """Test that pause overlay modifies the surface"""
@@ -319,10 +321,13 @@ class TestDrawPauseOverlay(unittest.TestCase):
         self.assertNotEqual(color_before, color_after)
 
 
+
 # DRAW GAME OVER SCREEN TESTS
+
 
 class TestDrawGameOverScreen(unittest.TestCase):
     """Tests for the draw_game_over_screen function"""
+
 
     def test_draw_game_over_screen_with_new_high_score(self):
         """Test game over screen with new high score"""
@@ -356,5 +361,4 @@ class TestDrawGameOverScreen(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main(exit=False)
-    pygame.quit()
+    unittest.main()

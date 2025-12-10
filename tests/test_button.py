@@ -1,23 +1,13 @@
 """
-Debbie Tavish Zac and Aradhya
-
 Testing for the class Button
 
 """
-import os
-os.environ['SDL_VIDEODRIVER'] = 'dummy'
-os.environ['SDL_AUDIODRIVER'] = 'dummy'
-
 import pygame
 import unittest
-
-# Initialize pygame BEFORE imports that need it
-pygame.init()
-pygame.font.init()
-pygame.display.set_mode((800, 600))
-
 from ui.button import Button
 
+pygame.init()
+pygame.display.set_mode((800, 600), pygame.HIDDEN)
 
 class TestButton(unittest.TestCase):
     # Test the Button class
@@ -71,14 +61,13 @@ class TestButton(unittest.TestCase):
             self.button.draw(surface)
         except Exception as e:
             self.fail(f"Button.draw() for disabled button raised an exception: {e}")
-
+    
     def test_enabled_button_state(self):
         # Test the enabled state of the button.
         self.button.enabled = False
         mouse_pos = (150, 120)  # <-- Inside the button
         self.button.update(mouse_pos)
         self.assertFalse(self.button.hovered)  # Should not be hovered if disabled
-
 
 if __name__ == '__main__':
     unittest.main(exit=False)

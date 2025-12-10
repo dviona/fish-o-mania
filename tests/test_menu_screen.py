@@ -1,24 +1,13 @@
 """
-Debbie Tavish Zac and Aradhya
-
 Testing for class MenuScreen
 
 """
-import os
-os.environ['SDL_VIDEODRIVER'] = 'dummy'
-os.environ['SDL_AUDIODRIVER'] = 'dummy'
-
 import pygame
-
-# Initialize pygame BEFORE imports that need it
-pygame.init()
-pygame.mixer.init()
-pygame.font.init()
-pygame.display.set_mode((800, 600))
-
 import unittest
 from ui.menu_screen import MenuScreen
 
+pygame.init()
+pygame.display.set_mode((800, 600), pygame.HIDDEN)
 
 class TestMenuScreen(unittest.TestCase):
     def setUp(self):
@@ -57,7 +46,6 @@ class TestMenuScreen(unittest.TestCase):
         # Test the number of buttons created
         self.assertEqual(len(self.menu_screen.buttons), 5)
 
-
 if __name__ == '__main__':
-    unittest.main(exit=False)
+    unittest.main(exit = False)
     pygame.quit()

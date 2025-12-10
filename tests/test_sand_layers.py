@@ -1,6 +1,4 @@
 """
-Debbie Tavish Zac and Aradhya
-
 Unit Tests for Sand Layers Module
 
 This module contains tests for the SandLayers class

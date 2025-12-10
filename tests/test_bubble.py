@@ -1,6 +1,4 @@
 """
-Tavish, Debbie, Zac, Aradhya
-
 Unit Tests for Background Module
 
 This module contains tests for all background visual elements:
