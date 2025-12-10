@@ -1,5 +1,6 @@
-# Zac, Tavish
 """
+Zac, Tavish
+ 
 Death Animation Class for Fish-O-Mania
 
 Handles the animation that plays when a fish is caught
