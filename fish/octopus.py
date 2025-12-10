@@ -1,5 +1,6 @@
-# Tavish, Debbie
 """
+Tavish, Debbie
+
 Octopus Fish Class for Fish-O-Mania.
 
 Large, slow-moving creature worth good points.
