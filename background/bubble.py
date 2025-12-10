@@ -1,5 +1,6 @@
-# Tavish, Debbie, Zac, Aradhya
 """
+Tavish, Debbie, Zac, Aradhya
+
 Bubble Module for Fish-O-Mania.
 
 This module contains the Bubble class for rising bubble effects.
