@@ -1,5 +1,6 @@
-# Tavish, Debbie, Zac, Aradhya
 """
+Tavish, Debbie, Zac, Aradhya
+
 Constants Module for Fish-O-Mania.
 
 This module contains all game config constants incl screen settings,
